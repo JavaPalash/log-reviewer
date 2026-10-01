@@ -202,13 +202,30 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
     if (lineInfo.isHeader) {
       const msg = lineInfo.message || '';
       const isCalling = msg.includes('<-------- Calling ');
-      const isRestStart = !inApiCall && msg.includes('RestWebService.request: Request Method = ');
+      const isRestStart = !inApiCall && (
+        msg.includes('RestWebService.request: Request Method = ') ||
+        msg.includes('RestWebService. Request Method = ') ||
+        msg.includes('FlexiWebService.callWebService:name:') ||
+        msg.includes('FlexiWebService.runWebService: ID=') ||
+        msg.includes('FlexiWebService.runWebService: Cache disabled') ||
+        msg.includes('RestWebService.request:ID=') ||
+        msg.includes('RestWebService.getAction') ||
+        msg.includes('RestWebService.postAction') ||
+        msg.includes('RestWebService.patchAction') ||
+        msg.includes('RestWebService.putAction') ||
+        msg.includes('RestWebService.deleteAction')
+      );
       const isApiStart = isCalling || isRestStart;
 
       const isApiContinuation = inApiCall && !isCalling && (
-        msg.includes('RestWebService.') ||
-        msg.includes('RestWebService:') ||
+        msg.includes('RestWebService') ||
+        msg.includes('FlexiWebService') ||
         msg.includes('.runWebService') ||
+        msg.includes('Request Authorization:') ||
+        msg.includes('Authenticator Configuration') ||
+        msg.includes('FlexiUtil.transformTokenString2:') ||
+        msg.includes('runScript-onResponseReceived') ||
+        msg.includes('failed with response code:') ||
         msg.includes('SUCCESS') ||
         msg.includes('FAILED')
       );
@@ -221,7 +238,13 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
         inApiCall = true;
       } else if (isApiContinuation) {
         currentGroup.push(lineInfo);
-        if (msg.includes('SUCCESS') || msg.includes('FAILED')) {
+        if (
+          msg.includes('runWebService: result') ||
+          msg.includes('postAction result:') ||
+          msg.includes('getAction result:') ||
+          msg.includes('SUCCESS') ||
+          msg.includes('FAILED')
+        ) {
           flushGroup(currentGroup);
           currentGroup = [];
           inApiCall = false;
@@ -445,41 +468,93 @@ function processGroupToEntry(
     }
 
     // API Detection
-    if (txt.includes('.runWebService')) {
-      const am = txt.match(/(\S+_WS|\S+WebService)\.runWebService/);
-      if (am) apiName = am[1];
-      if (txt.includes('result ')) {
-        const rres = txt.match(/result\s*(\d{3})(?:\s+([\s\S]*))?/);
-        if (rres) {
-          responseCode = parseInt(rres[1], 10);
-          responseBody = (rres[2] || '').trim();
+    if (!apiName) {
+      if (txt.includes('FlexiWebService.runWebService: finish ')) {
+        const m = txt.match(/finish\s+([A-Za-z0-9_]+)/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('FlexiWebService.runWebService: ID=')) {
+        const m = txt.match(/ID=([A-Za-z0-9_]+)/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('FlexiWebService.callWebService:name:')) {
+        const m = txt.match(/callWebService:name:([A-Za-z0-9_]+)/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('<-------- Calling ')) {
+        const m = txt.match(/<--------\s*Calling\s+([A-Za-z0-9_]+)/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('.runWebService')) {
+        const m = txt.match(/([A-Za-z0-9_]+_WS)\.runWebService/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('failed with response code:')) {
+        const m = txt.match(/([A-Za-z0-9_]+)\s+failed\s+with\s+response\s+code:/);
+        if (m) apiName = m[1];
+      } else if (txt.includes('runScript-onResponseReceived~')) {
+        const m = txt.match(/runScript-onResponseReceived~([A-Za-z0-9_]+)/);
+        if (m) apiName = m[1];
+      }
+    }
+
+    if (!method) {
+      const rm = txt.match(/Request\s*Method\s*=\s*([A-Z]+)/i);
+      if (rm) {
+        method = rm[1].toUpperCase();
+      } else if (txt.includes('RestWebService.postAction')) {
+        method = 'POST';
+      } else if (txt.includes('RestWebService.getAction')) {
+        method = 'GET';
+      } else if (txt.includes('RestWebService.patchAction')) {
+        method = 'PATCH';
+      } else if (txt.includes('RestWebService.putAction')) {
+        method = 'PUT';
+      } else if (txt.includes('RestWebService.deleteAction')) {
+        method = 'DELETE';
+      }
+    }
+
+    if (!url) {
+      const ru = txt.match(/(?:URL\s*=|postAction:|patchAction:|getAction:|putAction:|deleteAction:)\s*(https?:\/\/\S+)/i);
+      if (ru) {
+        url = ru[1].trim();
+      } else if (txt.includes('Final statement = http')) {
+        const fu = txt.match(/Final\s*statement\s*=\s*(https?:\/\/\S+)/i);
+        if (fu) url = fu[1].trim();
+      }
+    }
+
+    if (responseCode === undefined) {
+      const rcm = txt.match(/Response\s*Code\s*=\s*(\d{3})/i);
+      if (rcm) {
+        responseCode = parseInt(rcm[1], 10);
+      } else if (txt.includes('failed with response code:')) {
+        const fm = txt.match(/failed\s+with\s+response\s+code:\s*(\d{3})/i);
+        if (fm) responseCode = parseInt(fm[1], 10);
+      } else if (txt.includes('result ')) {
+        const rres = txt.match(/result\s+(\d{3})\b/i);
+        if (rres) responseCode = parseInt(rres[1], 10);
+      }
+    }
+
+    if (!responseBody) {
+      if (txt.includes('.runWebService: result')) {
+        const rbm = txt.match(/\.runWebService:\s*result\s*(\{[\s\S]*\}|\[[\s\S]*\])/);
+        if (rbm) {
+          responseBody = rbm[1].trim();
+        } else {
+          const rbm2 = txt.match(/\.runWebService:\s*result\s*\d{3}\s+([\s\S]*)/);
+          if (rbm2) responseBody = rbm2[1].trim();
         }
-      }
-      if (txt.includes('Total time =')) {
-        const rdur = txt.match(/Total\s*time\s*=\s*(\d+)\s*ms/);
-        if (rdur) durationMs = parseInt(rdur[1], 10);
-      }
-    }
-
-    // Direct WebService failure message e.g. "POST_PICK_WAVE_WS failed with response code: 400"
-    if (txt.includes('failed with response code:')) {
-      const fm = txt.match(/(\S+_WS|\S+WebService)\s+failed\s+with\s+response\s+code:\s*(\d{3})/);
-      if (fm) {
-        if (!apiName) apiName = fm[1];
-        if (responseCode === undefined) responseCode = parseInt(fm[2], 10);
+      } else if (txt.includes('result:')) {
+        const rbm = txt.match(/result:\s*(\{[\s\S]*\}|\[[\s\S]*\])/);
+        if (rbm) responseBody = rbm[1].trim();
       }
     }
 
-    if (txt.includes('RestWebService.request: Request Method =')) {
-      const rm = txt.match(/Request\s*Method\s*=\s*([A-Z]+)/);
-      if (rm) method = rm[1];
+    if (durationMs === undefined && txt.includes('Total time =')) {
+      const rdur = txt.match(/Total\s*time\s*=\s*(\d+)\s*ms/i);
+      if (rdur) durationMs = parseInt(rdur[1], 10);
     }
-    if (txt.includes('RestWebService.request: URL =') || txt.includes('RestWebService.postAction:') || txt.includes('RestWebService.patchAction:')) {
-      const ru = txt.match(/(?:URL\s*=|postAction:|patchAction:|getAction:)\s*(https?:\/\/\S+)/);
-      if (ru) url = ru[1];
-    }
-    if (txt.includes('RestWebService.authorizationRequest:')) {
-      const ra = txt.match(/authorizationRequest:\s*(\S+\s+\S+|\S+)/);
+
+    if (txt.includes('RestWebService.authorizationRequest:') || txt.includes('Request Authorization:')) {
+      const ra = txt.match(/(?:authorizationRequest:|Request Authorization:)\s*(\S+\s+\S+|\S+)/i);
       if (ra) authHeader = ra[1];
     }
     if (txt.includes('Request Body =') || txt.includes('requestBody:')) {
@@ -520,6 +595,23 @@ function processGroupToEntry(
     }
   }
 
+  if (responseCode === undefined && responseBody) {
+    if (responseBody.includes('"code":"NOT_FOUND"')) responseCode = 404;
+    else if (responseBody.includes('"code":"VALIDATION_ERROR"')) responseCode = 400;
+  }
+
+  if (!apiName && url) {
+    const em = url.match(/\/entity\/([a-zA-Z0-9_]+)/i);
+    if (em) {
+      apiName = `lgfapi: ${em[1].toUpperCase()}`;
+    } else {
+      const scmMatch = url.match(/\/fscmRestApi\/resources\/[^/]+\/([a-zA-Z0-9_]+)/i);
+      if (scmMatch) {
+        apiName = `fscmRestApi: ${scmMatch[1]}`;
+      }
+    }
+  }
+
   if (!method && apiName) {
     if (apiName.startsWith('GET_')) method = 'GET';
     else if (apiName.startsWith('POST_') || apiName.includes('_POST_')) method = 'POST';
@@ -530,14 +622,26 @@ function processGroupToEntry(
 
   // Extract scanned value directly from API URL query parameters if not yet captured
   if (!scannedValue && url) {
-    const cm = url.match(/[?&](?:container_id__container_nbr|container_nbr|pallet_nbr|shipment_nbr|lpn)=([^&]+)/i);
-    if (cm) {
-      scannedValue = decodeURIComponent(cm[1]);
-      if (!field) {
-        if (url.includes('container_nbr')) field = 'container_nbr (LPN)';
-        else if (url.includes('pallet_nbr')) field = 'pallet_nbr';
-        else if (url.includes('shipment_nbr')) field = 'shipment_nbr';
-        else field = 'LPN';
+    const qParams = [
+      { key: 'container_nbr', field: 'container_nbr (LPN)' },
+      { key: 'container_id__container_nbr', field: 'container_nbr (LPN)' },
+      { key: 'pallet_nbr', field: 'pallet_nbr' },
+      { key: 'shipment_nbr', field: 'shipment_nbr' },
+      { key: 'lpn', field: 'LPN' },
+      { key: 'task_id__next_location_id__pick_zone', field: 'pick_zone' },
+      { key: 'task_id', field: 'task_id' },
+      { key: 'order_dtl_id__order_id__cust_short_text_4', field: 'shipping_option' },
+    ];
+    for (const qp of qParams) {
+      const regex = new RegExp(`[?&]${qp.key}=([^&]+)`, 'i');
+      const qm = url.match(regex);
+      if (qm && qm[1]) {
+        const val = decodeURIComponent(qm[1]).trim();
+        if (val) {
+          scannedValue = val;
+          if (!field) field = qp.field;
+          break;
+        }
       }
     }
   }
@@ -714,10 +818,10 @@ function processGroupToEntry(
 
   // Determine Entry Type (Focus on Flexi code, methods, APIs, and errors vs Platform noise)
   let entryType: EntryType = 'PLATFORM';
-  if (isIssue || status === 'FAIL' || errorDetails || level === 'ERROR') {
-    entryType = 'ERROR';
-  } else if (apiDetails) {
+  if (apiDetails) {
     entryType = 'API_CALL';
+  } else if (isIssue || status === 'FAIL' || errorDetails || level === 'ERROR') {
+    entryType = 'ERROR';
   } else if (flexiMethod) {
     entryType = 'FLEXI_METHOD';
   } else if (scriptCode || sampleSnippet.includes('runScript:') || sampleSnippet.includes('running script')) {

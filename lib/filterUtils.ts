@@ -40,7 +40,12 @@ export function applyFiltersAndSort(entries: LogEntry[], filters: FilterState): 
   // 1c. Entry Type filter (Script Code, Flexi Method, API Call, Error, User Input)
   if (filters.entryTypes && filters.entryTypes.length > 0) {
     const etSet = new Set(filters.entryTypes);
-    result = result.filter(e => etSet.has(e.entryType));
+    result = result.filter(e => {
+      if (etSet.has(e.entryType)) return true;
+      if (etSet.has('ERROR') && (e.status === 'FAIL' || e.isIssue || e.level === 'ERROR')) return true;
+      if (etSet.has('API_CALL') && e.apiDetails !== undefined) return true;
+      return false;
+    });
   }
 
   // 1d. App Type filter (SCM vs WMS)
