@@ -1,0 +1,4000 @@
+[DEBUG] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - onLoginEvent: onLoginScript=null
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 08:59:55.282 [][WS-G-HK(181)-[(181)Thread-509]-[3]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBOUND
+[TRACE] 2026-08-05 08:59:58.003 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='1', isScan='false', target='menu1INBOUND', source='menu1INBOUND', seq='3', com.intellinum.mia.app.runtime.InputData@18a0959d}
+[INFO ] 2026-08-05 08:59:58.003 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '1' from source 'menu1INBOUND' to target 'menu1INBOUND'
+[TRACE] 2026-08-05 08:59:58.196 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m1(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H
+Ctrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) ASN RECEIVING[3;31H
+[H[2J
+
+1) ASN RECEIVING
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) DIRECTED PUTAWAY G[4;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) MANUAL PUTAWAY[5;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[6d4) RF LOCK UNLOCK CONTAINER   
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[7d5) SPLIT/COMBINE IBLPN[7;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[8d6) INB PALLETIZE[8;31H
+
+
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 08:59:58.196 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=193 ms
+[INFO ] 2026-08-05 08:59:58.222 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 1, action target : menu1INBOUND, action previousActiveComponent : menu1INBOUND},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 08:59:58.237 [][WS-G-HK(181)-[(181)Thread-509]-[4]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1ASNRECEIVING
+[TRACE] 2026-08-05 09:00:21.480 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='3', isScan='false', target='menu3MANUALPUTAWAY', source='menu1ASNRECEIVING', seq='4', com.intellinum.mia.app.runtime.InputData@3192334d}
+[INFO ] 2026-08-05 09:00:21.480 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '3' from source 'menu1ASNRECEIVING' to target 'menu3MANUALPUTAWAY'
+[TRACE] 2026-08-05 09:00:23.358 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m3(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[6d4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[7d5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8d6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H[2;6HLocate LPN Pallet
+
+
+Pallet/LPN: [?1h=
+(B[0;4m                     
+(B[m[15dEnv: dpworld2[16;30H
+Ctrl-X: Exit App[17;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE
+[6G  MANUAL PUTAWAY[K[29G
+
+
+
+(B[0;4m1(B[m
+(B[0;4m 
+(B[m
+[INFO ] 2026-08-05 09:00:23.358 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=1878 ms
+[INFO ] 2026-08-05 09:00:23.373 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 3, action target : menu3MANUALPUTAWAY, action previousActiveComponent : menu1ASNRECEIVING},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:00:23.373 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE-MANUAL PUTAWAY
+[INFO ] 2026-08-05 09:00:23.373 [][WS-G-HK(181)-[(181)Thread-509]-[5]] UserActionLogger - LogFirePage.doAction:finish Current cursor =textPalletLPN
+[TRACE] 2026-08-05 09:08:24.699 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=1, value='', isScan='false', target='', source='textPalletLPN', seq='5', com.intellinum.mia.app.runtime.InputData@2c4398b0}
+[INFO ] 2026-08-05 09:08:24.699 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - FlexiRuntime.handleUI: F2 with value '' from source 'textPalletLPN' to target ''
+[TRACE] 2026-08-05 09:08:24.886 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFireSSHConnection.SendKey:content=[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+Pallet/LPN:
+(B[0;4m                     
+[15d(B[mEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[2;6H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[6d(B[0;4m                     
+[15d(B[mEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[6d (B[0;4m                    
+[15d(B[mEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[16dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[17dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[17dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[17d[H[2J[H[2J
+[H[2J
+[6G[H[2J
+
+
+
+[H[2J[6d[H[2J[6d[H[2J[15d[H[2J[16d[H[2J[16d[H[2J[17d[H[2J[17d[H[2J[H[2J
+[16dCtrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) INBOUND[3;31H
+[H[2J
+
+1) INBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) OUTBOUND[4;31H
+[H[2J
+
+1) INBOUND
+2) OUTBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) INVENTORY[5;31H
+
+
+
+
+
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:08:24.886 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=187 ms
+[INFO ] 2026-08-05 09:08:24.902 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : GOTO_PREVIOUS_PAGE, action value : null, action target : null, action previousActiveComponent : textPalletLPN},previousActiveComponent=Component{name='textPalletLPN', eventListeners=[], container=Div1}
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE-MANUAL PUTAWAY,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:24.918 [][WS-G-HK(181)-[(181)Thread-509]-[6]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBOUND
+[TRACE] 2026-08-05 09:08:26.325 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='1', isScan='false', target='menu1INBOUND', source='menu1INBOUND', seq='6', com.intellinum.mia.app.runtime.InputData@156944aa}
+[INFO ] 2026-08-05 09:08:26.325 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '1' from source 'menu1INBOUND' to target 'menu1INBOUND'
+[TRACE] 2026-08-05 09:08:26.513 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m1(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H
+Ctrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) ASN RECEIVING[3;31H
+[H[2J
+
+1) ASN RECEIVING
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) DIRECTED PUTAWAY G[4;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) MANUAL PUTAWAY[5;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[6d4) RF LOCK UNLOCK CONTAINER   
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[7d5) SPLIT/COMBINE IBLPN[7;31H
+[H[2J
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[8d6) INB PALLETIZE[8;31H
+
+
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:08:26.513 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:08:26.544 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 1, action target : menu1INBOUND, action previousActiveComponent : menu1INBOUND},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:26.560 [][WS-G-HK(181)-[(181)Thread-509]-[7]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1ASNRECEIVING
+[TRACE] 2026-08-05 09:08:28.796 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='6', isScan='false', target='menu6INBPALLETIZE', source='menu1ASNRECEIVING', seq='7', com.intellinum.mia.app.runtime.InputData@261374e6}
+[INFO ] 2026-08-05 09:08:28.796 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '6' from source 'menu1ASNRECEIVING' to target 'menu6INBPALLETIZE'
+[TRACE] 2026-08-05 09:08:28.984 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m6(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) ASN RECEIVING
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) DIRECTED PUTAWAY G
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) MANUAL PUTAWAY
+4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[6d4) RF LOCK UNLOCK CONTAINER
+5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[7d5) SPLIT/COMBINE IBLPN
+6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8d6) INB PALLETIZE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H[?1h=
+[5dPlt:(B[0;4m                     [5G(B[m
+[15dEnv: dpworld2[16;30H
+Ctrl-X: Exit App[17;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE	   [5;5H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:08:28.984 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:08:28.999 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 6, action target : menu6INBPALLETIZE, action previousActiveComponent : menu1ASNRECEIVING},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:08:28.999 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE-INB PALLETIZE
+[INFO ] 2026-08-05 09:08:28.999 [][WS-G-HK(181)-[(181)Thread-509]-[8]] UserActionLogger - LogFirePage.doAction:finish Current cursor =textPlt
+[TRACE] 2026-08-05 09:08:30.813 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=1, value='', isScan='false', target='', source='textPlt', seq='8', com.intellinum.mia.app.runtime.InputData@33ed7660}
+[INFO ] 2026-08-05 09:08:30.813 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - FlexiRuntime.handleUI: F2 with value '' from source 'textPlt' to target ''
+[TRACE] 2026-08-05 09:08:31.001 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFireSSHConnection.SendKey:content=[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE[5;6H(B[0;4m                    
+[15d(B[mEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[15dEnv: dpworld2
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[5;5H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[16dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[17dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[17dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GINB PALLETIZE
+[17d[H[2J
+[8GINB PALLETIZE[H[H[2J
+[H[2J
+
+
+
+[H[2J[5;5H[H[2J[15d[H[2J[16d[H[2J[16d[H[2J[17d[H[2J[17d[H[2J[H[2J
+[16dCtrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) INBOUND[3;31H
+[H[2J
+
+1) INBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) OUTBOUND[4;31H
+[H[2J
+
+1) INBOUND
+2) OUTBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) INVENTORY[5;31H
+
+
+
+
+
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:08:31.001 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:08:31.001 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : GOTO_PREVIOUS_PAGE, action value : null, action target : null, action previousActiveComponent : textPlt},previousActiveComponent=Component{name='textPlt', eventListeners=[], container=Div1}
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE-INB PALLETIZE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:31.016 [][WS-G-HK(181)-[(181)Thread-509]-[9]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBOUND
+[TRACE] 2026-08-05 09:08:32.189 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='3', isScan='false', target='menu3INVENTORY', source='menu1INBOUND', seq='9', com.intellinum.mia.app.runtime.InputData@1ae0024c}
+[INFO ] 2026-08-05 09:08:32.189 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '3' from source 'menu1INBOUND' to target 'menu3INVENTORY'
+[TRACE] 2026-08-05 09:08:32.377 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m3(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H
+Ctrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) INB PALLETIZE[3;31H
+[H[2J
+
+1) INB PALLETIZE
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) CC TASK EXECUTION[4;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) PRINT BLIND LABELS[5;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[6d4) MODIFY IBLPN[6;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[7d5) PALLET INQUIRY[7;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[8d6) CARTON INQUIIRY[8;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[9d7) ITEM INQUIRY[9;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[10d8) LOCATION INQUIRY[10;31H
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:08:32.377 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:08:32.392 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 3, action target : menu3INVENTORY, action previousActiveComponent : menu1INBOUND},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[TRACE] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:32.408 [][WS-G-HK(181)-[(181)Thread-509]-[10]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='9', isScan='false', target='XX_LABEL_PRINT_CUSTOM_NEW', source='menu1INBPALLETIZE', seq='10', com.intellinum.mia.app.runtime.InputData@5ce9f6c4}
+[INFO ] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '9' from source 'menu1INBPALLETIZE' to target 'XX_LABEL_PRINT_CUSTOM_NEW'
+[TRACE] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.runScript:_afterClick~XX_LABEL_PRINT_CUSTOM_NEW:Java = 
+flexi.openApplication("XX_LABEL_PRINT_CUSTOM");
+[INFO ] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - FlexiAPI.openApplication:applicationID: XX_LABEL_PRINT_CUSTOM
+[INFO ] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - Session.openApplication: applicationID 4
+[TRACE] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[INFO ] 2026-08-05 09:08:36.380 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 4, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:08:36.395 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.runScript:_onPageEntered~XX_LABEL_PRINT_CUSTOM:Java = 
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.setHidden(true);
+XX_ORDER.setHidden(true);
+
+XX_GET_USER_PRINTER_WS.callWebService(null);
+if (XX_GET_USER_PRINTER_WS.getResponseCode() == 200) {
+	JSONObject trackingObj = new JSONObject(XX_GET_USER_PRINTER_WS.getRawResponse());
+	JSONArray trackingArr = trackingObj.getJSONArray("results");
+	flexi.putObject("PRINTER_VAL",trackingArr.get(0).get("default_label_printer"));
+	XX_PRINTER.setValue(flexi.getObject("PRINTER_VAL"));
+}
+[TRACE] 2026-08-05 09:08:36.395 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService
+[TRACE] 2026-08-05 09:08:36.395 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-08-05 09:08:36.395 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - RestWebService.request: URL = https://f1.wms.ocs.oraclecloud.com/dpworld2/wms/lgfapi/v10/entity/user?auth_user_id__username=WS-G-HK&values_list=default_label_printer
+[TRACE] 2026-08-05 09:08:36.395 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - RestWebService: Content Type = application/json
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: Total time = 766 ms
+[DEBUG] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: result 200 {"result_count":1,"page_count":1,"page_nbr":1,"next_page":null,"previous_page":null,"results":[{"default_label_printer":"GGLZT231PRINT03-D003"}]}
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - FlexiAPI.putObject:key: PRINTER_VAL
+[INFO ] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - FlexiAPI.getObject:key: PRINTER_VAL
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.script initialize = 766 ms
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onFocus~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+XX_PALLET_LABEL.reset();
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.reset();
+XX_LPN_LABEL.setHidden(true);
+
+[TRACE] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[INFO ] 2026-08-05 09:08:37.161 [][WS-G-HK(181)-[(181)Thread-509]-[11]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:09:27.923 [][WS-G-HK(181)-[(181)Thread-509]-[12]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_SUBMIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='11', com.intellinum.mia.app.runtime.InputData@80abb4f}
+[INFO ] 2026-08-05 09:09:27.923 [][WS-G-HK(181)-[(181)Thread-509]-[12]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SUBMIT_BTN'
+[INFO ] 2026-08-05 09:09:27.923 [][WS-G-HK(181)-[(181)Thread-509]-[12]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:09:36.181 [][WS-G-HK(181)-[(181)Thread-509]-[13]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='00984035390370022580', isScan='false', target='XX_SELECT_LABEL_PRINT_TYPE', source='XX_SELECT_LABEL_PRINT_TYPE', seq='12', com.intellinum.mia.app.runtime.InputData@6c5d6e1c}
+[INFO ] 2026-08-05 09:09:36.181 [][WS-G-HK(181)-[(181)Thread-509]-[13]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SELECT_LABEL_PRINT_TYPE'
+[INFO ] 2026-08-05 09:09:36.181 [][WS-G-HK(181)-[(181)Thread-509]-[13]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:09:38.714 [][WS-G-HK(181)-[(181)Thread-509]-[14]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_PRINTER', source='XX_SELECT_LABEL_PRINT_TYPE', seq='13', com.intellinum.mia.app.runtime.InputData@1c322ef3}
+[INFO ] 2026-08-05 09:09:38.714 [][WS-G-HK(181)-[(181)Thread-509]-[14]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_PRINTER'
+[INFO ] 2026-08-05 09:09:38.714 [][WS-G-HK(181)-[(181)Thread-509]-[14]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:09:43.614 [][WS-G-HK(181)-[(181)Thread-509]-[15]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_SUBMIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='14', com.intellinum.mia.app.runtime.InputData@17d5e4a0}
+[INFO ] 2026-08-05 09:09:43.614 [][WS-G-HK(181)-[(181)Thread-509]-[15]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SUBMIT_BTN'
+[INFO ] 2026-08-05 09:09:43.614 [][WS-G-HK(181)-[(181)Thread-509]-[15]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:09:44.650 [][WS-G-HK(181)-[(181)Thread-509]-[16]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_EXIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='15', com.intellinum.mia.app.runtime.InputData@4f152aeb}
+[INFO ] 2026-08-05 09:09:44.650 [][WS-G-HK(181)-[(181)Thread-509]-[16]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_EXIT_BTN'
+[INFO ] 2026-08-05 09:09:44.650 [][WS-G-HK(181)-[(181)Thread-509]-[16]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:09:47.777 [][WS-G-HK(181)-[(181)Thread-509]-[17]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_EXIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='16', com.intellinum.mia.app.runtime.InputData@593a170a}
+[INFO ] 2026-08-05 09:09:47.777 [][WS-G-HK(181)-[(181)Thread-509]-[17]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_EXIT_BTN'
+[INFO ] 2026-08-05 09:09:47.777 [][WS-G-HK(181)-[(181)Thread-509]-[17]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:11.286 [][WS-G-HK(181)-[(181)Thread-509]-[18]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_SUBMIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='17', com.intellinum.mia.app.runtime.InputData@467c544b}
+[INFO ] 2026-08-05 09:10:11.286 [][WS-G-HK(181)-[(181)Thread-509]-[18]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SUBMIT_BTN'
+[INFO ] 2026-08-05 09:10:11.286 [][WS-G-HK(181)-[(181)Thread-509]-[18]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:26.409 [][WS-G-HK(181)-[(181)Thread-509]-[19]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=1, value='', isScan='false', target='', source='XX_SELECT_LABEL_PRINT_TYPE', seq='18', com.intellinum.mia.app.runtime.InputData@64acb168}
+[INFO ] 2026-08-05 09:10:26.409 [][WS-G-HK(181)-[(181)Thread-509]-[19]] UserActionLogger - FlexiRuntime.handleUI: F2 with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target ''
+[INFO ] 2026-08-05 09:10:26.409 [][WS-G-HK(181)-[(181)Thread-509]-[19]] UserActionLogger - Session.closeApplication: isConfirm true
+[INFO ] 2026-08-05 09:10:26.409 [][WS-G-HK(181)-[(181)Thread-509]-[19]] UserActionLogger - Transformed Action {ActionType : EXIT_APPLICATION, action value : true, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:26.409 [][WS-G-HK(181)-[(181)Thread-509]-[19]] UserActionLogger - FlexiRuntime.showOptionDialog:title Quit, message Do you want to close the screen?, options 2, backgroundColor null
+[TRACE] 2026-08-05 09:10:35.073 [][WS-G-HK(181)-[(181)Thread-509]-[22]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_SUBMIT_BTN', source='XX_SELECT_LABEL_PRINT_TYPE', seq='19', com.intellinum.mia.app.runtime.InputData@55c5d291}
+[INFO ] 2026-08-05 09:10:35.073 [][WS-G-HK(181)-[(181)Thread-509]-[22]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SUBMIT_BTN'
+[INFO ] 2026-08-05 09:10:35.073 [][WS-G-HK(181)-[(181)Thread-509]-[22]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:37.575 [][WS-G-HK(181)-[(181)Thread-509]-[23]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=1, value='', isScan='false', target='', source='XX_SELECT_LABEL_PRINT_TYPE', seq='20', com.intellinum.mia.app.runtime.InputData@45daebc}
+[INFO ] 2026-08-05 09:10:37.575 [][WS-G-HK(181)-[(181)Thread-509]-[23]] UserActionLogger - FlexiRuntime.handleUI: F2 with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target ''
+[INFO ] 2026-08-05 09:10:37.575 [][WS-G-HK(181)-[(181)Thread-509]-[23]] UserActionLogger - Session.closeApplication: isConfirm true
+[INFO ] 2026-08-05 09:10:37.575 [][WS-G-HK(181)-[(181)Thread-509]-[23]] UserActionLogger - Transformed Action {ActionType : EXIT_APPLICATION, action value : true, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:37.575 [][WS-G-HK(181)-[(181)Thread-509]-[23]] UserActionLogger - FlexiRuntime.showOptionDialog:title Quit, message Do you want to close the screen?, options 2, backgroundColor null
+[TRACE] 2026-08-05 09:10:44.075 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='5', isScan='false', target='menu5PALLETINQUIRY', source='menu1INBPALLETIZE', seq='21', com.intellinum.mia.app.runtime.InputData@524bb871}
+[INFO ] 2026-08-05 09:10:44.075 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '5' from source 'menu1INBPALLETIZE' to target 'menu5PALLETINQUIRY'
+[TRACE] 2026-08-05 09:10:44.263 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m5(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[6d4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[7d5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8d6) CARTON INQUIIRY
+7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[9d7) ITEM INQUIRY
+8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[10d8) LOCATION INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H[?1h=
+[4dPlt:[?1h=
+(B[0;4m                     
+(B[m[?1h=
+Type:[?1h=
+[?1h=
+LPNs:[?1h=
+Current LPN Type:[?1h=
+Weight:[?1h=
+Length:[?1h=
+Width:[?1h=
+Height:[?1h=
+Locn:
+
+Ctrl-V: Pallet Information[16;56H
+Ctrl-N: LPN List[17;46H
+Ctrl-T: Update LPN Type/Weight[18;60H
+Ctrl-F: Attachment[19;48H
+[15dEnv: dpworld2[20;30H
+Ctrl-X: Exit App[21;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY[29G
+
+
+(B[0;4m1(B[m
+(B[0;4m 
+(B[m
+[INFO ] 2026-08-05 09:10:44.263 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:10:44.279 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 5, action target : menu5PALLETINQUIRY, action previousActiveComponent : menu1INBPALLETIZE},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:10:44.279 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE-PALLET INQUIRY
+[INFO ] 2026-08-05 09:10:44.279 [][WS-G-HK(181)-[(181)Thread-509]-[26]] UserActionLogger - LogFirePage.doAction:finish Current cursor =textPlt
+[TRACE] 2026-08-05 09:10:46.420 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=1, value='', isScan='false', target='', source='textPlt', seq='22', com.intellinum.mia.app.runtime.InputData@3828fcde}
+[INFO ] 2026-08-05 09:10:46.420 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - FlexiRuntime.handleUI: F2 with value '' from source 'textPlt' to target ''
+[TRACE] 2026-08-05 09:10:46.608 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFireSSHConnection.SendKey:content=[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+
+
+(B[0;4m                     
+(B[mType:
+
+LPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+
+
+(B[0;4m                     
+(B[mType:
+
+LPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[4;5H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+
+
+ (B[0;4m                    
+(B[mType:
+
+LPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+
+
+
+Type:
+
+LPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[8dLPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[8dLPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[6;6H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[8dLPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[8dLPNs:
+Current LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[9dCurrent LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[9dCurrent LPN Type:
+Weight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[8;6H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[10dWeight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[10dWeight:
+Length:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[9;18H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[11dLength:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[11dLength:
+Width:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[10;8H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[12dWidth:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[12dWidth:
+Height:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[11;8H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[13dHeight:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[13dHeight:
+Locn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[12;7H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[14dLocn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[14dLocn:
+Env: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;8H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+Ctrl-V: Pallet Information
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[14;6H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+
+Ctrl-N: LPN List
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+
+
+Ctrl-T: Update LPN Type/Weight
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+
+
+
+Ctrl-F: Attachment
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[15dEnv: dpworld2
+[20dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[20dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[21dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[21dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[8GPALLET INQUIRY
+[21d[H[2J
+[8GPALLET INQUIRY[H[H[2J
+[H[2J
+
+
+[H[2J
+
+
+    [H[2J
+
+
+
+[H[2J
+
+
+
+[H[2J[6d[H[2J[6;6H[H[2J[7d[H[2J[7d[H[2J[8d[H[2J[8;6H[H[2J[9d[H[2J[9;18H[H[2J[10d[H[2J[10;8H[H[2J[11d[H[2J[11;8H[H[2J[12d[H[2J[12;7H[H[2J[13d[H[2J[13;8H[H[2J[14d[H[2J[14;6H[H[2J[16d[H[2J[17d[H[2J[18d[H[2J[19d[H[2J[15d[H[2J[20d[H[2J[20d[H[2J[21d[H[2J[21d[H[2J[H[2J
+[16dCtrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) INBOUND[3;31H
+[H[2J
+
+1) INBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) OUTBOUND[4;31H
+[H[2J
+
+1) INBOUND
+2) OUTBOUND
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) INVENTORY[5;31H
+
+
+
+
+
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:10:46.608 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=188 ms
+[INFO ] 2026-08-05 09:10:46.624 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : GOTO_PREVIOUS_PAGE, action value : null, action target : null, action previousActiveComponent : textPlt},previousActiveComponent=Component{name='textPlt', eventListeners=[], container=Div1}
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE-PALLET INQUIRY,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[WARN ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[TRACE] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:10:46.639 [][WS-G-HK(181)-[(181)Thread-509]-[27]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBOUND
+[TRACE] 2026-08-05 09:10:47.708 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='3', isScan='false', target='menu3INVENTORY', source='menu1INBOUND', seq='23', com.intellinum.mia.app.runtime.InputData@1820cf65}
+[INFO ] 2026-08-05 09:10:47.708 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '3' from source 'menu1INBOUND' to target 'menu3INVENTORY'
+[TRACE] 2026-08-05 09:10:47.898 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFireSSHConnection.SendKey:content=(B[0;4m3(B[m[15;17H(B[0;5m.....(B[m[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY[13;5H(B[0;4m                         
+
+(B[mEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2   (B[0;5m.....
+(B[mCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[15;17H[K[22G[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[16d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[17d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+
+
+
+Ctrl-O: Restrict Company
+Ctrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[18d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[19d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+1) INBOUND
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+2) OUTBOUND
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[H
+
+[H[2JOracle WMS GOOGLE_HK/GOOGLE
+
+
+
+3) INVENTORY
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[4d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[5d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[6d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[7d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[8d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[9d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[10d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[11d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[12d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[15dEnv: dpworld2
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[14d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[13d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[20dCtrl-U: Page Up
+Ctrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen[13;4H[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[21dCtrl-D: Page Down
+Ctrl-X: Exit App
+Ctrl-W: Previous Screen
+[20d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[21d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[22dCtrl-X: Exit App
+Ctrl-W: Previous Screen
+[15d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23dCtrl-W: Previous Screen
+[A[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2JOracle WMS GOOGLE_HK/GOOGLE
+[23d[H[2J[H[2J[15;17H
+Ctrl-L: Change Language[16;53H
+Ctrl-F: Change Facility[17;53H
+Ctrl-P: Change Default Printer[18;60H
+Ctrl-O: Restrict Company[19;54H[2;29H
+[3;31H[H[2J[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company[H
+
+1) INB PALLETIZE[3;31H
+[H[2J
+
+1) INB PALLETIZE
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[4d2) CC TASK EXECUTION[4;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[5d3) PRINT BLIND LABELS[5;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[6d4) MODIFY IBLPN[6;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[7d5) PALLET INQUIRY[7;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[8d6) CARTON INQUIIRY[8;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[9d7) ITEM INQUIRY[9;31H
+[H[2J
+
+1) INB PALLETIZE
+2) CC TASK EXECUTION
+3) PRINT BLIND LABELS
+4) MODIFY IBLPN
+5) PALLET INQUIRY
+6) CARTON INQUIIRY
+7) ITEM INQUIRY
+[16dCtrl-L: Change Language
+Ctrl-F: Change Facility
+Ctrl-P: Change Default Printer
+Ctrl-O: Restrict Company
+[10d8) LOCATION INQUIRY[10;31H
+
+
+
+
+[?1h=
+[13d=> (B[0;4m                          [4G(B[m
+[20dCtrl-U: Page Up[20;45H
+Ctrl-D: Page Down[21;47H
+[15dEnv: dpworld2[22;30H
+Ctrl-X: Exit App[23;30H
+Ctrl-W: Previous Screen[HOracle WMS GOOGLE_HK/GOOGLE[13;4H(B[0;4m1(B[m(B[0;4m (B[m
+[INFO ] 2026-08-05 09:10:47.898 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFireSSHConnection.SendKey:LogFireTime=190 ms
+[INFO ] 2026-08-05 09:10:47.914 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - Current language: en_US
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.performPersonalization:event={action : {ActionType : MOUSE_CLICK, action value : 3, action target : menu3INVENTORY, action previousActiveComponent : menu1INBOUND},previousActiveComponent=ListItem{values=[]}
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.performPersonalization:previousTitle=Oracle WMS GOOGLE_HK/GOOGLE,currentTitle=Oracle WMS GOOGLE_HK/GOOGLE
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM, type Menu, reference after menu8CycleCount]
+[WARN ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM, type Menu, reference after XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM]
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_DESTUFFING_CONTAINER_TBL_NEW, type Menu, reference after menu2Putaway]
+[WARN ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:reference component not found
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:additionalComponent=[name XX_LABEL_PRINT_CUSTOM_NEW, type Menu, reference after menu8LOCATIONINQUIRY]
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.applyAdditionalField:reference component found
+[TRACE] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.runScript:_afterPageEntered~LogFirePage:Java = 
+page.disableBackButton();
+String title=page.getTitle();
+String[] parts = title.split("/");
+String p1 = parts[0];
+String p2 = parts[1];
+String[] title1= p1 .split(" ");
+String[] title2= p2 .split(" ");
+String facility = title1[title1.length-1];
+flexi.putSessionObject("FACILITY",facility);
+String[] parts_copy = title.split("-");
+String p3 = parts[0];
+String[] title3= p3 .split(" ");
+String cmny = title3[title3.length-1];
+flexi.putSessionObject("COMPANY",p2);
+//flexi.setStatusMessage("Company:-"+flexi.getSessionObject("COMPANY")+", Facility:-"+flexi.getSessionObject("FACILITY"));
+
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_INBOUND_PERMIT_NUM.setHidden(true);
+}
+if(menu1Receiving!=void)
+{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(false);
+}
+else{
+XX_CUSTOM_UPDATE_OUTBOUND_PERMIT_NUM.setHidden(true);
+}
+[TRACE] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - FlexiAPI.putSessionObject:key: FACILITY, object: GOOGLE_HK
+[TRACE] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - FlexiAPI.putSessionObject:key: COMPANY, object: GOOGLE
+[TRACE] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.script initialize = 0 ms
+[INFO ] 2026-08-05 09:10:47.930 [][WS-G-HK(181)-[(181)Thread-509]-[28]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='9', isScan='false', target='XX_LABEL_PRINT_CUSTOM_NEW', source='menu1INBPALLETIZE', seq='24', com.intellinum.mia.app.runtime.InputData@7456b27e}
+[INFO ] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '9' from source 'menu1INBPALLETIZE' to target 'XX_LABEL_PRINT_CUSTOM_NEW'
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.runScript:_afterClick~XX_LABEL_PRINT_CUSTOM_NEW:Java = 
+flexi.openApplication("XX_LABEL_PRINT_CUSTOM");
+[INFO ] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - FlexiAPI.openApplication:applicationID: XX_LABEL_PRINT_CUSTOM
+[INFO ] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - Session.openApplication: applicationID 4
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.script initialize = 0 ms
+[INFO ] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[INFO ] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 4, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.runScript:_onPageEntered~XX_LABEL_PRINT_CUSTOM:Java = 
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.setHidden(true);
+XX_ORDER.setHidden(true);
+
+XX_GET_USER_PRINTER_WS.callWebService(null);
+if (XX_GET_USER_PRINTER_WS.getResponseCode() == 200) {
+	JSONObject trackingObj = new JSONObject(XX_GET_USER_PRINTER_WS.getRawResponse());
+	JSONArray trackingArr = trackingObj.getJSONArray("results");
+	flexi.putObject("PRINTER_VAL",trackingArr.get(0).get("default_label_printer"));
+	XX_PRINTER.setValue(flexi.getObject("PRINTER_VAL"));
+}
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - RestWebService.request: URL = https://f1.wms.ocs.oraclecloud.com/dpworld2/wms/lgfapi/v10/entity/user?auth_user_id__username=WS-G-HK&values_list=default_label_printer
+[TRACE] 2026-08-05 09:10:56.069 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - RestWebService: Content Type = application/json
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: Total time = 609 ms
+[DEBUG] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: result 200 {"result_count":1,"page_count":1,"page_nbr":1,"next_page":null,"previous_page":null,"results":[{"default_label_printer":"GGLZT231PRINT03-D003"}]}
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - FlexiAPI.putObject:key: PRINTER_VAL
+[INFO ] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - FlexiAPI.getObject:key: PRINTER_VAL
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.script initialize = 609 ms
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onFocus~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+XX_PALLET_LABEL.reset();
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.reset();
+XX_LPN_LABEL.setHidden(true);
+
+[TRACE] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[INFO ] 2026-08-05 09:10:56.678 [][WS-G-HK(181)-[(181)Thread-509]-[29]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:11:02.855 [][WS-G-HK(181)-[(181)Thread-509]-[30]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=28, value='', isScan='false', target='XX_SELECT_LABEL_PRINT_TYPE', source='XX_SELECT_LABEL_PRINT_TYPE', seq='25', com.intellinum.mia.app.runtime.InputData@77e1e9a3}
+[INFO ] 2026-08-05 09:11:02.855 [][WS-G-HK(181)-[(181)Thread-509]-[30]] UserActionLogger - FlexiRuntime.handleUI: CTRL_L with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SELECT_LABEL_PRINT_TYPE'
+[INFO ] 2026-08-05 09:11:02.855 [][WS-G-HK(181)-[(181)Thread-509]-[30]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='2', isScan='false', target='1', source='1', seq='26', com.intellinum.mia.app.runtime.InputData@e37d3f6}
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '2' from source '1' to target '1'
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : 2, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : IB Label, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onExit~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+if(XX_SELECT_LABEL_PRINT_TYPE.getValue().length()>0)
+{
+	XX_PALLET_LABEL.setReadOnly(false);
+	XX_LPN_LABEL.setReadOnly(false);
+	XX_PALLET_LABEL.setHidden(false);
+	XX_LPN_LABEL.setHidden(false);
+	
+	flexi.putObject("LABEL_TYPE_VAL_OBJ",XX_SELECT_LABEL_PRINT_TYPE.getValue());
+	if("IB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("OB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("Order".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(false);
+		XX_PALLET_LABEL.setHidden(true);
+		XX_LPN_LABEL.setHidden(true);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	
+}
+[TRACE] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiAPI.putObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[TRACE] 2026-08-05 09:11:03.965 [][WS-G-HK(181)-[(181)Thread-509]-[31]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[TRACE] 2026-08-05 09:11:36.282 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022580', isScan='false', target='XX_SUBMIT_BTN', source='XX_PALLET_LABEL', seq='27', com.intellinum.mia.app.runtime.InputData@7e0da96f}
+[INFO ] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022580' from source 'XX_PALLET_LABEL' to target 'XX_SUBMIT_BTN'
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - XX_PALLET_LABEL.runScript:_onExit~XX_PALLET_LABEL:Java = 
+if(XX_PALLET_LABEL.getValue().length()>0)
+{
+	XX_LPN_LABEL.setReadOnly(true);
+}
+else
+{
+	XX_LPN_LABEL.setReadOnly(false);
+}
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - XX_PALLET_LABEL.script initialize = 0 ms
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - XX_SUBMIT_BTN.runScript:_onClick~XX_SUBMIT_BTN:Java = 
+String labelType = XX_SELECT_LABEL_PRINT_TYPE.getValue();
+String printerName = XX_PRINTER.getValue();
+String orderNum = XX_ORDER.getValue();
+String palletLabel = XX_PALLET_LABEL.getValue();
+String lpnLabel = XX_LPN_LABEL.getValue();
+
+logger.trace("Label Type Selected: " +labelType);
+logger.trace("Printer Name Selected: " +printerName);
+logger.trace("Order Number Selected: " +orderNum);
+logger.trace("palletLabel Selected: " +palletLabel);
+logger.trace("LPN Label Selected: " +lpnLabel);
+
+JSONObject payload = new JSONObject();
+
+if ("IB Label".equals(labelType)) {
+	// ============================================================
+	// IB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	
+	//payload.put("carton",       ""); Previous New code added below
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",     ""); previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "IB");
+	payload.put("order",        "");
+
+} else if ("OB Label".equals(labelType)) {
+	// ============================================================
+	// OB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	//payload.put("carton",       ""); previously new code added below
+	
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",      ""); Previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        "");
+
+} else if ("Order".equals(labelType)) {
+	// ============================================================
+	// Order Type Payload
+	// ============================================================
+	payload.put("LPNNumber",    "");
+	payload.put("orderNumber",  orderNum      != null ? orderNum      : "");
+	payload.put("carton",       "");
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	payload.put("pallet",       "");
+	payload.put("palletNumber", "");
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        orderNum      != null ? orderNum      : "");
+
+} else {
+	flexi.setStatusMessage("Invalid Label Type Selected: " + labelType);
+	return;
+}
+
+String finalPayloadString = payload.toString();
+logger.trace("Final Payload: " + finalPayloadString);
+flexi.putSessionObject("PAYLOAD", finalPayloadString);
+flexi.setStatusMessage("Payload Created:  " +flexi.getSessionObject("PAYLOAD"));
+// ============================================================
+// Call OIC Web Service
+// ============================================================
+
+OIC_POST_ORDER_PRINT_WS.callWebService(null);
+if (OIC_POST_ORDER_PRINT_WS.getResponseCode() == 200 || OIC_POST_ORDER_PRINT_WS.getResponseCode() == 202) {
+	flexi.setStatusMessage("Label Printed Successfully..!!");
+	flexi.closeApplication();
+} else {
+	flexi.setStatusMessage("Failed to Print Label. Response Code: " + OIC_POST_ORDER_PRINT_WS.getResponseCode());
+}
+
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Label Type Selected: IB Label
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Printer Name Selected: GGLZT231PRINT03-D003
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Order Number Selected: 
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - palletLabel Selected: 00984035390370022580
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - LPN Label Selected: 
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Final Payload: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022580","palletNumber":"00984035390370022580","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiAPI.putSessionObject:key: PAYLOAD, object: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022580","palletNumber":"00984035390370022580","LABEL_TYPE":"IB","order":""}
+[INFO ] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiAPI.getSessionObject:key: PAYLOAD
+[INFO ] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiAPI.setStatusMessage:message=Payload Created:  {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022580","palletNumber":"00984035390370022580","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService.request: Request Method = POST
+[DEBUG] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService.postAction: https://otmprod-oic-dpwglobalpass.integration.eu-frankfurt-1.ocp.oraclecloud.com/ic/api/integration/v1/flows/rest/DPW_INT_GGL_OB_ORDE_PALL_LABE_PR/1.0/wms2ggl/orderprint
+[DEBUG] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService.logRequestBody: Request Body = {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022580","palletNumber":"00984035390370022580","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:11:36.297 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService: Content Type = null
+[TRACE] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - RestWebService.request:POST request
+[TRACE] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: Total time = 1392 ms
+[DEBUG] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: result 202 
+[INFO ] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiAPI.setStatusMessage:message=Label Printed Successfully..!!
+[INFO ] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - FlexiAPI.closeApplication
+[INFO ] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Session.closeApplication: isConfirm false
+[TRACE] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - XX_SUBMIT_BTN.script initialize = 1392 ms
+[INFO ] 2026-08-05 09:11:37.689 [][WS-G-HK(181)-[(181)Thread-509]-[32]] UserActionLogger - Transformed Action {ActionType : EXIT_APPLICATION, action value : false, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='9', isScan='false', target='XX_LABEL_PRINT_CUSTOM_NEW', source='menu1INBPALLETIZE', seq='28', com.intellinum.mia.app.runtime.InputData@354b7428}
+[INFO ] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '9' from source 'menu1INBPALLETIZE' to target 'XX_LABEL_PRINT_CUSTOM_NEW'
+[TRACE] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.runScript:_afterClick~XX_LABEL_PRINT_CUSTOM_NEW:Java = 
+flexi.openApplication("XX_LABEL_PRINT_CUSTOM");
+[INFO ] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - FlexiAPI.openApplication:applicationID: XX_LABEL_PRINT_CUSTOM
+[INFO ] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - Session.openApplication: applicationID 4
+[TRACE] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.script initialize = 0 ms
+[INFO ] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[INFO ] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 4, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:40.630 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.runScript:_onPageEntered~XX_LABEL_PRINT_CUSTOM:Java = 
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.setHidden(true);
+XX_ORDER.setHidden(true);
+
+XX_GET_USER_PRINTER_WS.callWebService(null);
+if (XX_GET_USER_PRINTER_WS.getResponseCode() == 200) {
+	JSONObject trackingObj = new JSONObject(XX_GET_USER_PRINTER_WS.getRawResponse());
+	JSONArray trackingArr = trackingObj.getJSONArray("results");
+	flexi.putObject("PRINTER_VAL",trackingArr.get(0).get("default_label_printer"));
+	XX_PRINTER.setValue(flexi.getObject("PRINTER_VAL"));
+}
+[TRACE] 2026-08-05 09:11:40.645 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService
+[TRACE] 2026-08-05 09:11:40.645 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-08-05 09:11:40.645 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - RestWebService.request: URL = https://f1.wms.ocs.oraclecloud.com/dpworld2/wms/lgfapi/v10/entity/user?auth_user_id__username=WS-G-HK&values_list=default_label_printer
+[TRACE] 2026-08-05 09:11:40.645 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - RestWebService: Content Type = application/json
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: Total time = 423 ms
+[DEBUG] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: result 200 {"result_count":1,"page_count":1,"page_nbr":1,"next_page":null,"previous_page":null,"results":[{"default_label_printer":"GGLZT231PRINT03-D003"}]}
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - FlexiAPI.putObject:key: PRINTER_VAL
+[INFO ] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - FlexiAPI.getObject:key: PRINTER_VAL
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.script initialize = 438 ms
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onFocus~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+XX_PALLET_LABEL.reset();
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.reset();
+XX_LPN_LABEL.setHidden(true);
+
+[TRACE] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[INFO ] 2026-08-05 09:11:41.068 [][WS-G-HK(181)-[(181)Thread-509]-[33]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:11:45.502 [][WS-G-HK(181)-[(181)Thread-509]-[34]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=28, value='', isScan='false', target='XX_SELECT_LABEL_PRINT_TYPE', source='XX_SELECT_LABEL_PRINT_TYPE', seq='29', com.intellinum.mia.app.runtime.InputData@538ee19c}
+[INFO ] 2026-08-05 09:11:45.502 [][WS-G-HK(181)-[(181)Thread-509]-[34]] UserActionLogger - FlexiRuntime.handleUI: CTRL_L with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SELECT_LABEL_PRINT_TYPE'
+[INFO ] 2026-08-05 09:11:45.502 [][WS-G-HK(181)-[(181)Thread-509]-[34]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='2', isScan='false', target='1', source='1', seq='30', com.intellinum.mia.app.runtime.InputData@772e4dd9}
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '2' from source '1' to target '1'
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : 2, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : IB Label, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onExit~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+if(XX_SELECT_LABEL_PRINT_TYPE.getValue().length()>0)
+{
+	XX_PALLET_LABEL.setReadOnly(false);
+	XX_LPN_LABEL.setReadOnly(false);
+	XX_PALLET_LABEL.setHidden(false);
+	XX_LPN_LABEL.setHidden(false);
+	
+	flexi.putObject("LABEL_TYPE_VAL_OBJ",XX_SELECT_LABEL_PRINT_TYPE.getValue());
+	if("IB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("OB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("Order".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(false);
+		XX_PALLET_LABEL.setHidden(true);
+		XX_LPN_LABEL.setHidden(true);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	
+}
+[TRACE] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiAPI.putObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[TRACE] 2026-08-05 09:11:48.301 [][WS-G-HK(181)-[(181)Thread-509]-[35]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[TRACE] 2026-08-05 09:12:34.071 [][WS-G-HK(181)-[(181)Thread-509]-[36]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='00984035390370022597', isScan='false', target='XX_PALLET_LABEL', source='XX_PALLET_LABEL', seq='31', com.intellinum.mia.app.runtime.InputData@5990b6c4}
+[INFO ] 2026-08-05 09:12:34.071 [][WS-G-HK(181)-[(181)Thread-509]-[36]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value '00984035390370022597' from source 'XX_PALLET_LABEL' to target 'XX_PALLET_LABEL'
+[TRACE] 2026-08-05 09:12:34.071 [][WS-G-HK(181)-[(181)Thread-509]-[36]] UserActionLogger - XX_PALLET_LABEL.runScript:_onExit~XX_PALLET_LABEL:Java = 
+if(XX_PALLET_LABEL.getValue().length()>0)
+{
+	XX_LPN_LABEL.setReadOnly(true);
+}
+else
+{
+	XX_LPN_LABEL.setReadOnly(false);
+}
+[TRACE] 2026-08-05 09:12:34.071 [][WS-G-HK(181)-[(181)Thread-509]-[36]] UserActionLogger - XX_PALLET_LABEL.script initialize = 0 ms
+[TRACE] 2026-08-05 09:12:36.010 [][WS-G-HK(181)-[(181)Thread-509]-[37]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='GGLZT231PRINT03-D003', isScan='false', target='XX_PRINTER', source='XX_PRINTER', seq='32', com.intellinum.mia.app.runtime.InputData@3be09686}
+[INFO ] 2026-08-05 09:12:36.010 [][WS-G-HK(181)-[(181)Thread-509]-[37]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value 'GGLZT231PRINT03-D003' from source 'XX_PRINTER' to target 'XX_PRINTER'
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='', isScan='false', target='', source='XX_SUBMIT_BTN', seq='33', com.intellinum.mia.app.runtime.InputData@3307439b}
+[INFO ] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value '' from source 'XX_SUBMIT_BTN' to target ''
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - XX_SUBMIT_BTN.runScript:_onClick~XX_SUBMIT_BTN:Java = 
+String labelType = XX_SELECT_LABEL_PRINT_TYPE.getValue();
+String printerName = XX_PRINTER.getValue();
+String orderNum = XX_ORDER.getValue();
+String palletLabel = XX_PALLET_LABEL.getValue();
+String lpnLabel = XX_LPN_LABEL.getValue();
+
+logger.trace("Label Type Selected: " +labelType);
+logger.trace("Printer Name Selected: " +printerName);
+logger.trace("Order Number Selected: " +orderNum);
+logger.trace("palletLabel Selected: " +palletLabel);
+logger.trace("LPN Label Selected: " +lpnLabel);
+
+JSONObject payload = new JSONObject();
+
+if ("IB Label".equals(labelType)) {
+	// ============================================================
+	// IB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	
+	//payload.put("carton",       ""); Previous New code added below
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",     ""); previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "IB");
+	payload.put("order",        "");
+
+} else if ("OB Label".equals(labelType)) {
+	// ============================================================
+	// OB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	//payload.put("carton",       ""); previously new code added below
+	
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",      ""); Previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        "");
+
+} else if ("Order".equals(labelType)) {
+	// ============================================================
+	// Order Type Payload
+	// ============================================================
+	payload.put("LPNNumber",    "");
+	payload.put("orderNumber",  orderNum      != null ? orderNum      : "");
+	payload.put("carton",       "");
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	payload.put("pallet",       "");
+	payload.put("palletNumber", "");
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        orderNum      != null ? orderNum      : "");
+
+} else {
+	flexi.setStatusMessage("Invalid Label Type Selected: " + labelType);
+	return;
+}
+
+String finalPayloadString = payload.toString();
+logger.trace("Final Payload: " + finalPayloadString);
+flexi.putSessionObject("PAYLOAD", finalPayloadString);
+flexi.setStatusMessage("Payload Created:  " +flexi.getSessionObject("PAYLOAD"));
+// ============================================================
+// Call OIC Web Service
+// ============================================================
+
+OIC_POST_ORDER_PRINT_WS.callWebService(null);
+if (OIC_POST_ORDER_PRINT_WS.getResponseCode() == 200 || OIC_POST_ORDER_PRINT_WS.getResponseCode() == 202) {
+	flexi.setStatusMessage("Label Printed Successfully..!!");
+	flexi.closeApplication();
+} else {
+	flexi.setStatusMessage("Failed to Print Label. Response Code: " + OIC_POST_ORDER_PRINT_WS.getResponseCode());
+}
+
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Label Type Selected: IB Label
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Printer Name Selected: GGLZT231PRINT03-D003
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Order Number Selected: 
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - palletLabel Selected: 00984035390370022597
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - LPN Label Selected: 
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Final Payload: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022597","palletNumber":"00984035390370022597","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiAPI.putSessionObject:key: PAYLOAD, object: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022597","palletNumber":"00984035390370022597","LABEL_TYPE":"IB","order":""}
+[INFO ] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiAPI.getSessionObject:key: PAYLOAD
+[INFO ] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiAPI.setStatusMessage:message=Payload Created:  {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022597","palletNumber":"00984035390370022597","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService.request: Request Method = POST
+[DEBUG] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService.postAction: https://otmprod-oic-dpwglobalpass.integration.eu-frankfurt-1.ocp.oraclecloud.com/ic/api/integration/v1/flows/rest/DPW_INT_GGL_OB_ORDE_PALL_LABE_PR/1.0/wms2ggl/orderprint
+[DEBUG] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService.logRequestBody: Request Body = {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"00984035390370022597","palletNumber":"00984035390370022597","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:12:37.918 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService: Content Type = null
+[TRACE] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - RestWebService.request:POST request
+[TRACE] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: Total time = 735 ms
+[DEBUG] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: result 202 
+[INFO ] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiAPI.setStatusMessage:message=Label Printed Successfully..!!
+[INFO ] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - FlexiAPI.closeApplication
+[INFO ] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Session.closeApplication: isConfirm false
+[TRACE] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - XX_SUBMIT_BTN.script initialize = 735 ms
+[INFO ] 2026-08-05 09:12:38.653 [][WS-G-HK(181)-[(181)Thread-509]-[38]] UserActionLogger - Transformed Action {ActionType : EXIT_APPLICATION, action value : false, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='9', isScan='false', target='XX_LABEL_PRINT_CUSTOM_NEW', source='menu1INBPALLETIZE', seq='34', com.intellinum.mia.app.runtime.InputData@489ee366}
+[INFO ] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '9' from source 'menu1INBPALLETIZE' to target 'XX_LABEL_PRINT_CUSTOM_NEW'
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.runScript:_afterClick~XX_LABEL_PRINT_CUSTOM_NEW:Java = 
+flexi.openApplication("XX_LABEL_PRINT_CUSTOM");
+[INFO ] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - FlexiAPI.openApplication:applicationID: XX_LABEL_PRINT_CUSTOM
+[INFO ] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - Session.openApplication: applicationID 4
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.script initialize = 0 ms
+[INFO ] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[INFO ] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 4, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.runScript:_onPageEntered~XX_LABEL_PRINT_CUSTOM:Java = 
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.setHidden(true);
+XX_ORDER.setHidden(true);
+
+XX_GET_USER_PRINTER_WS.callWebService(null);
+if (XX_GET_USER_PRINTER_WS.getResponseCode() == 200) {
+	JSONObject trackingObj = new JSONObject(XX_GET_USER_PRINTER_WS.getRawResponse());
+	JSONArray trackingArr = trackingObj.getJSONArray("results");
+	flexi.putObject("PRINTER_VAL",trackingArr.get(0).get("default_label_printer"));
+	XX_PRINTER.setValue(flexi.getObject("PRINTER_VAL"));
+}
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - RestWebService.request: URL = https://f1.wms.ocs.oraclecloud.com/dpworld2/wms/lgfapi/v10/entity/user?auth_user_id__username=WS-G-HK&values_list=default_label_printer
+[TRACE] 2026-08-05 09:12:42.894 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - RestWebService: Content Type = application/json
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: Total time = 471 ms
+[DEBUG] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: result 200 {"result_count":1,"page_count":1,"page_nbr":1,"next_page":null,"previous_page":null,"results":[{"default_label_printer":"GGLZT231PRINT03-D003"}]}
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - FlexiAPI.putObject:key: PRINTER_VAL
+[INFO ] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - FlexiAPI.getObject:key: PRINTER_VAL
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.script initialize = 471 ms
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onFocus~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+XX_PALLET_LABEL.reset();
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.reset();
+XX_LPN_LABEL.setHidden(true);
+
+[TRACE] 2026-08-05 09:12:43.365 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[INFO ] 2026-08-05 09:12:43.381 [][WS-G-HK(181)-[(181)Thread-509]-[39]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:12:48.482 [][WS-G-HK(181)-[(181)Thread-509]-[40]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=28, value='', isScan='false', target='XX_SELECT_LABEL_PRINT_TYPE', source='XX_SELECT_LABEL_PRINT_TYPE', seq='35', com.intellinum.mia.app.runtime.InputData@7623139f}
+[INFO ] 2026-08-05 09:12:48.482 [][WS-G-HK(181)-[(181)Thread-509]-[40]] UserActionLogger - FlexiRuntime.handleUI: CTRL_L with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SELECT_LABEL_PRINT_TYPE'
+[INFO ] 2026-08-05 09:12:48.482 [][WS-G-HK(181)-[(181)Thread-509]-[40]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='2', isScan='false', target='1', source='1', seq='36', com.intellinum.mia.app.runtime.InputData@50129fb3}
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '2' from source '1' to target '1'
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : 2, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : IB Label, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onExit~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+if(XX_SELECT_LABEL_PRINT_TYPE.getValue().length()>0)
+{
+	XX_PALLET_LABEL.setReadOnly(false);
+	XX_LPN_LABEL.setReadOnly(false);
+	XX_PALLET_LABEL.setHidden(false);
+	XX_LPN_LABEL.setHidden(false);
+	
+	flexi.putObject("LABEL_TYPE_VAL_OBJ",XX_SELECT_LABEL_PRINT_TYPE.getValue());
+	if("IB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("OB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("Order".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(false);
+		XX_PALLET_LABEL.setHidden(true);
+		XX_LPN_LABEL.setHidden(true);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	
+}
+[TRACE] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiAPI.putObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[TRACE] 2026-08-05 09:12:49.483 [][WS-G-HK(181)-[(181)Thread-509]-[41]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[TRACE] 2026-08-05 09:13:13.139 [][WS-G-HK(181)-[(181)Thread-509]-[42]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='0094035390370022634', isScan='false', target='XX_PALLET_LABEL', source='XX_PALLET_LABEL', seq='37', com.intellinum.mia.app.runtime.InputData@58b43659}
+[INFO ] 2026-08-05 09:13:13.139 [][WS-G-HK(181)-[(181)Thread-509]-[42]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value '0094035390370022634' from source 'XX_PALLET_LABEL' to target 'XX_PALLET_LABEL'
+[TRACE] 2026-08-05 09:13:13.139 [][WS-G-HK(181)-[(181)Thread-509]-[42]] UserActionLogger - XX_PALLET_LABEL.runScript:_onExit~XX_PALLET_LABEL:Java = 
+if(XX_PALLET_LABEL.getValue().length()>0)
+{
+	XX_LPN_LABEL.setReadOnly(true);
+}
+else
+{
+	XX_LPN_LABEL.setReadOnly(false);
+}
+[TRACE] 2026-08-05 09:13:13.139 [][WS-G-HK(181)-[(181)Thread-509]-[42]] UserActionLogger - XX_PALLET_LABEL.script initialize = 0 ms
+[TRACE] 2026-08-05 09:13:14.516 [][WS-G-HK(181)-[(181)Thread-509]-[43]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='GGLZT231PRINT03-D003', isScan='false', target='XX_PRINTER', source='XX_PRINTER', seq='38', com.intellinum.mia.app.runtime.InputData@7c7c5b05}
+[INFO ] 2026-08-05 09:13:14.516 [][WS-G-HK(181)-[(181)Thread-509]-[43]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value 'GGLZT231PRINT03-D003' from source 'XX_PRINTER' to target 'XX_PRINTER'
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='', isScan='false', target='', source='XX_SUBMIT_BTN', seq='39', com.intellinum.mia.app.runtime.InputData@53c466c2}
+[INFO ] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value '' from source 'XX_SUBMIT_BTN' to target ''
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - XX_SUBMIT_BTN.runScript:_onClick~XX_SUBMIT_BTN:Java = 
+String labelType = XX_SELECT_LABEL_PRINT_TYPE.getValue();
+String printerName = XX_PRINTER.getValue();
+String orderNum = XX_ORDER.getValue();
+String palletLabel = XX_PALLET_LABEL.getValue();
+String lpnLabel = XX_LPN_LABEL.getValue();
+
+logger.trace("Label Type Selected: " +labelType);
+logger.trace("Printer Name Selected: " +printerName);
+logger.trace("Order Number Selected: " +orderNum);
+logger.trace("palletLabel Selected: " +palletLabel);
+logger.trace("LPN Label Selected: " +lpnLabel);
+
+JSONObject payload = new JSONObject();
+
+if ("IB Label".equals(labelType)) {
+	// ============================================================
+	// IB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	
+	//payload.put("carton",       ""); Previous New code added below
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",     ""); previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "IB");
+	payload.put("order",        "");
+
+} else if ("OB Label".equals(labelType)) {
+	// ============================================================
+	// OB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
+	}
+	else
+	{
+		payload.put("LPNNumber", "");
+	}
+	payload.put("orderNumber",  "");
+	//payload.put("carton",       ""); previously new code added below
+	
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("carton", lpnLabel);
+	}
+	else
+	{
+		payload.put("carton", "");
+	}
+	
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	//payload.put("pallet",      ""); Previously new code added below
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("pallet", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	if(XX_PALLET_LABEL.getValue().length()>0)
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	else
+	{
+		payload.put("palletNumber", palletLabel   != null ? palletLabel   : "");
+	}
+	
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        "");
+
+} else if ("Order".equals(labelType)) {
+	// ============================================================
+	// Order Type Payload
+	// ============================================================
+	payload.put("LPNNumber",    "");
+	payload.put("orderNumber",  orderNum      != null ? orderNum      : "");
+	payload.put("carton",       "");
+	payload.put("printerName",  printerName   != null ? printerName   : "");
+	payload.put("pallet",       "");
+	payload.put("palletNumber", "");
+	payload.put("LABEL_TYPE",   "OB");
+	payload.put("order",        orderNum      != null ? orderNum      : "");
+
+} else {
+	flexi.setStatusMessage("Invalid Label Type Selected: " + labelType);
+	return;
+}
+
+String finalPayloadString = payload.toString();
+logger.trace("Final Payload: " + finalPayloadString);
+flexi.putSessionObject("PAYLOAD", finalPayloadString);
+flexi.setStatusMessage("Payload Created:  " +flexi.getSessionObject("PAYLOAD"));
+// ============================================================
+// Call OIC Web Service
+// ============================================================
+
+OIC_POST_ORDER_PRINT_WS.callWebService(null);
+if (OIC_POST_ORDER_PRINT_WS.getResponseCode() == 200 || OIC_POST_ORDER_PRINT_WS.getResponseCode() == 202) {
+	flexi.setStatusMessage("Label Printed Successfully..!!");
+	flexi.closeApplication();
+} else {
+	flexi.setStatusMessage("Failed to Print Label. Response Code: " + OIC_POST_ORDER_PRINT_WS.getResponseCode());
+}
+
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Label Type Selected: IB Label
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Printer Name Selected: GGLZT231PRINT03-D003
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Order Number Selected: 
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - palletLabel Selected: 0094035390370022634
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - LPN Label Selected: 
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Final Payload: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"0094035390370022634","palletNumber":"0094035390370022634","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiAPI.putSessionObject:key: PAYLOAD, object: {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"0094035390370022634","palletNumber":"0094035390370022634","LABEL_TYPE":"IB","order":""}
+[INFO ] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiAPI.getSessionObject:key: PAYLOAD
+[INFO ] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiAPI.setStatusMessage:message=Payload Created:  {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"0094035390370022634","palletNumber":"0094035390370022634","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService.request: Request Method = POST
+[DEBUG] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService.postAction: https://otmprod-oic-dpwglobalpass.integration.eu-frankfurt-1.ocp.oraclecloud.com/ic/api/integration/v1/flows/rest/DPW_INT_GGL_OB_ORDE_PALL_LABE_PR/1.0/wms2ggl/orderprint
+[DEBUG] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService.logRequestBody: Request Body = {"LPNNumber":"","orderNumber":"","carton":"","printerName":"GGLZT231PRINT03-D003","pallet":"0094035390370022634","palletNumber":"0094035390370022634","LABEL_TYPE":"IB","order":""}
+[TRACE] 2026-08-05 09:13:15.579 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService: Content Type = null
+[TRACE] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - RestWebService.request:POST request
+[TRACE] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: Total time = 327 ms
+[DEBUG] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - OIC_POST_ORDER_PRINT_WS.runWebService: result 202 
+[INFO ] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiAPI.setStatusMessage:message=Label Printed Successfully..!!
+[INFO ] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - FlexiAPI.closeApplication
+[INFO ] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Session.closeApplication: isConfirm false
+[TRACE] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - XX_SUBMIT_BTN.script initialize = 327 ms
+[INFO ] 2026-08-05 09:13:15.906 [][WS-G-HK(181)-[(181)Thread-509]-[44]] UserActionLogger - Transformed Action {ActionType : EXIT_APPLICATION, action value : false, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='9', isScan='false', target='XX_LABEL_PRINT_CUSTOM_NEW', source='menu1INBPALLETIZE', seq='40', com.intellinum.mia.app.runtime.InputData@21f01bbc}
+[INFO ] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '9' from source 'menu1INBPALLETIZE' to target 'XX_LABEL_PRINT_CUSTOM_NEW'
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.runScript:_afterClick~XX_LABEL_PRINT_CUSTOM_NEW:Java = 
+flexi.openApplication("XX_LABEL_PRINT_CUSTOM");
+[INFO ] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - FlexiAPI.openApplication:applicationID: XX_LABEL_PRINT_CUSTOM
+[INFO ] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - Session.openApplication: applicationID 4
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_LABEL_PRINT_CUSTOM_NEW.script initialize = 0 ms
+[INFO ] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[INFO ] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 4, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.runScript:_onPageEntered~XX_LABEL_PRINT_CUSTOM:Java = 
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.setHidden(true);
+XX_ORDER.setHidden(true);
+
+XX_GET_USER_PRINTER_WS.callWebService(null);
+if (XX_GET_USER_PRINTER_WS.getResponseCode() == 200) {
+	JSONObject trackingObj = new JSONObject(XX_GET_USER_PRINTER_WS.getRawResponse());
+	JSONArray trackingArr = trackingObj.getJSONArray("results");
+	flexi.putObject("PRINTER_VAL",trackingArr.get(0).get("default_label_printer"));
+	XX_PRINTER.setValue(flexi.getObject("PRINTER_VAL"));
+}
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - RestWebService.request: URL = https://f1.wms.ocs.oraclecloud.com/dpworld2/wms/lgfapi/v10/entity/user?auth_user_id__username=WS-G-HK&values_list=default_label_printer
+[TRACE] 2026-08-05 09:13:21.819 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - RestWebService: Content Type = application/json
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: Total time = 1641 ms
+[DEBUG] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_GET_USER_PRINTER_WS.runWebService: result 200 {"result_count":1,"page_count":1,"page_nbr":1,"next_page":null,"previous_page":null,"results":[{"default_label_printer":"GGLZT231PRINT03-D003"}]}
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - FlexiAPI.putObject:key: PRINTER_VAL
+[INFO ] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - FlexiAPI.getObject:key: PRINTER_VAL
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_LABEL_PRINT_CUSTOM.script initialize = 1641 ms
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onFocus~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+XX_PALLET_LABEL.reset();
+XX_PALLET_LABEL.setHidden(true);
+XX_LPN_LABEL.reset();
+XX_LPN_LABEL.setHidden(true);
+
+[TRACE] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[INFO ] 2026-08-05 09:13:23.460 [][WS-G-HK(181)-[(181)Thread-509]-[45]] UserActionLogger - LogFirePage.doAction:finish Current cursor =menu1INBPALLETIZE
+[TRACE] 2026-08-05 09:13:27.604 [][WS-G-HK(181)-[(181)Thread-509]-[46]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=28, value='', isScan='false', target='XX_SELECT_LABEL_PRINT_TYPE', source='XX_SELECT_LABEL_PRINT_TYPE', seq='41', com.intellinum.mia.app.runtime.InputData@4fbf2a11}
+[INFO ] 2026-08-05 09:13:27.604 [][WS-G-HK(181)-[(181)Thread-509]-[46]] UserActionLogger - FlexiRuntime.handleUI: CTRL_L with value '' from source 'XX_SELECT_LABEL_PRINT_TYPE' to target 'XX_SELECT_LABEL_PRINT_TYPE'
+[INFO ] 2026-08-05 09:13:27.604 [][WS-G-HK(181)-[(181)Thread-509]-[46]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='2', isScan='false', target='1', source='1', seq='42', com.intellinum.mia.app.runtime.InputData@17cfb336}
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '2' from source '1' to target '1'
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : 2, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : IB Label, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.runScript:_onExit~XX_SELECT_LABEL_PRINT_TYPE:Java = 
+if(XX_SELECT_LABEL_PRINT_TYPE.getValue().length()>0)
+{
+	XX_PALLET_LABEL.setReadOnly(false);
+	XX_LPN_LABEL.setReadOnly(false);
+	XX_PALLET_LABEL.setHidden(false);
+	XX_LPN_LABEL.setHidden(false);
+	
+	flexi.putObject("LABEL_TYPE_VAL_OBJ",XX_SELECT_LABEL_PRINT_TYPE.getValue());
+	if("IB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("OB Label".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(true);
+		//XX_PALLET_LABEL.setHidden(false);
+		//XX_LPN_LABEL.setHidden(false);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	if("Order".equals(flexi.getObject("LABEL_TYPE_VAL_OBJ")))
+	{
+		XX_ORDER.setHidden(false);
+		XX_PALLET_LABEL.setHidden(true);
+		XX_LPN_LABEL.setHidden(true);
+	}
+	else{
+		//XX_ORDER.setHidden(false);
+	}
+	
+}
+[TRACE] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiAPI.putObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[INFO ] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - FlexiAPI.getObject:key: LABEL_TYPE_VAL_OBJ
+[TRACE] 2026-08-05 09:13:28.668 [][WS-G-HK(181)-[(181)Thread-509]-[47]] UserActionLogger - XX_SELECT_LABEL_PRINT_TYPE.script initialize = 0 ms
+[TRACE] 2026-08-05 09:13:53.964 [][WS-G-HK(181)-[(181)Thread-509]-[48]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='00984035390370022641', isScan='false', target='XX_SUBMIT_BTN', source='XX_PALLET_LABEL', seq='43', com.intellinum.mia.app.runtime.InputData@746c36b2}
+[INFO ] 2026-08-05 09:13:53.964 [][WS-G-HK(181)-[(181)Thread-509]-[48]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '00984035390370022641' from source 'XX_PALLET_LABEL' to target 'XX_SUBMIT_BTN'
+[TRACE] 2026-08-05 09:13:53.964 [][WS-G-HK(181)-[(181)Thread-509]-[48]] UserActionLogger - XX_PALLET_LABEL.runScript:_onExit~XX_PALLET_LABEL:Java = 
+if(XX_PALLET_LABEL.getValue().length()>0)
+{
+	XX_LPN_LABEL.setReadOnly(true);
+}
+else
+{
+	XX_LPN_LABEL.setReadOnly(false);
+}
+[TRACE] 2026-08-05 09:13:53.964 [][WS-G-HK(181)-[(181)Thread-509]-[48]] UserActionLogger - XX_PALLET_LABEL.script initialize = 0 ms
+[TRACE] 2026-08-05 09:13:53.964 [][WS-G-HK(181)-[(181)Thread-509]-[48]] UserActionLogger - XX_SUBMIT_BTN.runScript:_onClick~XX_SUBMIT_BTN:Java = 
+String labelType = XX_SELECT_LABEL_PRINT_TYPE.getValue();
+String printerName = XX_PRINTER.getValue();
+String orderNum = XX_ORDER.getValue();
+String palletLabel = XX_PALLET_LABEL.getValue();
+String lpnLabel = XX_LPN_LABEL.getValue();
+
+logger.trace("Label Type Selected: " +labelType);
+logger.trace("Printer Name Selected: " +printerName);
+logger.trace("Order Number Selected: " +orderNum);
+logger.trace("palletLabel Selected: " +palletLabel);
+logger.trace("LPN Label Selected: " +lpnLabel);
+
+JSONObject payload = new JSONObject();
+
+if ("IB Label".equals(labelType)) {
+	// ============================================================
+	// IB Label Payload
+	// ============================================================
+	if(XX_LPN_LABEL.getValue().length()>0)
+	{
+		payload.put("LPNNumber", lpnLabel);
