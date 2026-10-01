@@ -87,7 +87,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
         }
       }
 
-      if (e.apiDetails?.responseCode && e.apiDetails.responseCode >= 400) {
+      if (
+        (e.apiDetails?.responseCode && e.apiDetails.responseCode >= 400) ||
+        (e.apiDetails && e.issueCategory === 'API_FAILURE' && e.status === 'FAIL')
+      ) {
         failedApiCount++;
         const apiLabel = e.apiDetails.name || e.apiDetails.url || 'Unknown API';
         failingApisMap.set(apiLabel, (failingApisMap.get(apiLabel) || 0) + 1);

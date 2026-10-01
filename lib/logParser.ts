@@ -186,10 +186,17 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
   let inApiCall = false;
   let fileTenant = '';
 
+  let activeScreen = '';
+  let activeField = '';
+  let activeEvent = '';
+
   function flushGroup(group: RawLogLineInfo[]) {
     if (!group || group.length === 0) return;
-    const entry = processGroupToEntry(group, fileName, fileId, entries.length, appType);
+    const entry = processGroupToEntry(group, fileName, fileId, entries.length, appType, activeScreen, activeField, activeEvent);
     if (entry) {
+      if (entry.screen) activeScreen = entry.screen;
+      if (entry.field) activeField = entry.field;
+      if (entry.event && entry.event !== entry.apiDetails?.name) activeEvent = entry.event;
       if (!fileTenant && entry.tenant) fileTenant = entry.tenant;
       entries.push(entry);
     }
@@ -201,7 +208,45 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
 
     if (lineInfo.isHeader) {
       const msg = lineInfo.message || '';
+
+      // Screen context tracking across lines
+      if (msg.includes('LogFirePage')) activeScreen = 'LogFirePage';
+      else if (msg.includes('_onPageEntered~') || msg.includes('_afterPageEntered~')) {
+        const sm = msg.match(/(?:_onPageEntered~|_afterPageEntered~)([A-Za-z0-9_]+)/);
+        if (sm) activeScreen = sm[1];
+      } else if (msg.includes('ActionType : OPEN_PAGE')) {
+        const sm = msg.match(/OPEN_PAGE,\s*action\s*value\s*:\s*(?:[\w.]+\.)?([A-Za-z0-9_]+)/);
+        if (sm) activeScreen = sm[1];
+      } else if (msg.includes('openApplication(')) {
+        const sm = msg.match(/openApplication\(["']([A-Za-z0-9_]+)["']\)/);
+        if (sm) activeScreen = sm[1];
+      } else if (msg.includes('lookup_code:')) {
+        const sm = msg.match(/lookup_code:\s*([A-Za-z0-9_]+)/);
+        if (sm) activeScreen = sm[1];
+      }
+
+      // Field & Event context tracking across lines
+      if (msg.includes('.runScript:') || msg.includes('runScript:_')) {
+        const se = msg.match(/(?:([A-Za-z0-9_]+)\.)?runScript:_?([A-Za-z0-9]+)~([A-Za-z0-9_]+)/);
+        if (se) {
+          if (se[1] && !activeScreen) activeScreen = se[1];
+          activeEvent = se[2];
+          activeField = se[3] || se[1] || '';
+        }
+      } else if (msg.includes('handleUI:inputData=')) {
+        const idm = msg.match(/target='(.*?)'/);
+        if (idm && idm[1]) activeField = idm[1];
+        activeEvent = 'onBarcodeScan';
+      } else if (msg.includes('handleUI: ')) {
+        const huia = msg.match(/handleUI:\s*([A-Z_]+)\s+with\s+value\s+'(.*?)'\s+from\s+source\s+'(.*?)'\s+to\s+target\s+'(.*?)'/);
+        if (huia) {
+          activeEvent = huia[1];
+          activeField = huia[4] || huia[3] || activeField;
+        }
+      }
+
       const isCalling = msg.includes('<-------- Calling ');
+      const isScmApiStart = !inApiCall && !msg.includes('FlexiWebService.') && /\b([A-Za-z0-9_]+)\.runWebService\s*$/.test(msg);
       const isRestStart = !inApiCall && (
         msg.includes('RestWebService.request: Request Method = ') ||
         msg.includes('RestWebService. Request Method = ') ||
@@ -215,17 +260,18 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
         msg.includes('RestWebService.putAction') ||
         msg.includes('RestWebService.deleteAction')
       );
-      const isApiStart = isCalling || isRestStart;
+      const isApiStart = isCalling || isScmApiStart || isRestStart;
 
-      const isApiContinuation = inApiCall && !isCalling && (
+      const isApiContinuation = inApiCall && !isCalling && !isScmApiStart && (
         msg.includes('RestWebService') ||
         msg.includes('FlexiWebService') ||
         msg.includes('.runWebService') ||
+        msg.includes('FLEXI_OVERRIDE_SSO_AUTHENTICATION') ||
         msg.includes('Request Authorization:') ||
         msg.includes('Authenticator Configuration') ||
         msg.includes('FlexiUtil.transformTokenString2:') ||
         msg.includes('runScript-onResponseReceived') ||
-        msg.includes('failed with response code:') ||
+        /failed\s+with\s+response\s+code:\s*\d{3}\b/i.test(msg) ||
         msg.includes('SUCCESS') ||
         msg.includes('FAILED')
       );
@@ -238,10 +284,9 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
         inApiCall = true;
       } else if (isApiContinuation) {
         currentGroup.push(lineInfo);
+        const hasClosingBracket = msg.includes('}') || msg.includes(']');
         if (
-          msg.includes('runWebService: result') ||
-          msg.includes('postAction result:') ||
-          msg.includes('getAction result:') ||
+          ((msg.includes('runWebService: result') || msg.includes('postAction result:') || msg.includes('getAction result:')) && hasClosingBracket) ||
           msg.includes('SUCCESS') ||
           msg.includes('FAILED')
         ) {
@@ -291,7 +336,10 @@ function processGroupToEntry(
   fileName: string,
   fileId: string,
   index: number,
-  appType: 'SCM' | 'WMS' | 'UNKNOWN' = 'UNKNOWN'
+  appType: 'SCM' | 'WMS' | 'UNKNOWN' = 'UNKNOWN',
+  fallbackScreen: string = '',
+  fallbackField: string = '',
+  fallbackEvent: string = ''
 ): LogEntry | null {
   if (group.length === 0) return null;
 
@@ -482,11 +530,14 @@ function processGroupToEntry(
         const m = txt.match(/<--------\s*Calling\s+([A-Za-z0-9_]+)/);
         if (m) apiName = m[1];
       } else if (txt.includes('.runWebService')) {
-        const m = txt.match(/([A-Za-z0-9_]+_WS)\.runWebService/);
-        if (m) apiName = m[1];
-      } else if (txt.includes('failed with response code:')) {
-        const m = txt.match(/([A-Za-z0-9_]+)\s+failed\s+with\s+response\s+code:/);
-        if (m) apiName = m[1];
+        const m = txt.match(/\b([A-Za-z0-9_]+)\.runWebService/);
+        if (m && m[1] !== 'FlexiWebService') apiName = m[1];
+      } else if (/failed\s+with\s+response\s+code:\s*\d{3}\b/i.test(txt)) {
+        const m = txt.match(/([A-Za-z0-9_]+)\s+failed\s+with\s+response\s+code:\s*(\d{3})/i);
+        if (m) {
+          if (!apiName) apiName = m[1];
+          if (responseCode === undefined) responseCode = parseInt(m[2], 10);
+        }
       } else if (txt.includes('runScript-onResponseReceived~')) {
         const m = txt.match(/runScript-onResponseReceived~([A-Za-z0-9_]+)/);
         if (m) apiName = m[1];
@@ -524,7 +575,7 @@ function processGroupToEntry(
       const rcm = txt.match(/Response\s*Code\s*=\s*(\d{3})/i);
       if (rcm) {
         responseCode = parseInt(rcm[1], 10);
-      } else if (txt.includes('failed with response code:')) {
+      } else if (/failed\s+with\s+response\s+code:\s*(\d{3})/i.test(txt)) {
         const fm = txt.match(/failed\s+with\s+response\s+code:\s*(\d{3})/i);
         if (fm) responseCode = parseInt(fm[1], 10);
       } else if (txt.includes('result ')) {
@@ -534,17 +585,22 @@ function processGroupToEntry(
     }
 
     if (!responseBody) {
-      if (txt.includes('.runWebService: result')) {
-        const rbm = txt.match(/\.runWebService:\s*result\s*(\{[\s\S]*\}|\[[\s\S]*\])/);
-        if (rbm) {
-          responseBody = rbm[1].trim();
-        } else {
-          const rbm2 = txt.match(/\.runWebService:\s*result\s*\d{3}\s+([\s\S]*)/);
-          if (rbm2) responseBody = rbm2[1].trim();
+      if (txt.includes('.runWebService: result') || txt.includes('result:')) {
+        const rbm = txt.match(/(?:\.runWebService:\s*result|\bresult:)\s*(?:(\d{3})\s*)?([\s\S]*)/);
+        if (rbm && rbm[2] && (rbm[2].trim().startsWith('{') || rbm[2].trim().startsWith('['))) {
+          if (rbm[2].includes('}') || rbm[2].includes(']')) {
+            responseBody = rbm[2].trim();
+          } else {
+            // Multiline JSON
+            const bodyLines = [rbm[2].trim()];
+            for (let j = i + 1; j < group.length; j++) {
+              if (group[j].isHeader) break;
+              bodyLines.push(group[j].rawText);
+              if (group[j].rawText.trim().endsWith('}') || group[j].rawText.trim().endsWith(']')) break;
+            }
+            responseBody = bodyLines.join('\n').trim();
+          }
         }
-      } else if (txt.includes('result:')) {
-        const rbm = txt.match(/result:\s*(\{[\s\S]*\}|\[[\s\S]*\])/);
-        if (rbm) responseBody = rbm[1].trim();
       }
     }
 
@@ -646,6 +702,10 @@ function processGroupToEntry(
     }
   }
 
+  if (!screen && fallbackScreen) screen = fallbackScreen;
+  if (!field && fallbackField) field = fallbackField;
+  if (!event && fallbackEvent) event = fallbackEvent;
+
   if (apiName || method || url || responseCode !== undefined) {
     apiDetails = {
       name: apiName,
@@ -699,12 +759,90 @@ function processGroupToEntry(
     } catch (_) {}
   }
 
+  // Payload Business Failure Detection (HTTP 200/201 but error/warning in response)
+  let hasBusinessFailure = false;
+  let businessErrorMessage = '';
+  let businessErrorType = '';
+
+  if (responseBody) {
+    try {
+      const jsonStart = responseBody.indexOf('{');
+      const jsonEnd = responseBody.lastIndexOf('}');
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        const jsonStr = responseBody.substring(jsonStart, jsonEnd + 1);
+        const parsed = JSON.parse(jsonStr);
+
+        // 1. Check ReturnStatus
+        if (parsed.ReturnStatus && typeof parsed.ReturnStatus === 'string') {
+          const rs = parsed.ReturnStatus.trim().toLowerCase();
+          if (rs === 'error' || rs === 'fail' || rs === 'failed' || rs === 'e') {
+            hasBusinessFailure = true;
+            businessErrorType = 'ReturnStatus: ' + parsed.ReturnStatus;
+            businessErrorMessage = parsed.ErrorExplanation || parsed.ReturnMessage || parsed.ErrorMessage || parsed.message || parsed.ReturnStatus;
+          } else if (rs === 'warning' || rs === 'warn') {
+            if (parsed.ReturnMessage && /partially completed with warnings|warning|failed|error/i.test(parsed.ReturnMessage)) {
+              hasBusinessFailure = true;
+              businessErrorType = 'Warning: ' + parsed.ReturnStatus;
+              businessErrorMessage = parsed.ReturnMessage || parsed.ErrorExplanation || '';
+            }
+          }
+        }
+
+        // 2. Check ErrorExplanation
+        if (!hasBusinessFailure && parsed.ErrorExplanation && typeof parsed.ErrorExplanation === 'string' && parsed.ErrorExplanation.trim() && parsed.ErrorExplanation.trim().toLowerCase() !== 'null') {
+          hasBusinessFailure = true;
+          businessErrorType = 'ErrorExplanation';
+          businessErrorMessage = parsed.ErrorExplanation.trim();
+        }
+
+        // 3. Check ReturnMessage
+        if (!hasBusinessFailure && parsed.ReturnMessage && typeof parsed.ReturnMessage === 'string') {
+          const rm = parsed.ReturnMessage.trim();
+          if (/partially completed with warnings|fail|failed|error|rejected|denied|exception/i.test(rm)) {
+            hasBusinessFailure = true;
+            businessErrorType = 'ReturnMessage';
+            businessErrorMessage = rm;
+          }
+        }
+
+        // 4. Check standard error fields
+        if (!hasBusinessFailure) {
+          const errField = parsed.ErrorMessage || parsed.errorMessage || parsed.error_message || parsed.error || parsed.fault;
+          if (errField && typeof errField === 'string' && errField.trim() && errField.trim().toLowerCase() !== 'null' && errField.trim().toLowerCase() !== 'ok' && errField.trim().toLowerCase() !== 'success') {
+            hasBusinessFailure = true;
+            businessErrorType = 'ErrorMessage';
+            businessErrorMessage = errField.trim();
+          } else if (Array.isArray(parsed.errors) && parsed.errors.length > 0) {
+            hasBusinessFailure = true;
+            businessErrorType = 'Errors';
+            businessErrorMessage = typeof parsed.errors[0] === 'string' ? parsed.errors[0] : (parsed.errors[0].message || JSON.stringify(parsed.errors[0]));
+          }
+        }
+      }
+    } catch (_) {
+      const expMatch = responseBody.match(/"ErrorExplanation"\s*:\s*"([^"]+)"/i);
+      if (expMatch && expMatch[1] && expMatch[1].toLowerCase() !== 'null') {
+        hasBusinessFailure = true;
+        businessErrorType = 'ErrorExplanation';
+        businessErrorMessage = expMatch[1];
+      }
+      const retMsgMatch = responseBody.match(/"ReturnMessage"\s*:\s*"([^"]+)"/i);
+      if (retMsgMatch && retMsgMatch[1] && /partially completed with warnings|fail|failed|error/i.test(retMsgMatch[1])) {
+        hasBusinessFailure = true;
+        businessErrorType = 'ReturnMessage';
+        businessErrorMessage = retMsgMatch[1];
+      }
+    }
+  }
+
   // Categorization & Root Cause
   let isIssue = false;
   let issueCategory: IssueCategory = 'NONE';
   let status: 'FAIL' | 'WARN' | 'PASS' | 'INFO' = 'INFO';
   let rootCauseHint = '';
   let suggestedFix = '';
+
+  const whereCalled = `Called in Field "${field || 'N/A'}" at event "${event || 'N/A'}"${screen ? ` (Screen: "${screen}")` : ''}`;
 
   if (apiDetails?.responseCode && apiDetails.responseCode >= 400) {
     isIssue = true;
@@ -723,13 +861,13 @@ function processGroupToEntry(
     }
 
     if (apiDetails.responseCode === 404) {
-      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned HTTP 404 (NOT_FOUND). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}Scanned ${field || 'Container/LPN'} "${scannedValue || 'record'}" was not found in inventory.`;
+      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned HTTP 404 (NOT_FOUND). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}${scannedValue ? `Scanned ${field || 'Container/LPN'} "${scannedValue}" was not found in inventory.` : 'Requested record was not found in backend.'} ${whereCalled}.`;
       suggestedFix = `Verify if ${field || 'record'} ${scannedValue ? `"${scannedValue}" ` : ''}exists in backend system or was already completed.`;
     } else if (apiDetails.responseCode >= 500) {
-      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} failed with HTTP ${apiDetails.responseCode} server error. ${errSnippet ? `Backend message: "${errSnippet}".` : ''}`;
+      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} failed with HTTP ${apiDetails.responseCode} server error. ${errSnippet ? `Backend message: "${errSnippet}". ` : ''}${whereCalled}.`;
       suggestedFix = `Check backend Cloud integration endpoint logs.`;
     } else {
-      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} returned HTTP ${apiDetails.responseCode}. ${errSnippet ? `Response: "${errSnippet}".` : ''}`;
+      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} returned HTTP ${apiDetails.responseCode}. ${errSnippet ? `Response: "${errSnippet}". ` : ''}${whereCalled}.`;
       suggestedFix = `Check request parameters, attributes, and authorization credentials.`;
     }
 
@@ -737,6 +875,14 @@ function processGroupToEntry(
       rootCauseHint += ` Note: Payload also sent with empty fields: [${missingValueDetails.field}].`;
       suggestedFix += ` Ensure required fields are scanned before submit.`;
     }
+  } else if (hasBusinessFailure && apiDetails) {
+    isIssue = true;
+    issueCategory = 'API_FAILURE';
+    status = 'FAIL';
+    level = 'ERROR';
+
+    rootCauseHint = `REST API ${apiDetails.name || 'endpoint'} returned HTTP ${apiDetails.responseCode || 200} with Business Failure [${businessErrorType}]: "${businessErrorMessage}". ${whereCalled}.`;
+    suggestedFix = `Investigate business validation failure: "${businessErrorMessage}". Check field values and conditions passed in event "${event || 'N/A'}".`;
   } else if (dialogMessage) {
     isIssue = true;
     issueCategory = 'VALIDATION';

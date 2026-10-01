@@ -59,13 +59,13 @@ export const RcaReportModal: React.FC<RcaReportModalProps> = ({
 
   // Generate initial diagnostic summaries based on actual detected failures
   const initialRootCause = useMemo(() => {
-    const failApis = allIssues.filter(e => e.apiDetails?.responseCode && e.apiDetails.responseCode >= 400);
+    const failApis = allIssues.filter(e => (e.apiDetails?.responseCode && e.apiDetails.responseCode >= 400) || (e.apiDetails && e.issueCategory === 'API_FAILURE' && e.status === 'FAIL'));
     const exceptions = allIssues.filter(e => e.error);
     const timeouts = allIssues.filter(e => e.issueCategory === 'SESSION_TIMEOUT');
 
     const points: string[] = [];
     if (failApis.length > 0) {
-      const distinctFailures = Array.from(new Set(failApis.map(a => `${a.apiDetails?.name || a.apiDetails?.url} (HTTP ${a.apiDetails?.responseCode})`)));
+      const distinctFailures = Array.from(new Set(failApis.map(a => `${a.apiDetails?.name || a.apiDetails?.url} (HTTP ${a.apiDetails?.responseCode || 'ERR'})`)));
       points.push(`- API Failures: Observed ${failApis.length} failed REST API requests across endpoint(s): ${distinctFailures.join(', ')}.`);
     }
     if (exceptions.length > 0) {

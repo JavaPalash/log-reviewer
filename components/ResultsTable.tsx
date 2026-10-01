@@ -485,7 +485,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
                       <td className="py-2 px-3 whitespace-nowrap font-mono text-center">
                         {e.apiDetails?.responseCode !== undefined ? (
                           <span className={`px-1.5 py-0.5 rounded font-bold text-[10px] ${
-                            e.apiDetails.responseCode >= 400
+                            e.apiDetails.responseCode >= 400 || (e.issueCategory === 'API_FAILURE' && e.status === 'FAIL')
                               ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-200'
                               : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200'
                           }`}>
