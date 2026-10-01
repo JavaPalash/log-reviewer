@@ -1,4 +1,4 @@
-import { LogEntry, LogLevel, ParsedLogFile, IssueCategory, ApiDetails, ErrorDetails, MissingValueInfo } from './types';
+import { LogEntry, LogLevel, ParsedLogFile, IssueCategory, ApiDetails, ErrorDetails, MissingValueInfo, FlexiMethodDetails, EntryType } from './types';
 import { PARSING_RULES } from './parsingRules';
 
 interface RawLogLineInfo {
@@ -95,15 +95,53 @@ function tryParseHeader(rawText: string, lineNum: number): RawLogLineInfo {
 }
 
 /**
- * Helper to extract user and session from thread block, message, or file name
+ * Helper to detect whether log is Oracle SCM Cloud or Oracle WMS Cloud
  */
-function extractUserAndSession(threadBlock: string, message: string, fileName: string = ''): { user: string; session: string; threadId: string; stepSeq: string } {
+export function detectAppType(sampleText: string, fileName: string): 'SCM' | 'WMS' | 'UNKNOWN' {
+  const s = (sampleText.substring(0, 50000) + ' ' + fileName).toUpperCase();
+  if (
+    s.includes('SCM') ||
+    s.includes('PURECS') ||
+    s.includes('FUSION') ||
+    s.includes('FSCMRESTAPI') ||
+    s.includes('SEHA') ||
+    s.includes('PICK_RELEASE') ||
+    s.includes('PICK_WAVE') ||
+    s.includes('MOVEMENT_REQUEST') ||
+    s.includes('KEDASU')
+  ) {
+    return 'SCM';
+  }
+  if (
+    s.includes('WMS') ||
+    s.includes('LOGFIRE') ||
+    s.includes('LGFAPI') ||
+    s.includes('WS-G-HK') ||
+    s.includes('TEXTPLTLPN') ||
+    s.includes('ASN RECEIVING') ||
+    s.includes('ORACLE WMS')
+  ) {
+    return 'WMS';
+  }
+  return 'UNKNOWN';
+}
+
+/**
+ * Helper to extract user, session, and tenant from thread block, message, or file name
+ */
+function extractUserAndSession(threadBlock: string, message: string, fileName: string = ''): { user: string; session: string; threadId: string; stepSeq: string; tenant: string } {
   let user = '';
   let session = '';
   let threadId = '';
   let stepSeq = '';
+  let tenant = '';
 
   if (threadBlock) {
+    const tm = threadBlock.match(PARSING_RULES.patterns.threadTenant);
+    if (tm && tm[1] && tm[1] !== '') {
+      tenant = tm[1].trim();
+    }
+
     const m = threadBlock.match(PARSING_RULES.patterns.threadUserSession);
     if (m) {
       user = m[1]?.trim() || '';
@@ -123,33 +161,36 @@ function extractUserAndSession(threadBlock: string, message: string, fileName: s
     }
   }
 
-  // Fallback to filename: e.g. WS-G-HK_038381784196022690_181.log
+  // Fallback to filename: e.g. WS-G-HK_038381784196022690_181.log or SAI.KEDASU_PURECS.COM_038521788334364984_434.log
   if ((!user || !session) && fileName) {
-    const fnMatch = fileName.match(/^([A-Za-z0-9_-]+)_(?:\d+)_(\d+)\.log$/i);
+    const fnMatch = fileName.match(PARSING_RULES.patterns.fileNameUserSession);
     if (fnMatch) {
       if (!user) user = fnMatch[1].trim();
       if (!session) session = fnMatch[2].trim();
     }
   }
 
-  return { user, session, threadId, stepSeq };
+  return { user, session, threadId, stepSeq, tenant };
 }
 
 /**
- * Main parser with smart API block grouping
+ * Main parser with smart API block grouping and SCM/WMS awareness
  */
 export function parseLogContent(content: string, fileName: string, fileId: string = 'file-1'): ParsedLogFile {
   const lines = content.split(/\r?\n/);
   const totalLines = lines.length;
+  const appType = detectAppType(content, fileName);
 
   const entries: LogEntry[] = [];
   let currentGroup: RawLogLineInfo[] = [];
   let inApiCall = false;
+  let fileTenant = '';
 
   function flushGroup(group: RawLogLineInfo[]) {
     if (!group || group.length === 0) return;
-    const entry = processGroupToEntry(group, fileName, fileId, entries.length);
+    const entry = processGroupToEntry(group, fileName, fileId, entries.length, appType);
     if (entry) {
+      if (!fileTenant && entry.tenant) fileTenant = entry.tenant;
       entries.push(entry);
     }
   }
@@ -213,6 +254,8 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
     totalEntries: entries.length,
     errorCount,
     warnCount,
+    appType,
+    tenant: fileTenant,
     entries,
   };
 }
@@ -220,7 +263,13 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
 /**
  * Processes a grouped block of raw lines into a structured LogEntry in a single fast pass
  */
-function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: string, index: number): LogEntry | null {
+function processGroupToEntry(
+  group: RawLogLineInfo[],
+  fileName: string,
+  fileId: string,
+  index: number,
+  appType: 'SCM' | 'WMS' | 'UNKNOWN' = 'UNKNOWN'
+): LogEntry | null {
   if (group.length === 0) return null;
 
   const headerLine = group.find(l => l.isHeader) || group[0];
@@ -231,7 +280,11 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
   let level: LogLevel = headerLine.level || 'INFO';
   const logger = headerLine.logger || '';
 
-  const { user, session, threadId, stepSeq } = extractUserAndSession(headerLine.threadBlock || '', headerLine.message || '', fileName);
+  const { user, session, threadId, stepSeq, tenant } = extractUserAndSession(
+    headerLine.threadBlock || '',
+    headerLine.message || '',
+    fileName
+  );
 
   let screen = '';
   let field = '';
@@ -258,6 +311,11 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
   let exceptionMessage = '';
   let logCode = '';
 
+  // Flexi-specific metadata
+  let flexiMethod: FlexiMethodDetails | undefined = undefined;
+  let scriptCode = '';
+  let scriptErrorLine: number | undefined = undefined;
+
   const rawLines: string[] = [];
   let sampleSnippet = '';
 
@@ -279,15 +337,77 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
       } else if (txt.includes('openApplication(')) {
         const sm = txt.match(/openApplication\(["']([A-Za-z0-9_]+)["']\)/);
         if (sm) screen = sm[1];
+      } else if (txt.includes('.runScript:')) {
+        const sm = txt.match(/([A-Za-z0-9_]+)\.runScript:(?:_onPageEntered|onSessionApplicationEnter|onLoginEvent)/);
+        if (sm) screen = sm[1];
+      } else if (txt.includes('lookup_code:')) {
+        const sm = txt.match(/lookup_code:\s*([A-Za-z0-9_]+)/);
+        if (sm) screen = sm[1];
       }
     }
 
     // Field & Event Detection
-    if (!field && txt.includes('runScript:_')) {
-      const se = txt.match(/runScript:_?([A-Za-z0-9]+)~([A-Za-z0-9_]+)/);
-      if (se) { event = se[1]; field = se[2]; }
+    if (!field && (txt.includes('.runScript:') || txt.includes('runScript:_'))) {
+      const se = txt.match(/(?:([A-Za-z0-9_]+)\.)?runScript:_?([A-Za-z0-9]+)~([A-Za-z0-9_]+)/);
+      if (se) {
+        event = se[2];
+        field = se[3] || se[1] || '';
+      }
     }
 
+    // Script Code Extraction
+    if (!scriptCode && (txt.includes('runScript:') || txt.includes(', running script script:'))) {
+      const codeLines: string[] = [];
+      const eqIdx = txt.indexOf(' = ');
+      if (eqIdx !== -1 && eqIdx + 3 < txt.length) {
+        const firstLine = txt.substring(eqIdx + 3).trim();
+        if (firstLine) codeLines.push(firstLine);
+      }
+      for (let j = i + 1; j < group.length; j++) {
+        if (group[j].isHeader) break;
+        codeLines.push(group[j].rawText);
+      }
+      if (codeLines.length > 0) {
+        scriptCode = codeLines.join('\n').trim();
+      }
+    }
+
+    // FlexiAPI Method Detection
+    if (!flexiMethod && txt.includes('FlexiAPI.')) {
+      if (txt.includes('FlexiAPI.putObject:key:')) {
+        const m = txt.match(/FlexiAPI\.putObject:key:\s*([A-Za-z0-9_]+)(?:,\s*object:\s*(.*))?/);
+        if (m) flexiMethod = { methodName: 'putObject', key: m[1], value: m[2] ? m[2].trim() : undefined };
+      } else if (txt.includes('FlexiAPI.getObject:key:')) {
+        const m = txt.match(/FlexiAPI\.getObject:key:\s*([A-Za-z0-9_]+)/);
+        if (m) flexiMethod = { methodName: 'getObject', key: m[1] };
+      } else if (txt.includes('FlexiAPI.putSessionObject:key:')) {
+        const m = txt.match(/FlexiAPI\.putSessionObject:key:\s*([A-Za-z0-9_]+)(?:,\s*object:\s*(.*))?/);
+        if (m) flexiMethod = { methodName: 'putSessionObject', key: m[1], value: m[2] ? m[2].trim() : undefined };
+      } else if (txt.includes('FlexiAPI.getSessionObject:key:')) {
+        const m = txt.match(/FlexiAPI\.getSessionObject:key:\s*([A-Za-z0-9_]+)/);
+        if (m) flexiMethod = { methodName: 'getSessionObject', key: m[1] };
+      } else if (txt.includes('FlexiAPI.removeObject:key:')) {
+        const m = txt.match(/FlexiAPI\.removeObject:key:\s*([A-Za-z0-9_]+)/);
+        if (m) flexiMethod = { methodName: 'removeObject', key: m[1] };
+      } else if (txt.includes('FlexiAPI.removeSessionObject:key:')) {
+        const m = txt.match(/FlexiAPI\.removeSessionObject:key:\s*([A-Za-z0-9_]+)/);
+        if (m) flexiMethod = { methodName: 'removeSessionObject', key: m[1] };
+      } else if (txt.includes('FlexiAPI.gotoComponent:')) {
+        const m = txt.match(/FlexiAPI\.gotoComponent:(?:componentName:|target:)\s*([A-Za-z0-9_]+)/);
+        if (m) flexiMethod = { methodName: 'gotoComponent', target: m[1] };
+      } else if (txt.includes('FlexiAPI.setStatusMessage:')) {
+        const m = txt.match(/FlexiAPI\.setStatusMessage:message[=:]\s*(.*)/);
+        if (m) flexiMethod = { methodName: 'setStatusMessage', message: m[1].trim() };
+      } else if (txt.includes('FlexiAPI.executeQuery:query')) {
+        const m = txt.match(/FlexiAPI\.executeQuery:query\s+(.*?)(?:,\s*parameters\s+(.*))?$/);
+        if (m) flexiMethod = { methodName: 'executeQuery', query: m[1].trim(), value: m[2] ? m[2].trim() : undefined };
+      } else if (txt.includes('FlexiAPI.executeUpdate:query')) {
+        const m = txt.match(/FlexiAPI\.executeUpdate:query\s+(.*?)(?:,\s*parameters\s+(.*))?$/);
+        if (m) flexiMethod = { methodName: 'executeUpdate', query: m[1].trim(), value: m[2] ? m[2].trim() : undefined };
+      }
+    }
+
+    // User input / Barcode scan detection
     if (txt.includes('handleUI:inputData=')) {
       const idm = txt.match(/inputData=InputData\{inputType=(\d+),\s*value='(.*?)',\s*isScan='(true|false)',\s*target='(.*?)',\s*source='(.*?)'/);
       if (idm) {
@@ -307,12 +427,21 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
         targetField = huia[4];
         if (!field) field = targetField || sourceField;
       }
+    } else if (txt.includes('BarcodeManager.extractBarcodes:result=')) {
+      const bm = txt.match(/result=(.*)/);
+      if (bm && !scannedValue) {
+        scannedValue = bm[1].trim();
+        isScan = true;
+      }
     }
 
     // Dialog prompt detection
     if (txt.includes('FlexiRuntime.showOptionDialog:')) {
       const dm = txt.match(/message\s+([^,]+)/);
-      if (dm) dialogMessage = dm[1].trim();
+      if (dm) {
+        dialogMessage = dm[1].trim();
+        if (!flexiMethod) flexiMethod = { methodName: 'showOptionDialog', message: dialogMessage };
+      }
     }
 
     // API Detection
@@ -329,6 +458,15 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
       if (txt.includes('Total time =')) {
         const rdur = txt.match(/Total\s*time\s*=\s*(\d+)\s*ms/);
         if (rdur) durationMs = parseInt(rdur[1], 10);
+      }
+    }
+
+    // Direct WebService failure message e.g. "POST_PICK_WAVE_WS failed with response code: 400"
+    if (txt.includes('failed with response code:')) {
+      const fm = txt.match(/(\S+_WS|\S+WebService)\s+failed\s+with\s+response\s+code:\s*(\d{3})/);
+      if (fm) {
+        if (!apiName) apiName = fm[1];
+        if (responseCode === undefined) responseCode = parseInt(fm[2], 10);
       }
     }
 
@@ -364,12 +502,20 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
         const sm = lineSnippet.match(/at\s+([a-zA-Z0-9_$.]+)\(([^)]+)\)/);
         if (sm) logCode = `${sm[1]}:${sm[2]}`;
       }
-    } else if (!txt.includes('runWebService: result') && (txt.includes('Exception:') || txt.includes('Error:') || txt.includes('Exception ') || txt.includes('Error '))) {
+    } else if (!txt.includes('runWebService: result') && (txt.includes('Exception:') || txt.includes('Error:') || txt.includes('Exception ') || txt.includes('Error ') || txt.includes('bsh.EvalError') || txt.includes('bsh.TargetError'))) {
       const lineSnippet = txt.length > 500 ? txt.substring(0, 500) : txt;
       const em = lineSnippet.match(/\b([A-Za-z0-9_.]*(?:Exception|Error))\b:?(?:\s+(.*))?/);
       if (em) {
         exceptionType = em[1];
         exceptionMessage = (em[2] || '').trim();
+      }
+    }
+
+    // Capture Script Error Line if present
+    if (txt.includes('at Line:')) {
+      const lm = txt.match(/at\s+Line:\s*(\d+)/i);
+      if (lm) {
+        scriptErrorLine = parseInt(lm[1], 10);
       }
     }
   }
@@ -466,21 +612,21 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
     if (apiDetails.responseBody) {
       try {
         const bodyObj = JSON.parse(apiDetails.responseBody);
-        errSnippet = bodyObj.message || bodyObj.code || bodyObj.error || apiDetails.responseBody.substring(0, 80);
+        errSnippet = bodyObj.message || bodyObj.code || bodyObj.error || apiDetails.responseBody.substring(0, 100);
       } catch (_) {
-        errSnippet = apiDetails.responseBody.substring(0, 80);
+        errSnippet = apiDetails.responseBody.substring(0, 100);
       }
     }
 
     if (apiDetails.responseCode === 404) {
-      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned HTTP 404 (NOT_FOUND). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}Scanned ${field || 'Container/LPN'} "${scannedValue || 'record'}" was not found in Oracle WMS inventory.`;
-      suggestedFix = `Verify if ${field || 'record'} ${scannedValue ? `"${scannedValue}" ` : ''}exists in Oracle WMS, or check if it was already received or closed.`;
+      rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned HTTP 404 (NOT_FOUND). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}Scanned ${field || 'Container/LPN'} "${scannedValue || 'record'}" was not found in inventory.`;
+      suggestedFix = `Verify if ${field || 'record'} ${scannedValue ? `"${scannedValue}" ` : ''}exists in backend system or was already completed.`;
     } else if (apiDetails.responseCode >= 500) {
       rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} failed with HTTP ${apiDetails.responseCode} server error. ${errSnippet ? `Backend message: "${errSnippet}".` : ''}`;
-      suggestedFix = `Check backend Oracle WMS integration endpoint logs.`;
+      suggestedFix = `Check backend Cloud integration endpoint logs.`;
     } else {
       rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} returned HTTP ${apiDetails.responseCode}. ${errSnippet ? `Response: "${errSnippet}".` : ''}`;
-      suggestedFix = `Check request parameters and authorization credentials.`;
+      suggestedFix = `Check request parameters, attributes, and authorization credentials.`;
     }
 
     if (missingValueDetails) {
@@ -509,7 +655,30 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
     const excType = errorDetails?.type || 'Exception';
     const excMsg = errorDetails?.message || '';
 
-    if (excType.includes('IOException') && sampleSnippet.includes('LogFireSSHConnection')) {
+    if (excType.includes('EvalError') || excMsg.includes('bsh.EvalError')) {
+      rootCauseHint = `BeanShell Script Evaluation Error${scriptErrorLine ? ` at script Line ${scriptErrorLine}` : ''}: ${excMsg.substring(0, 160)}. Check variable declaration or conditions.`;
+      suggestedFix = `Inspect the script code in Detail Panel (Line ${scriptErrorLine || 'N/A'}) and ensure proper variable types and null checks.`;
+    } else if (excType.includes('TargetError') || excMsg.includes('bsh.TargetError')) {
+      rootCauseHint = `BeanShell Runtime Exception${scriptErrorLine ? ` at script Line ${scriptErrorLine}` : ''}: ${excMsg.substring(0, 160)}.`;
+      suggestedFix = `Check array bounds, null references, or object types invoked within the script.`;
+    } else if (sampleSnippet.includes('No target component found')) {
+      const cm = sampleSnippet.match(/No target component found\s*:\s*target name\s*([A-Za-z0-9_]+)/);
+      const compName = cm ? cm[1] : 'specified component';
+      rootCauseHint = `Flexi Navigation Error: Page could not find target component '${compName}'.`;
+      suggestedFix = `Verify '${compName}' exists on this screen definition and is not conditionally unrendered.`;
+    } else if (sampleSnippet.includes('Component is not focusable')) {
+      rootCauseHint = `Flexi UI Focus Error: Cannot set focus to component because it is hidden, disabled, or read-only.`;
+      suggestedFix = `Ensure component.setHidden(false) and component.setEnabled(true) are executed before calling goToComponent.`;
+    } else if (excType.includes('JdbcConnectionException') || sampleSnippet.includes('JdbcConnectionException')) {
+      rootCauseHint = `Database Query Failure in Flexi: Unable to execute lookup/incident query against the database.`;
+      suggestedFix = `Verify database connectivity, lookup table definitions (e.g. FLEXI_LOOKUPS), and SQL syntax.`;
+    } else if (excMsg.includes('Unknown content encoding x-gzip')) {
+      rootCauseHint = `REST WebService Decompression Error: Oracle Cloud server returned 'x-gzip' compression which was rejected.`;
+      suggestedFix = `Check RestWebService header configuration; avoid passing unsupported Accept-Encoding headers.`;
+    } else if (sampleSnippet.includes('You must enter a valid combination of values for the OrderNumber')) {
+      rootCauseHint = `Oracle Fusion SCM Pick Wave Error (HTTP 400): Invalid combination of OrderNumber, OrderTypeCode, or SourceSystemName.`;
+      suggestedFix = `Ensure Order Number and Source System Name are validated against Oracle Fusion SCM before submitting pick wave.`;
+    } else if (excType.includes('IOException') && sampleSnippet.includes('LogFireSSHConnection')) {
       rootCauseHint = `SSH Connection to Oracle WMS terminal timed out or was closed (IOException in JSCHManager:isConnected at LogFireSSHConnection:949).`;
       suggestedFix = `Check network stability between Flexi Application Server and Oracle WMS SSH backend. Ensure SSH idle timeout is configured properly.`;
     } else if (sampleSnippet.includes('ClosedChannelException') || sampleSnippet.includes('FlexiWebSocket.send')) {
@@ -543,6 +712,75 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
     status = 'PASS';
   }
 
+  // Determine Entry Type (Focus on Flexi code, methods, APIs, and errors vs Platform noise)
+  let entryType: EntryType = 'PLATFORM';
+  if (isIssue || status === 'FAIL' || errorDetails || level === 'ERROR') {
+    entryType = 'ERROR';
+  } else if (apiDetails) {
+    entryType = 'API_CALL';
+  } else if (flexiMethod) {
+    entryType = 'FLEXI_METHOD';
+  } else if (scriptCode || sampleSnippet.includes('runScript:') || sampleSnippet.includes('running script')) {
+    entryType = 'SCRIPT_CODE';
+  } else if (isScan || scannedValue || sampleSnippet.includes('handleUI:inputData=') || sampleSnippet.includes('handleUI: ENTER') || sampleSnippet.includes('BarcodeManager.extractBarcodes')) {
+    entryType = 'USER_INPUT';
+  } else if (
+    sampleSnippet.includes('LogFireSSHConnection.SendKey') ||
+    sampleSnippet.includes('Transformed Action {ActionType') ||
+    sampleSnippet.includes('prevCur') ||
+    sampleSnippet.includes('Session.keepAlive') ||
+    sampleSnippet.includes('onWebSocketPing') ||
+    sampleSnippet.includes('FlexiWebSocket.onWebSocketPing')
+  ) {
+    entryType = 'PLATFORM';
+  } else if (logger === 'UserActionLogger' || logger === 'LogFirePage') {
+    entryType = 'USER_INPUT';
+  } else {
+    entryType = 'PLATFORM';
+  }
+
+  // Provide meaningful default rootCauseHint for Flexi Methods if not set
+  if (!rootCauseHint && flexiMethod) {
+    switch (flexiMethod.methodName) {
+      case 'putSessionObject':
+        rootCauseHint = `Stored session variable '${flexiMethod.key}' = ${flexiMethod.value ? `"${flexiMethod.value}"` : 'null'}`;
+        break;
+      case 'putObject':
+        rootCauseHint = `Stored component object '${flexiMethod.key}' = ${flexiMethod.value ? `"${flexiMethod.value}"` : 'null'}`;
+        break;
+      case 'getSessionObject':
+        rootCauseHint = `Retrieved session variable '${flexiMethod.key}'`;
+        break;
+      case 'getObject':
+        rootCauseHint = `Retrieved component object '${flexiMethod.key}'`;
+        break;
+      case 'removeObject':
+        rootCauseHint = `Removed object '${flexiMethod.key}' from memory`;
+        break;
+      case 'removeSessionObject':
+        rootCauseHint = `Removed session variable '${flexiMethod.key}'`;
+        break;
+      case 'gotoComponent':
+        rootCauseHint = `Focus navigation directed to component '${flexiMethod.target || ''}'`;
+        break;
+      case 'setStatusMessage':
+        rootCauseHint = `Flexi Status Notification: "${flexiMethod.message || ''}"`;
+        break;
+      case 'executeQuery':
+        rootCauseHint = `Flexi SQL Query: ${flexiMethod.query ? flexiMethod.query.substring(0, 100) : ''}...`;
+        break;
+      case 'executeUpdate':
+        rootCauseHint = `Flexi SQL Update: ${flexiMethod.query ? flexiMethod.query.substring(0, 100) : ''}...`;
+        break;
+    }
+  } else if (!rootCauseHint && scriptCode) {
+    rootCauseHint = `Executed custom script for ${field || screen || 'event'} (${event || 'script'})`;
+  }
+
+  if (!event && flexiMethod) event = flexiMethod.methodName;
+  if (!field && flexiMethod?.key) field = flexiMethod.key;
+  if (!field && flexiMethod?.target) field = flexiMethod.target;
+
   return {
     id: `${fileId}-${startLine}-${index}`,
     fileId,
@@ -574,6 +812,14 @@ function processGroupToEntry(group: RawLogLineInfo[], fileName: string, fileId: 
     rootCauseHint,
     suggestedFix,
     status,
+
+    // SCM & Flexi focused metadata
+    entryType,
+    appType,
+    tenant,
+    flexiMethod,
+    scriptCode: scriptCode || undefined,
+    scriptErrorLine,
   };
 }
 

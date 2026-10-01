@@ -25,7 +25,7 @@ interface NavbarProps {
   onExportExcel: () => void;
   onExportCsv: () => void;
   onExportPdf: () => void;
-  onLoadSample: (type: 'screen' | 'server') => void;
+  onLoadSample: (type: 'scm' | 'screen' | 'server') => void;
   isLoadingSample: boolean;
   totalEntriesCount: number;
 }
@@ -72,17 +72,33 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Log Reviewer
               </h1>
               <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                Flexi WMS
+                Flexi SCM & WMS
               </span>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Screen Log Analyzer & RCA Diagnostic
+              Screen & Server Log Diagnostic for Oracle Cloud
             </p>
           </div>
         </div>
 
         {/* Center: Essential Controls */}
         <div className="flex items-center gap-2">
+          {/* Flexi Focus Mode Toggle */}
+          <button
+            onClick={() => onFilterChange({ focusFlexiOnly: !filters.focusFlexiOnly })}
+            title={filters.focusFlexiOnly ? "Flexi Focus: Showing Flexi methods, scripts, APIs & errors. Platform noise hidden." : "Showing ALL raw logs including VT100 dumps"}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all border shadow-sm ${
+              filters.focusFlexiOnly
+                ? 'bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 ring-2 ring-purple-500/20'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700'
+            }`}
+          >
+            <span>🎯</span>
+            <span className="hidden sm:inline">
+              {filters.focusFlexiOnly ? 'Flexi Focus: ON' : 'Raw Platform Logs: Visible'}
+            </span>
+          </button>
+
           {/* Newest First / Oldest First Toggle */}
           <button
             onClick={toggleSortOrder}
@@ -133,13 +149,27 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden md:inline">Sample Logs</span>
               <span className="text-[10px] text-gray-400">▼</span>
             </button>
-            <div className="absolute right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
+            <div className="absolute right-0 mt-1 w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 hidden group-hover:block z-50">
               <button
-                onClick={() => onLoadSample('screen')}
+                onClick={() => onLoadSample('scm')}
                 disabled={isLoadingSample}
                 className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 flex flex-col"
               >
-                <span className="font-semibold text-blue-600 dark:text-blue-400">Screen Session Log</span>
+                <span className="font-semibold text-teal-600 dark:text-teal-400 flex items-center gap-1">
+                  <span className="px-1.5 py-0.2 bg-teal-100 dark:bg-teal-950 text-[10px] rounded font-bold">SCM</span>
+                  Oracle SCM Cloud Session
+                </span>
+                <span className="text-[10px] text-gray-500">Pick Confirm, putSessionObject, DFF query, Fusion APIs</span>
+              </button>
+              <button
+                onClick={() => onLoadSample('screen')}
+                disabled={isLoadingSample}
+                className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 flex flex-col border-t border-gray-100 dark:border-gray-700"
+              >
+                <span className="font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                  <span className="px-1.5 py-0.2 bg-blue-100 dark:bg-blue-950 text-[10px] rounded font-bold">WMS</span>
+                  Oracle WMS Screen Session
+                </span>
                 <span className="text-[10px] text-gray-500">WS-G-HK: REST APIs, 404, field events</span>
               </button>
               <button

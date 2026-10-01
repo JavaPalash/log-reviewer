@@ -21,7 +21,7 @@ interface LogUploaderProps {
   onClearAll: () => void;
   isParsing: boolean;
   parseProgress: { percent: number; message: string };
-  onLoadSample: (type: 'screen' | 'server') => void;
+  onLoadSample: (type: 'scm' | 'screen' | 'server') => void;
 }
 
 export const LogUploader: React.FC<LogUploaderProps> = ({
@@ -100,10 +100,10 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
           </div>
 
           <h3 className="text-base font-bold text-gray-900 dark:text-white">
-            Upload Flexi Application Log Files
+            Upload Flexi Application Log Files (Oracle SCM & WMS)
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-md mx-auto">
-            Drag and drop one or more log files here, or click to browse. Handles large logs (50MB+) using client-side background workers.
+            Drag and drop one or more log files here, or click to browse. Automatically isolates Flexi methods, API calls, custom scripts, and error lines while filtering platform noise.
           </p>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
@@ -117,11 +117,19 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
             <span className="text-xs text-gray-400">or test immediately with sample logs:</span>
             <button
               type="button"
+              onClick={() => onLoadSample('scm')}
+              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-teal-50 dark:bg-teal-950/80 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 flex items-center gap-1.5 transition-colors"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-teal-500" />
+              Try Oracle SCM Cloud Log (O-SKNS)
+            </button>
+            <button
+              type="button"
               onClick={() => onLoadSample('screen')}
               className="px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 flex items-center gap-1.5 transition-colors"
             >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-              Try Flexi Screen Log (WS-G-HK)
+              <FileText className="w-3.5 h-3.5 text-indigo-500" />
+              Try Oracle WMS Screen Log (WS-G-HK)
             </button>
             <button
               type="button"
@@ -178,11 +186,26 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
                 className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/40 flex items-center justify-between gap-3 shadow-xs"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <FileText className="w-4 h-4 text-blue-500 shrink-0" />
-                    <span className="text-xs font-bold text-gray-900 dark:text-white truncate" title={f.fileName}>
+                    <span className="text-xs font-bold text-gray-900 dark:text-white truncate max-w-[180px]" title={f.fileName}>
                       {f.fileName}
                     </span>
+                    {f.appType === 'SCM' && (
+                      <span className="px-1.5 py-0.2 rounded font-bold text-[9px] bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-200 border border-teal-300">
+                        SCM
+                      </span>
+                    )}
+                    {f.appType === 'WMS' && (
+                      <span className="px-1.5 py-0.2 rounded font-bold text-[9px] bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-200 border border-blue-300">
+                        WMS
+                      </span>
+                    )}
+                    {f.tenant && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        {f.tenant}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400">
                     <span>{formatFileSize(f.fileSize)}</span>

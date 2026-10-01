@@ -9,6 +9,17 @@ export type IssueCategory =
   | 'CONNECTION_DROP'
   | 'NONE';
 
+export type EntryType = 'SCRIPT_CODE' | 'FLEXI_METHOD' | 'API_CALL' | 'ERROR' | 'USER_INPUT' | 'PLATFORM';
+
+export interface FlexiMethodDetails {
+  methodName: string; // 'putObject' | 'getObject' | 'putSessionObject' | 'getSessionObject' | 'removeObject' | 'removeSessionObject' | 'gotoComponent' | 'setStatusMessage' | 'showOptionDialog' | 'automate' | 'openPage' | 'executeQuery' | 'executeUpdate'
+  key?: string;
+  value?: string;
+  target?: string;
+  message?: string;
+  query?: string;
+}
+
 export interface ApiDetails {
   name?: string;
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' | string;
@@ -64,6 +75,14 @@ export interface LogEntry {
   rootCauseHint: string;
   suggestedFix: string;
   status: 'FAIL' | 'WARN' | 'PASS' | 'INFO';
+
+  // SCM & Flexi Focused Metadata
+  entryType: EntryType;
+  appType: 'SCM' | 'WMS' | 'UNKNOWN';
+  tenant?: string; // e.g. PureCS_Rafed_TEST
+  flexiMethod?: FlexiMethodDetails;
+  scriptCode?: string; // Captured BeanShell / Java script code
+  scriptErrorLine?: number; // Line number in script where error occurred (e.g. Line 21 or Line 62)
 }
 
 export interface ParsedLogFile {
@@ -74,6 +93,8 @@ export interface ParsedLogFile {
   totalEntries: number;
   errorCount: number;
   warnCount: number;
+  appType: 'SCM' | 'WMS' | 'UNKNOWN';
+  tenant?: string;
   entries: LogEntry[];
 }
 
@@ -92,6 +113,12 @@ export interface FilterState {
   dateEnd?: string;
   sortOrder: 'newest' | 'oldest'; // 'newest' = bottom-to-top, 'oldest' = top-to-bottom
   maskSensitive: boolean;
+
+  // Flexi-focused filters
+  focusFlexiOnly: boolean; // Default true: shows Flexi code, methods, APIs, and errors, hiding raw platform noise
+  entryTypes: EntryType[];
+  appTypes: string[]; // 'SCM', 'WMS'
+  tenants: string[];
 }
 
 export interface RcaReportData {

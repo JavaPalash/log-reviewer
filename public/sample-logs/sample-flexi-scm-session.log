@@ -1,0 +1,866 @@
+[DEBUG] 2026-10-01 06:29:47.347 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[7]] UserActionLogger - onLoginEvent: onLoginScript=
+[INFO ] 2026-10-01 06:29:48.350 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[7]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.MenuPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:29:55.182 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[8]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='', isScan='false', target='Outbound', source='Inbound', seq='4', com.intellinum.mia.app.runtime.InputData@578f5c5d}
+[INFO ] 2026-10-01 06:29:55.182 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[8]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '' from source 'Inbound' to target 'Outbound'
+[INFO ] 2026-10-01 06:29:55.183 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[8]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.MenuPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:29:56.448 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[9]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='', isScan='false', target='Pick/Ship', source='Pick/Ship', seq='5', com.intellinum.mia.app.runtime.InputData@2a336834}
+[INFO ] 2026-10-01 06:29:56.448 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[9]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '' from source 'Pick/Ship' to target 'Pick/Ship'
+[INFO ] 2026-10-01 06:29:56.448 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[9]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : , action target : null, action previousActiveComponent : null}
+[INFO ] 2026-10-01 06:29:56.448 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[9]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.MenuPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:00.359 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='', isScan='false', target='Pick Confirm', source='Pick Release', seq='6', com.intellinum.mia.app.runtime.InputData@6194dbf6}
+[INFO ] 2026-10-01 06:30:00.359 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '' from source 'Pick Release' to target 'Pick Confirm'
+[INFO ] 2026-10-01 06:30:00.360 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - Session.openApplication: applicationID 1305
+[INFO ] 2026-10-01 06:30:00.360 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - Transformed Action {ActionType : OPEN_APPLICATION, action value : 1305, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:00.384 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - PICK_CONFIRM_ADVANCED.runScript:_onPageEntered~PICK_CONFIRM_ADVANCED:Java = 
+
+if(flexi.getSessionObject("ORACLE_SCM_ORG_ID") != null){
+	ORG_CODE.setValue(flexi.getSessionObject("ORACLE_SCM_ORG_CODE"));
+	ORG_CODE.setHidden(true);
+	page.setTitle("Order Picking (" + flexi.getSessionObject("ORACLE_SCM_ORG_CODE") + ")" );
+	
+	LPN_ENABLE_CHECK.call();
+}
+else
+{
+	page.setTitle("Order Picking" );
+	SUBINVENTORY.setHidden(true);
+	TO_SUBINVENTORY.setHidden(true);
+	PICK_SLIP.setHidden(true);
+	SO_NUM.setHidden(true);
+	MOVE_REQ.setHidden(true);
+	SHIPMENT.setHidden(true);
+	QUERY.setHidden(true);
+	LOCKED_TXN.setHidden(true);
+}
+
+ITEM_NUMBER.setHidden(true);
+CFM_ITEM.setHidden(true);
+ITEM_REVISION.setHidden(true);
+SUBINVENTORY_RO.setHidden(true);
+TO_ORG.setHidden(true);
+DROP_SUBINVENTORY.setHidden(true);
+DROP_LOCATOR.setHidden(true);
+CNF_SUBINVENTORY.setHidden(true);
+LOCATOR.setHidden(true);
+ONGOING_TXN_TBL.setHidden(true);
+CNF_LOCATOR.setHidden(true);
+ITEM_UOM.setHidden(true);
+QTY.setHidden(true);
+CNF_QTY.setHidden(true);
+REM_LOT_QTY.setHidden(true);
+LOT_NUMBER.setHidden(true);
+SERIAL_TYPE.setHidden(true);
+CNF_LOT.setHidden(true);
+LOT_QTY.setHidden(true);
+CNF_LOT_QTY.setHidden(true);
+SUBMIT.setHidden(true);
+SUBMIT_NEXT.setHidden(true);
+SERIAL_NUM.setHidden(true);
+FR_SERIAL_NUM.setHidden(true);
+TO_SERIAL_NUM.setHidden(true);
+FR_SERIAL_NUMBER.setHidden(true);
+TO_SERIAL_NUMBER.setHidden(true);
+LPN.setHidden(true);
+TO_LPN.setHidden(true);
+LPN_VALIDATION_DIV.setHidden(false);
+REM_PICKED_QTY.setHidden(true);
+ALLO_LPN.setHidden(true);
+EXP_DATE.setHidden(true);
+flexi.putObject("USER_COMPANY_ID", session.getCompanyId());
+[INFO ] 2026-10-01 06:30:00.384 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiAPI.getSessionObject:key: ORACLE_SCM_ORG_ID
+[TRACE] 2026-10-01 06:30:00.385 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiAPI.putObject:key: USER_COMPANY_ID
+[TRACE] 2026-10-01 06:30:00.385 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - PICK_CONFIRM_ADVANCED.script initialize = 2 ms
+[TRACE] 2026-10-01 06:30:00.385 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - PICK_CONFIRM_ADVANCED_APP.onSessionApplicationEnterEvent, running script script:
+
+
+//Code for Dff fields
+logger.trace("Executing the code of OnApplication Entered");
+
+
+
+if (div1 != void) {
+private void checkForDFF()
+{
+	String companyId=session.getCompanyId().toString();
+	logger.trace("CompanyId: "+companyId);
+	flexi.putObject("SESSION_ID",companyId);
+	String query = "SELECT meaning, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6, Attribute7, Attribute8, Attribute9, Attribute10 FROM FLEXI_LOOKUPS WHERE lookup_type ='FUSION_SCM_FLP_DFF_MAPPING'  AND ENABLED_FLAG='1' AND COMPANY_ID=? AND lookup_code=?";
+	logger.trace("Executing query to fetch TRANSACTION_DFF with lookup_code: " + page.getName());
+
+	ArrayList queryArr = flexi.executeQuery(query, new String[]{companyId,page.getName()});
+
+	ArrayList lookupCodes = new ArrayList();
+
+	if (queryArr.size() > 0) {
+	logger.trace("Result of TRANSACTION_DFF query: " + queryArr.get(0)[0]);
+
+		logger.trace("TRANSACTION_DFF found. Extracting meaning...");
+
+		Object transactionDFF = queryArr.get(0)[0];
+		flexi.putObject("DFF_ATT_API_NAME", queryArr.get(0)[1]);
+		flexi.putObject("TRANSACTION_DFF", transactionDFF);
+		logger.trace("TRANSACTION_DFF set to: " + transactionDFF);
+
+		// Extract Attribute2 to Attribute10 values
+		Set attributeFieldNames = new HashSet();
+		for (int i = 3; i <= 10; i++) {
+			Object attr = queryArr.get(0)[i];
+			if (attr != null && !attr.toString().trim().isEmpty()) {
+				attributeFieldNames.add(attr.toString().trim());
+			}
+		}
+
+		// If all attributes are empty, skip filtering
+		boolean shouldFilter = !attributeFieldNames.isEmpty();
+
+		String AttributesQuery = "SELECT * FROM XX_FSCM_DFF_SEGMENTS WHERE oracle_flexfield_code=? and COMPANY_ID=?";
+		logger.trace("Executing AttributesQuery with oracle_flexfield_code: " + transactionDFF);
+
+		ArrayList fieldsList = flexi.executeQuery(AttributesQuery, new String[]{String.valueOf(transactionDFF),companyId});
+		logger.trace("Result of AttributesQuery: " + fieldsList);
+
+		if (fieldsList.size() > 0)
+		{
+			if (shouldFilter)
+			{
+				logger.trace("Filtering AttributesQuery result based on mapped attribute names: " + attributeFieldNames);
+
+				ArrayList filteredList = new ArrayList();
+				for (int i = 0; i < fieldsList.size(); i++) {
+					Object[] row = (Object[]) fieldsList.get(i);
+					if (row[6] != null && attributeFieldNames.contains(row[6].toString().trim())) {
+						filteredList.add(row);
+					}
+				}
+	
+				if (filteredList.isEmpty())
+				{
+					logger.trace("Mapping does not match any attribute in AttributesQuery result.");
+					// Removing  all related objects from session
+					flexi.removeObject("TRANSACTION_DFF");
+					flexi.removeObject("DFF_ATT_API_NAME");
+
+					// Set the status message
+					flexi.setStatusMessage("Dff Field mapping mismatch with Oracle.");
+
+					// Stop further processing
+					return;
+				} else
+				{
+					logger.trace("Filtered fields matched with mapping: " + filteredList);
+					fieldsList = filteredList;
+				}
+			}
+			else
+			{
+				logger.trace("No attribute mapping provided. Keeping original fieldsList.");
+			}
+
+			// Put the (filtered or original) list into session
+			flexi.putObject("DFF_FIELDS", fieldsList);
+			logger.trace("DFF_FIELDS stored in session.");
+			
+			Button button = new Button("CAPTURE_DFF", page.getContext());
+			button.setLabel("Capture DFF");
+			int submitIndex = div1.getChildPosition("SUBMIT");
+			
+		     button.addEventListener(new ButtonEventListener() {
+public void onButtonClickedEvent(Event event1, Button button) {
+	flexi.openPage("FUSION_CAPTURE_DFF_ATT");
+}
+public void onButtonExitEvent(Event event1, Button button) {
+        // Optional: Add any cleanup logic if needed
+    }
+
+    public void onComponentExitEvent(Event event1, Button button) {
+        // Required: Even if empty, must be defined to avoid EvalError
+    }
+	
+	 public void  onComponentEnterEvent(Event event1, Button button) {
+        // Required: Even if empty, must be defined to avoid EvalError
+    }
+	
+	
+});
+			              div1.addChildAt(submitIndex, button);
+			              button.setHidden(false);
+		} else
+		{
+			logger.trace("No fields found for TRANSACTION_DFF.");
+		}
+	}
+
+}
+
+checkForDFF();
+
+}
+
+
+[TRACE] 2026-10-01 06:30:00.385 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - PICK_CONFIRM_ADVANCED_APP.runScript:onSessionApplicationEnter~PICK_CONFIRM_ADVANCED_APP:Java = 
+
+
+//Code for Dff fields
+logger.trace("Executing the code of OnApplication Entered");
+
+
+
+if (div1 != void) {
+private void checkForDFF()
+{
+	String companyId=session.getCompanyId().toString();
+	logger.trace("CompanyId: "+companyId);
+	flexi.putObject("SESSION_ID",companyId);
+	String query = "SELECT meaning, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6, Attribute7, Attribute8, Attribute9, Attribute10 FROM FLEXI_LOOKUPS WHERE lookup_type ='FUSION_SCM_FLP_DFF_MAPPING'  AND ENABLED_FLAG='1' AND COMPANY_ID=? AND lookup_code=?";
+	logger.trace("Executing query to fetch TRANSACTION_DFF with lookup_code: " + page.getName());
+
+	ArrayList queryArr = flexi.executeQuery(query, new String[]{companyId,page.getName()});
+
+	ArrayList lookupCodes = new ArrayList();
+
+	if (queryArr.size() > 0) {
+	logger.trace("Result of TRANSACTION_DFF query: " + queryArr.get(0)[0]);
+
+		logger.trace("TRANSACTION_DFF found. Extracting meaning...");
+
+		Object transactionDFF = queryArr.get(0)[0];
+		flexi.putObject("DFF_ATT_API_NAME", queryArr.get(0)[1]);
+		flexi.putObject("TRANSACTION_DFF", transactionDFF);
+		logger.trace("TRANSACTION_DFF set to: " + transactionDFF);
+
+		// Extract Attribute2 to Attribute10 values
+		Set attributeFieldNames = new HashSet();
+		for (int i = 3; i <= 10; i++) {
+			Object attr = queryArr.get(0)[i];
+			if (attr != null && !attr.toString().trim().isEmpty()) {
+				attributeFieldNames.add(attr.toString().trim());
+			}
+		}
+
+		// If all attributes are empty, skip filtering
+		boolean shouldFilter = !attributeFieldNames.isEmpty();
+
+		String AttributesQuery = "SELECT * FROM XX_FSCM_DFF_SEGMENTS WHERE oracle_flexfield_code=? and COMPANY_ID=?";
+		logger.trace("Executing AttributesQuery with oracle_flexfield_code: " + transactionDFF);
+
+		ArrayList fieldsList = flexi.executeQuery(AttributesQuery, new String[]{String.valueOf(transactionDFF),companyId});
+		logger.trace("Result of AttributesQuery: " + fieldsList);
+
+		if (fieldsList.size() > 0)
+		{
+			if (shouldFilter)
+			{
+				logger.trace("Filtering AttributesQuery result based on mapped attribute names: " + attributeFieldNames);
+
+				ArrayList filteredList = new ArrayList();
+				for (int i = 0; i < fieldsList.size(); i++) {
+					Object[] row = (Object[]) fieldsList.get(i);
+					if (row[6] != null && attributeFieldNames.contains(row[6].toString().trim())) {
+						filteredList.add(row);
+					}
+				}
+	
+				if (filteredList.isEmpty())
+				{
+					logger.trace("Mapping does not match any attribute in AttributesQuery result.");
+					// Removing  all related objects from session
+					flexi.removeObject("TRANSACTION_DFF");
+					flexi.removeObject("DFF_ATT_API_NAME");
+
+					// Set the status message
+					flexi.setStatusMessage("Dff Field mapping mismatch with Oracle.");
+
+					// Stop further processing
+					return;
+				} else
+				{
+					logger.trace("Filtered fields matched with mapping: " + filteredList);
+					fieldsList = filteredList;
+				}
+			}
+			else
+			{
+				logger.trace("No attribute mapping provided. Keeping original fieldsList.");
+			}
+
+			// Put the (filtered or original) list into session
+			flexi.putObject("DFF_FIELDS", fieldsList);
+			logger.trace("DFF_FIELDS stored in session.");
+			
+			Button button = new Button("CAPTURE_DFF", page.getContext());
+			button.setLabel("Capture DFF");
+			int submitIndex = div1.getChildPosition("SUBMIT");
+			
+		     button.addEventListener(new ButtonEventListener() {
+public void onButtonClickedEvent(Event event1, Button button) {
+	flexi.openPage("FUSION_CAPTURE_DFF_ATT");
+}
+public void onButtonExitEvent(Event event1, Button button) {
+        // Optional: Add any cleanup logic if needed
+    }
+
+    public void onComponentExitEvent(Event event1, Button button) {
+        // Required: Even if empty, must be defined to avoid EvalError
+    }
+	
+	 public void  onComponentEnterEvent(Event event1, Button button) {
+        // Required: Even if empty, must be defined to avoid EvalError
+    }
+	
+	
+});
+			              div1.addChildAt(submitIndex, button);
+			              button.setHidden(false);
+		} else
+		{
+			logger.trace("No fields found for TRANSACTION_DFF.");
+		}
+	}
+
+}
+
+checkForDFF();
+
+}
+
+
+[TRACE] 2026-10-01 06:30:00.386 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - Executing the code of OnApplication Entered
+[TRACE] 2026-10-01 06:30:00.387 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - CompanyId: 43
+[TRACE] 2026-10-01 06:30:00.387 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiAPI.putObject:key: SESSION_ID
+[TRACE] 2026-10-01 06:30:00.387 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - Executing query to fetch TRANSACTION_DFF with lookup_code: PICK_CONFIRM_ADVANCED
+[DEBUG] 2026-10-01 06:30:00.387 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - FlexiAPI.executeQuery:query SELECT meaning, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6, Attribute7, Attribute8, Attribute9, Attribute10 FROM FLEXI_LOOKUPS WHERE lookup_type ='FUSION_SCM_FLP_DFF_MAPPING'  AND ENABLED_FLAG='1' AND COMPANY_ID=? AND lookup_code=?, parameters [43, PICK_CONFIRM_ADVANCED]
+[TRACE] 2026-10-01 06:30:00.388 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[10]] UserActionLogger - PICK_CONFIRM_ADVANCED_APP.script initialize = 3 ms
+[TRACE] 2026-10-01 06:30:06.180 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=15, value='SSMC_WAREHOUSE', isScan='false', target='ORG_CODE', source='ORG_CODE', seq='7', com.intellinum.mia.app.runtime.InputData@1e119b40}
+[TRACE] 2026-10-01 06:30:06.180 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - --------->>>>>>>>>Personalization Input processor --------->>>>>>>>
+[TRACE] 2026-10-01 06:30:06.180 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ====================Pick Confirm InputProcessortempInputSSMC_WAREHOUSE
+[INFO ] 2026-10-01 06:30:06.183 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiRuntime.handleUI: ENTER with value 'SSMC_WAREHOUSE' from source '' to target 'ORG_CODE'
+[TRACE] 2026-10-01 06:30:06.183 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - BarcodeManager.extractBarcodes:result=SSMC_WAREHOUSE
+[INFO ] 2026-10-01 06:30:06.183 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_WEBSERVICE.runWebService
+[INFO ] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.getObject:key: FLEXI_OVERRIDE_SSO_AUTHENTICATION
+[DEBUG] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_WEBSERVICE.runWebService: Cache enabled
+[TRACE] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.request: URL = https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com//fscmRestApi/resources/latest/inventoryOrganizations?q=OrganizationCode+LIKE+%27%25SSMC_WAREHOUSE%25%27%3BInventoryFlag%3Dtrue&fields=OrganizationId%2COrganizationCode%2COrganizationName&onlyData=true&orderBy=OrganizationCode&limit=90&offset=0
+[TRACE] 2026-10-01 06:30:06.184 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-10-01 06:30:07.174 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-10-01 06:30:07.174 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService: Content Type = application/vnd.oracle.adf.resourcecollection+json
+[TRACE] 2026-10-01 06:30:07.174 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_WEBSERVICE.runWebService: Total time = 990 ms
+[DEBUG] 2026-10-01 06:30:07.174 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_WEBSERVICE.runWebService: result 200 {
+  "items" : [ {
+    "OrganizationId" : 300002781387604,
+    "OrganizationCode" : "SSMC_WAREHOUSE",
+    "OrganizationName" : "SSMC Warehouse"
+  } ],
+  "count" : 1,
+  "hasMore" : false,
+  "limit" : 90,
+  "offset" : 0,
+  "links" : [ {
+    "rel" : "self",
+    "href" : "https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/inventoryOrganizations",
+    "name" : "inventoryOrganizations",
+    "kind" : "collection"
+  }, {
+    "rel" : "action",
+    "href" : "https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/inventoryOrganizations/action/copyInventoryOrganizations",
+    "name" : "copyInventoryOrganizations",
+    "kind" : "other"
+  } ]
+}
+[INFO ] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : SSMC_WAREHOUSE, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_CODE.runScript:_onExit~ORG_CODE:Java = 
+
+if(flexi.getSessionObject("ORACLE_SCM_ORG_ID") == null){
+	if(ORG_CODE.getValue().length () > 0 && ORG_CODE.getSelectedValues() != null){
+		flexi.putSessionObject("ORACLE_SCM_ORG_ID",ORG_CODE.getSelectedValues().get(2));
+		flexi.putSessionObject("ORACLE_SCM_ORG_CODE", ORG_CODE.getValue());
+		ORG_CODE.setHidden(true);
+		SUBINVENTORY.setHidden(false);
+		PICK_SLIP.setHidden(false);
+		SO_NUM.setHidden(false);
+		MOVE_REQ.setHidden(false);
+		SHIPMENT.setHidden(false);
+		QUERY.setHidden(false);
+		LOCKED_TXN.setHidden(false);
+		page.setTitle("Order Picking(" + ORG_CODE.getValue() + ")");
+		
+		LPN_ENABLE_CHECK.call();
+	}
+}
+
+[INFO ] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.getSessionObject:key: ORACLE_SCM_ORG_ID
+[TRACE] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.putSessionObject:key: ORACLE_SCM_ORG_ID, object: 300002781387604
+[TRACE] 2026-10-01 06:30:07.176 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.putSessionObject:key: ORACLE_SCM_ORG_CODE, object: SSMC_WAREHOUSE
+[TRACE] 2026-10-01 06:30:07.180 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_ENABLE_CHECK.runScript:_script~LPN_ENABLE_CHECK:Java = 
+logger.debug("Initiate LPN Check for Organization");
+if(flexi.getSessionObject("ORACLE_SCM_ORG_ID") != null){
+	logger.debug("Printing Value of OrganizationId: "+flexi.getSessionObject("ORACLE_SCM_ORG_ID"));
+	LPN_CHECK_WEB_SERVICE.callWebService();
+	logger.debug("LPN_CHECK_WEB_SERVICE triggered");
+	if (LPN_CHECK_WEB_SERVICE.getResponseCode() == 200 ) {
+		JSONArray items = new org.json.JSONObject(LPN_CHECK_WEB_SERVICE.getRawResponse()).getJSONArray("items");
+		if( items.length()>0){
+			flexi.putObject("LPN_ENABLED_FLAG",items.get(0).get("LPNEnabledFlag"));
+			logger.info("Value for LPN_ENABLED_FLAG: "+flexi.getObject("LPN_ENABLED_FLAG"));
+			/*
+if("true".equals(flexi.getObject("LPN_ENABLED_FLAG").toString())){
+        logger.info("Unhiding LPN field when value is true");
+        LPN.setHidden(false);
+        LPN_VALIDATION_DIV.setHidden(false);
+      }else{
+        logger.info("Hiding LPN field when value is false");
+        LPN.setHidden(true);
+      }*/
+		}
+	}
+}
+[DEBUG] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - Initiate LPN Check for Organization
+[INFO ] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.getSessionObject:key: ORACLE_SCM_ORG_ID
+[INFO ] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.getSessionObject:key: ORACLE_SCM_ORG_ID
+[DEBUG] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - Printing Value of OrganizationId: 300002781387604
+[TRACE] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_CHECK_WEB_SERVICE.runWebService
+[INFO ] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.getObject:key: FLEXI_OVERRIDE_SSO_AUTHENTICATION
+[TRACE] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.request: URL = https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com//fscmRestApi/resources/latest/advancedInventoryParameters?q=OrganizationId%3D300002781387604%3B
+[TRACE] 2026-10-01 06:30:07.181 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-10-01 06:30:07.468 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-10-01 06:30:07.468 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - RestWebService: Content Type = application/vnd.oracle.adf.resourcecollection+json
+[TRACE] 2026-10-01 06:30:07.468 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_CHECK_WEB_SERVICE.runWebService: Total time = 287 ms
+[DEBUG] 2026-10-01 06:30:07.468 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_CHECK_WEB_SERVICE.runWebService: result 200 {
+  "items" : [ ],
+  "count" : 0,
+  "hasMore" : false,
+  "limit" : 25,
+  "offset" : 0,
+  "links" : [ {
+    "rel" : "self",
+    "href" : "https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/advancedInventoryParameters",
+    "name" : "advancedInventoryParameters",
+    "kind" : "collection"
+  } ]
+}
+[DEBUG] 2026-10-01 06:30:07.468 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_CHECK_WEB_SERVICE triggered
+[TRACE] 2026-10-01 06:30:07.469 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - LPN_ENABLE_CHECK.script initialize = 289 ms
+[TRACE] 2026-10-01 06:30:07.469 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - ORG_CODE.script initialize = 293 ms
+[TRACE] 2026-10-01 06:30:07.469 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - SUBINVENTORY.runScript:_onFocus~SUBINVENTORY:Java = 
+
+flexi.removeObject("SERIAL_LIST");
+flexi.removeObject("QUERY_PICK_LINES_RESULTS");
+[TRACE] 2026-10-01 06:30:07.469 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.removeObject:key: SERIAL_LIST
+[TRACE] 2026-10-01 06:30:07.470 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - FlexiAPI.removeObject:key: QUERY_PICK_LINES_RESULTS
+[TRACE] 2026-10-01 06:30:07.470 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[11]] UserActionLogger - SUBINVENTORY.script initialize = 1 ms
+[TRACE] 2026-10-01 06:30:09.331 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=28, value='', isScan='false', target='SO_NUM', source='SUBINVENTORY', seq='8', com.intellinum.mia.app.runtime.InputData@3f269f50}
+[TRACE] 2026-10-01 06:30:09.331 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - --------->>>>>>>>>Personalization Input processor --------->>>>>>>>
+[TRACE] 2026-10-01 06:30:09.331 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - ====================Pick Confirm InputProcessortempInput
+[INFO ] 2026-10-01 06:30:09.334 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiRuntime.handleUI: CTRL_L with value '' from source '' to target 'SO_NUM'
+[TRACE] 2026-10-01 06:30:09.334 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_NUM.runScript:_onFocus~SO_NUM:Java = 
+
+flexi.removeObject("QUERY_PICK_LINES_RESULTS");
+[TRACE] 2026-10-01 06:30:09.334 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiAPI.removeObject:key: QUERY_PICK_LINES_RESULTS
+[TRACE] 2026-10-01 06:30:09.334 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_NUM.script initialize = 0 ms
+[INFO ] 2026-10-01 06:30:09.334 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - Transformed Action {ActionType : OPEN_PAGE, action value : com.intellinum.mia.app.pages.LOVPage, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:09.336 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_WEBSERVICE.runWebService
+[TRACE] 2026-10-01 06:30:09.336 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_WEBSERVICE.runScript:_onCallingRequest~SO_WEBSERVICE:Java = 
+SO_WEBSERVICE.addRequestHeader("REST-Framework-Version", "3");
+
+  //flexi.putObject("PICK_TYPE", " and pickLines.TransactionType='Sales Order Pick' ");
+
+  String sourceSub = SUBINVENTORY.getValue();
+if (sourceSub != null && sourceSub.length() > 0) {
+  flexi.putObject("SOURCE_SUB", " and pickLines.SourceSubinventory='"+sourceSub+"' ");  
+}else{
+  if(flexi.getObject("SOURCE_SUB") != null){
+    flexi.removeObject("SOURCE_SUB");
+  }
+}
+String toSub = TO_SUBINVENTORY.getValue();
+if (toSub != null && toSub.length() > 0) {
+  flexi.putObject("TO_SUB", " and pickLines.DestinationSubinventory='"+toSub+"' ");  
+}else{
+  if(flexi.getObject("TO_SUB") != null){
+    flexi.removeObject("TO_SUB");
+  }
+}
+
+//TransactionType
+//work in Process Material Issue
+[INFO ] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiAPI.getObject:key: SOURCE_SUB
+[INFO ] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiAPI.getObject:key: TO_SUB
+[TRACE] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_WEBSERVICE.script initialize = 1 ms
+[INFO ] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - FlexiAPI.getObject:key: FLEXI_OVERRIDE_SSO_AUTHENTICATION
+[TRACE] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService.request: Request Method = GET
+[DEBUG] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService.request: URL = https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com//fscmRestApi/resources/latest/pickSlipDetails?q=Organization%3D%27SSMC_WAREHOUSE%27+AND+Order+LIKE+%27%25%25%27++++&fields=PickSlip%2COrder%2CMovementRequest%2CShipment%2CCustomer%2CShipToLocation%2CNumberOfPicks&onlyData=true&orderBy=Order%3Adesc&expand=all&limit=90&offset=0
+[TRACE] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService.authorizationRequest: Basic
+[TRACE] 2026-10-01 06:30:09.337 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService.getAction Request Header = REST-Framework-Version value = 3
+[TRACE] 2026-10-01 06:30:11.743 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService: Content Encoding = null
+[TRACE] 2026-10-01 06:30:11.743 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - RestWebService: Content Type = application/vnd.oracle.adf.resourcecollection+json
+[TRACE] 2026-10-01 06:30:11.743 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_WEBSERVICE.runWebService: Total time = 2406 ms
+[DEBUG] 2026-10-01 06:30:11.743 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[12]] UserActionLogger - SO_WEBSERVICE.runWebService: result 200 {
+  "items" : [ {
+    "PickSlip" : 4522437,
+    "Order" : "4084508",
+    "MovementRequest" : "10878191",
+    "Shipment" : "5142041",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4515435,
+    "Order" : "4080484",
+    "MovementRequest" : "10868183",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4509647,
+    "Order" : "4073673",
+    "MovementRequest" : "10840132",
+    "Shipment" : "5130905",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 4
+  }, {
+    "PickSlip" : 4508762,
+    "Order" : "4073606",
+    "MovementRequest" : "10840897",
+    "Shipment" : "5131797",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4508753,
+    "Order" : "4073076",
+    "MovementRequest" : "10840839",
+    "Shipment" : "5131786",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 20
+  }, {
+    "PickSlip" : 4509466,
+    "Order" : "4072691",
+    "MovementRequest" : "10836135",
+    "Shipment" : "5130618",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 8
+  }, {
+    "PickSlip" : 4509650,
+    "Order" : "4072437",
+    "MovementRequest" : "10840851",
+    "Shipment" : "5130912",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 17
+  }, {
+    "PickSlip" : 4476463,
+    "Order" : "3988609",
+    "MovementRequest" : "10678437",
+    "Shipment" : "5098989",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 2
+  }, {
+    "PickSlip" : 4251043,
+    "Order" : "3841625",
+    "MovementRequest" : "9673810",
+    "Shipment" : "4839042",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4526443,
+    "Order" : "3664016",
+    "MovementRequest" : "10889197",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 2
+  }, {
+    "PickSlip" : 3624785,
+    "Order" : "3577792",
+    "MovementRequest" : "7451690",
+    "Shipment" : "4036073",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4527438,
+    "Order" : "3574614",
+    "MovementRequest" : "10888188",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4526439,
+    "Order" : "3552503",
+    "MovementRequest" : "10887195",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 3608475,
+    "Order" : "3545989",
+    "MovementRequest" : "7222218",
+    "Shipment" : "4014033",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4517435,
+    "Order" : "3545989",
+    "MovementRequest" : "10871180",
+    "Shipment" : "4014031",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 3664117,
+    "Order" : "3517294",
+    "MovementRequest" : "7748306",
+    "Shipment" : "4075673",
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 4526438,
+    "Order" : "3343519",
+    "MovementRequest" : "10887190",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2402045,
+    "Order" : "2637380",
+    "MovementRequest" : "5178787",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2402086,
+    "Order" : "2637378",
+    "MovementRequest" : "5178990",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2402968,
+    "Order" : "2636008",
+    "MovementRequest" : "5173534",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2377955,
+    "Order" : "2631346",
+    "MovementRequest" : "5127140",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2317947,
+    "Order" : "2608496",
+    "MovementRequest" : "4950170",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2311994,
+    "Order" : "2607854",
+    "MovementRequest" : "4944732",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2271962,
+    "Order" : "2599071",
+    "MovementRequest" : "4794126",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2341898,
+    "Order" : "2598891",
+    "MovementRequest" : "4996735",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2283938,
+    "Order" : "2598720",
+    "MovementRequest" : "4813988",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2128911,
+    "Order" : "2592392",
+    "MovementRequest" : "4451773",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2055906,
+    "Order" : "2579276",
+    "MovementRequest" : "4273755",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1855068,
+    "Order" : "2481080",
+    "MovementRequest" : "3698909",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1783888,
+    "Order" : "2266080",
+    "MovementRequest" : "3498528",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1759883,
+    "Order" : "2227271",
+    "MovementRequest" : "3432435",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1816984,
+    "Order" : "2210248",
+    "MovementRequest" : "3559691",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1758895,
+    "Order" : "2210204",
+    "MovementRequest" : "3430965",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 2074922,
+    "Order" : "2209613",
+    "MovementRequest" : "4306738",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1746908,
+    "Order" : "2197073",
+    "MovementRequest" : "3395840",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1817971,
+    "Order" : "2162733",
+    "MovementRequest" : "3559572",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1756911,
+    "Order" : "2130694",
+    "MovementRequest" : "3430844",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1715792,
+    "Order" : "2073231",
+    "MovementRequest" : "3260069",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  }, {
+    "PickSlip" : 1671859,
+    "Order" : "2044440",
+    "MovementRequest" : "3200430",
+    "Shipment" : null,
+    "Customer" : null,
+    "ShipToLocation" : "Abu Dhabi, Sheikh Shakhbout Medical City,, Ghweifat International Highway, Al Mafraq area, 11001, United Arab Emirates",
+    "NumberOfPicks" : 1
+  } ],
+  "count" : 39,
+  "hasMore" : false,
+  "limit" : 90,
+  "offset" : 0,
+  "links" : [ {
+    "rel" : "self",
+    "href" : "https://fa-eutv-dev3-saasfaprod1.fa.ocs.oraclecloud.com:443/fscmRestApi/resources/11.13.18.05/pickSlipDetails",
+    "name" : "pickSlipDetails",
+    "kind" : "collection"
+  } ]
+}
+[TRACE] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiRuntime.handleUI:inputData=InputData{inputType=99, value='', isScan='false', target='1', source='1', seq='9', com.intellinum.mia.app.runtime.InputData@376901dc}
+[INFO ] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiRuntime.handleUI: MOUSE_ENTER with value '' from source '1' to target '1'
+[INFO ] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - Transformed Action {ActionType : SUBMIT, action value : , action target : null, action previousActiveComponent : null}
+[INFO ] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - Transformed Action {ActionType : CLOSE_LOV_PAGE, action value : null, action target : null, action previousActiveComponent : null}
+[INFO ] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - Transformed Action {ActionType : LOV_SUBMIT, action value : 4522437, action target : null, action previousActiveComponent : null}
+[TRACE] 2026-10-01 06:30:19.886 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - SO_NUM.runScript:_onExit~SO_NUM:Java = 
+if(SO_NUM.getValue().length () > 0 && !SO_NUM.getValue().equals("null") && SO_NUM.getSelectedValues() != null){
+	SO_NUM.setValue(SO_NUM.getSelectedValues().get(1));
+	if(SO_NUM.getValue().equals("null")){
+		SO_NUM.setValue("");
+	}
+	PICK_SLIP.setValue(SO_NUM.getSelectedValues().get(0));
+	PICK_SLIP.setValidateLOV(false);
+	if(PICK_SLIP.getValue().equals("null")){
+		PICK_SLIP.setValue("");
+	}
+	MOVE_REQ.setValue(SO_NUM.getSelectedValues().get(2));
+	MOVE_REQ.setValidateLOV(false);
+	if(MOVE_REQ.getValue().equals("null") || MOVE_REQ.getValue().equalsIgnoreCase("Multiple")){
+		MOVE_REQ.setValue("");
+	}
+	SHIPMENT.setValue(SO_NUM.getSelectedValues().get(3));
+	SHIPMENT.setValidateLOV(false);
+	if(SHIPMENT.getValue().equals("null") || SHIPMENT.getValue().equalsIgnoreCase("Multiple")){
+		SHIPMENT.setValue("");
+	}
+	if(SO_NUM.getSelectedValues().get(4).toString().equals("null")){
+		flexi.putObject("LABEL_CUSTOMER", "");
+	}else{
+		flexi.putObject("LABEL_CUSTOMER", SO_NUM.getSelectedValues().get(4));
+	}
+	flexi.putObject("PICK_SLIP_OBJ", PICK_SLIP.getValue());
+	flexi.removeObject("QUERY_PICK_LINES_RESULTS");
+}
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiAPI.putObject:key: LABEL_CUSTOMER
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiAPI.putObject:key: PICK_SLIP_OBJ
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiAPI.removeObject:key: QUERY_PICK_LINES_RESULTS
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - SO_NUM.script initialize = 1 ms
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - MOVE_REQ.runScript:_onFocus~MOVE_REQ:Java = 
+
+flexi.removeObject("QUERY_PICK_LINES_RESULTS");
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - FlexiAPI.removeObject:key: QUERY_PICK_LINES_RESULTS
+[TRACE] 2026-10-01 06:30:19.887 [PureCS_Rafed_TEST][O-SKNS@SEHA.AE(441)-[(441)Thread-739]-[13]] UserActionLogger - MOVE_REQ.script initialize = 0 ms

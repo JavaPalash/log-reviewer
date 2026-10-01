@@ -37,7 +37,7 @@ export default function Home() {
   // RCA Modal state
   const [isRcaModalOpen, setIsRcaModalOpen] = useState(false);
 
-  // Global Filter State with default: NEWEST FIRST (bottom-to-top)
+  // Global Filter State with default: NEWEST FIRST (bottom-to-top) & FLEXI FOCUS ON
   const [filters, setFilters] = useState<FilterState>({
     search: '',
     users: [],
@@ -51,6 +51,10 @@ export default function Home() {
     onlyFailures: false,
     sortOrder: 'newest', // DEFAULT: Newest first (bottom-to-top)
     maskSensitive: false,
+    focusFlexiOnly: true, // DEFAULT: ON (focuses on Flexi methods, scripts, APIs, errors)
+    entryTypes: [],
+    appTypes: [],
+    tenants: [],
   });
 
   // Load preferences from localStorage on mount
@@ -119,6 +123,10 @@ export default function Home() {
       onlyFailures: false,
       dateStart: undefined,
       dateEnd: undefined,
+      focusFlexiOnly: true,
+      entryTypes: [],
+      appTypes: [],
+      tenants: [],
     }));
   }, []);
 
@@ -164,10 +172,16 @@ export default function Home() {
   };
 
   // Sample Log Loader
-  const handleLoadSample = async (type: 'screen' | 'server') => {
+  const handleLoadSample = async (type: 'scm' | 'screen' | 'server') => {
     setIsLoadingSample(true);
     setIsParsing(true);
-    const fileName = type === 'screen' ? 'sample-flexi-screen-session.log' : 'sample-flexi-server-error.log';
+    let fileName = 'sample-flexi-screen-session.log';
+    if (type === 'scm') {
+      fileName = 'sample-flexi-scm-session.log';
+    } else if (type === 'server') {
+      fileName = 'sample-flexi-server-error.log';
+    }
+
     setParseProgress({ percent: 20, message: `Loading ${fileName}...` });
 
     try {

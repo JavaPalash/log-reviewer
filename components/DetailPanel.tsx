@@ -16,7 +16,10 @@ import {
   Clock, 
   User, 
   Layers, 
-  ExternalLink 
+  Sparkles,
+  ExternalLink,
+  Terminal,
+  Database
 } from 'lucide-react';
 import { LogEntry } from '../lib/types';
 
@@ -42,7 +45,19 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
   const [copiedRaw, setCopiedRaw] = useState(false);
   const [copiedPayload, setCopiedPayload] = useState(false);
   const [copiedResponse, setCopiedResponse] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'api' | 'raw' | 'stack'>('overview');
+  const [copiedScript, setCopiedScript] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'script' | 'api' | 'raw' | 'stack'>('overview');
+
+  // Automatically switch tab if entry has script code and it's an error
+  useEffect(() => {
+    if (entry?.scriptCode && (entry.scriptErrorLine || entry.status === 'FAIL')) {
+      setActiveTab('script');
+    } else if (entry?.apiDetails && entry.status === 'FAIL') {
+      setActiveTab('api');
+    } else {
+      setActiveTab('overview');
+    }
+  }, [entry?.id]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -76,6 +91,8 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
   const isFailed = entry.status === 'FAIL';
   const isWarn = entry.status === 'WARN';
 
+  const scriptLines = entry.scriptCode ? entry.scriptCode.split('\n') : [];
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end transition-opacity">
       
@@ -100,13 +117,28 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
             </span>
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white">
                   Entry #{currentIndex + 1} of {totalCount}
                 </h3>
                 <span className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
                   Line {entry.startLine === entry.endLine ? entry.startLine : `${entry.startLine}-${entry.endLine}`}
                 </span>
+                {entry.appType === 'SCM' && (
+                  <span className="px-1.5 py-0.2 rounded font-bold text-[10px] bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-200 border border-teal-300">
+                    Oracle SCM Cloud
+                  </span>
+                )}
+                {entry.appType === 'WMS' && (
+                  <span className="px-1.5 py-0.2 rounded font-bold text-[10px] bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-200 border border-blue-300">
+                    Oracle WMS Cloud
+                  </span>
+                )}
+                {entry.tenant && (
+                  <span className="px-1.5 py-0.2 rounded font-medium text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-300">
+                    {entry.tenant}
+                  </span>
+                )}
               </div>
               <p className="text-[11px] text-gray-500 font-mono">
                 {entry.fileName} • {entry.timestamp}
@@ -143,7 +175,7 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
 
         </div>
 
-        {/* Root Cause Hint Alert Box (if issue) */}
+        {/* Root Cause Diagnostic Alert Box */}
         {entry.rootCauseHint && (
           <div className={`p-4 border-b ${
             isFailed
@@ -153,9 +185,16 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
             <div className="flex items-start gap-2.5">
               <AlertTriangle className={`w-4 h-4 mt-0.5 shrink-0 ${isFailed ? 'text-rose-600' : 'text-amber-600'}`} />
               <div className="space-y-1 text-xs">
-                <span className="font-bold tracking-wide uppercase text-[10px]">
-                  Root Cause Diagnostic:
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold tracking-wide uppercase text-[10px]">
+                    Root Cause Diagnostic:
+                  </span>
+                  {entry.scriptErrorLine !== undefined && (
+                    <span className="px-2 py-0.5 rounded-full font-mono font-bold text-[10px] bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200">
+                      Line {entry.scriptErrorLine} in script
+                    </span>
+                  )}
+                </div>
                 <p className="font-semibold leading-relaxed">
                   {entry.rootCauseHint}
                 </p>
@@ -170,7 +209,7 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
         )}
 
         {/* Tab Selection */}
-        <div className="flex border-b border-gray-200 dark:border-gray-800 px-4 bg-white dark:bg-gray-900 text-xs">
+        <div className="flex border-b border-gray-200 dark:border-gray-800 px-4 bg-white dark:bg-gray-900 text-xs flex-wrap">
           <button
             onClick={() => setActiveTab('overview')}
             className={`py-2.5 px-3 font-semibold border-b-2 transition-colors ${
@@ -179,20 +218,42 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
                 : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'
             }`}
           >
-            Overview & Fields
+            Overview & Context
           </button>
+
+          {entry.scriptCode && (
+            <button
+              onClick={() => setActiveTab('script')}
+              className={`py-2.5 px-3 font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
+                activeTab === 'script'
+                  ? 'border-emerald-600 text-emerald-600 dark:text-emerald-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'
+              }`}
+            >
+              <Code className="w-3.5 h-3.5" />
+              <span>Script Code</span>
+              {entry.scriptErrorLine !== undefined && (
+                <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-mono text-[9px] font-bold">
+                  L{entry.scriptErrorLine}
+                </span>
+              )}
+            </button>
+          )}
+
           {entry.apiDetails && (
             <button
               onClick={() => setActiveTab('api')}
-              className={`py-2.5 px-3 font-semibold border-b-2 transition-colors ${
+              className={`py-2.5 px-3 font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
                 activeTab === 'api'
                   ? 'border-blue-600 text-blue-600 dark:text-blue-400'
                   : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'
               }`}
             >
-              API Request & Response
+              <Server className="w-3.5 h-3.5" />
+              <span>API Details</span>
             </button>
           )}
+
           {entry.error?.stackTrace && entry.error.stackTrace.length > 0 && (
             <button
               onClick={() => setActiveTab('stack')}
@@ -205,6 +266,7 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
               Stack Trace
             </button>
           )}
+
           <button
             onClick={() => setActiveTab('raw')}
             className={`py-2.5 px-3 font-semibold border-b-2 transition-colors ${
@@ -224,6 +286,62 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
           {activeTab === 'overview' && (
             <div className="space-y-4">
               
+              {/* Flexi Method Inspector Card (if flexiMethod is present) */}
+              {entry.flexiMethod && (
+                <div className="p-4 rounded-xl border border-purple-200 dark:border-purple-800 bg-purple-50/50 dark:bg-purple-950/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <h4 className="font-bold text-purple-950 dark:text-purple-200 uppercase tracking-wider text-[11px]">
+                        Flexi Method Invocation
+                      </h4>
+                    </div>
+                    <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
+                      FlexiAPI.{entry.flexiMethod.methodName}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-xs bg-white dark:bg-gray-900 p-3 rounded-lg border border-purple-100 dark:border-purple-900">
+                    {entry.flexiMethod.key && (
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Object / Session Key</span>
+                        <span className="font-mono font-bold text-purple-700 dark:text-purple-300">{entry.flexiMethod.key}</span>
+                      </div>
+                    )}
+                    {entry.flexiMethod.target && (
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Target Component</span>
+                        <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{entry.flexiMethod.target}</span>
+                      </div>
+                    )}
+                    {entry.flexiMethod.value && (
+                      <div className="col-span-2">
+                        <span className="text-gray-400 block text-[10px]">Stored / Assigned Value</span>
+                        <pre className="font-mono text-xs bg-gray-50 dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white overflow-x-auto">
+                          {entry.flexiMethod.value}
+                        </pre>
+                      </div>
+                    )}
+                    {entry.flexiMethod.message && (
+                      <div className="col-span-2">
+                        <span className="text-gray-400 block text-[10px]">Message Text</span>
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">
+                          {entry.flexiMethod.message}
+                        </p>
+                      </div>
+                    )}
+                    {entry.flexiMethod.query && (
+                      <div className="col-span-2">
+                        <span className="text-gray-400 block text-[10px]">SQL Query</span>
+                        <pre className="font-mono text-xs bg-gray-50 dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-700 text-blue-700 dark:text-blue-300 overflow-x-auto whitespace-pre-wrap">
+                          {entry.flexiMethod.query}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Field & Event Card */}
               <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 space-y-3">
                 <h4 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
@@ -235,7 +353,7 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
                     <span className="font-bold text-gray-800 dark:text-gray-200">{entry.screen || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block text-[10px]">Field Name</span>
+                    <span className="text-gray-400 block text-[10px]">Field / Component Name</span>
                     <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{entry.field || 'N/A'}</span>
                   </div>
                   <div>
@@ -259,184 +377,227 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
                 <h4 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
                   User Session & Thread
                 </h4>
-                <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <span className="text-gray-400 block text-[10px]">User Name</span>
-                    <span className="font-semibold text-gray-800 dark:text-gray-200">{entry.userName || 'N/A'}</span>
+                    <span className="text-gray-400 block text-[10px]">Username</span>
+                    <span className="font-semibold text-gray-800 dark:text-gray-200 truncate block">
+                      {entry.userName || 'N/A'}
+                    </span>
                   </div>
                   <div>
                     <span className="text-gray-400 block text-[10px]">Session ID</span>
-                    <span className="font-mono font-semibold text-gray-800 dark:text-gray-200">{entry.sessionId || 'N/A'}</span>
+                    <span className="font-mono font-bold text-gray-800 dark:text-gray-200">
+                      {entry.sessionId ? `#${entry.sessionId}` : 'N/A'}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block text-[10px]">Thread ID</span>
-                    <span className="font-mono text-gray-600 dark:text-gray-400">{entry.threadId || 'N/A'}</span>
+                    <span className="text-gray-400 block text-[10px]">Thread</span>
+                    <span className="font-mono text-gray-600 dark:text-gray-400 truncate block">
+                      {entry.threadId || 'N/A'}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block text-[10px]">Sequence Step</span>
-                    <span className="font-mono text-gray-600 dark:text-gray-400">{entry.stepSeq || 'N/A'}</span>
+                    <span className="text-gray-400 block text-[10px]">Step Sequence</span>
+                    <span className="font-mono text-gray-600 dark:text-gray-400">
+                      {entry.stepSeq ? `[${entry.stepSeq}]` : 'N/A'}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Code Reference Card */}
-              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 space-y-2">
-                <h4 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
-                  Code Reference & Logger
-                </h4>
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-400">Logger:</span>
-                    <code className="text-gray-800 dark:text-gray-200 font-bold">{entry.logger || 'N/A'}</code>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-400">Class / Method:</span>
-                    <code className="text-indigo-600 dark:text-indigo-400 font-bold">{entry.logCode || 'N/A'}</code>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-400">Log File Lines:</span>
-                    <code className="text-gray-700 dark:text-gray-300 font-bold">L{entry.startLine} to L{entry.endLine}</code>
-                  </div>
-                </div>
-              </div>
-
-              {/* Missing Value Alert */}
-              {entry.missingValueDetails && (
-                <div className="p-4 rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50/80 dark:bg-amber-950/40 space-y-1.5">
-                  <h4 className="font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider text-[11px]">
-                    Missing / Null Data Detected
+              {entry.logCode && (
+                <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 space-y-2">
+                  <h4 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
+                    Internal Code Reference
                   </h4>
-                  <p className="text-amber-800 dark:text-amber-200 font-medium">
-                    {entry.missingValueDetails.reason}
+                  <p className="font-mono text-xs text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 p-2.5 rounded-lg border border-gray-200 dark:border-gray-700">
+                    {entry.logCode}
                   </p>
-                  <div className="text-[11px] text-amber-700 dark:text-amber-400">
-                    Source: <strong>{entry.missingValueDetails.sourceObject}</strong>
-                  </div>
                 </div>
               )}
 
             </div>
           )}
 
-          {/* TAB 2: API DETAILS */}
+          {/* TAB 2: SCRIPT CODE */}
+          {activeTab === 'script' && entry.scriptCode && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Code className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="font-bold text-gray-900 dark:text-white text-xs">
+                    BeanShell / Java Screen Event Script
+                  </span>
+                </div>
+                <button
+                  onClick={() => copyToClipboard(entry.scriptCode || '', setCopiedScript)}
+                  className="px-2.5 py-1 rounded text-xs border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-1 text-gray-600 dark:text-gray-300 transition-colors"
+                >
+                  {copiedScript ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedScript ? 'Copied' : 'Copy Script'}</span>
+                </button>
+              </div>
+
+              {entry.scriptErrorLine !== undefined && (
+                <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 rounded-lg text-xs text-rose-800 dark:text-rose-200 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                  <div>
+                    <strong>Script Failure:</strong> Error occurred on <strong>Line {entry.scriptErrorLine}</strong> (highlighted in red below).
+                  </div>
+                </div>
+              )}
+
+              {/* Code block with line numbers */}
+              <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-950 text-gray-200 font-mono text-xs overflow-x-auto p-4 shadow-inner max-h-[500px] overflow-y-auto">
+                <table className="w-full border-collapse">
+                  <tbody>
+                    {scriptLines.map((line, idx) => {
+                      const lineNum = idx + 1;
+                      const isErrorLine = entry.scriptErrorLine === lineNum;
+
+                      return (
+                        <tr
+                          key={idx}
+                          className={`${
+                            isErrorLine
+                              ? 'bg-rose-950/80 text-rose-200 font-bold border-l-4 border-rose-500'
+                              : 'hover:bg-gray-900/60'
+                          }`}
+                        >
+                          <td className="w-12 select-none pr-4 text-right text-gray-500 text-[11px]">
+                            {lineNum}
+                          </td>
+                          <td className="whitespace-pre">
+                            {line || ' '}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: API REQUEST & RESPONSE */}
           {activeTab === 'api' && entry.apiDetails && (
             <div className="space-y-4">
               
-              {/* Endpoint & Method Bar */}
-              <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-800/60 space-y-2">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded font-bold text-xs bg-blue-600 text-white">
-                      {entry.apiDetails.method || 'GET'}
-                    </span>
-                    <span className="font-bold text-sm text-gray-900 dark:text-white">
-                      {entry.apiDetails.name || 'WebService'}
-                    </span>
-                  </div>
-                  {entry.apiDetails.responseCode && (
-                    <span className={`px-2.5 py-0.5 rounded font-bold text-xs ${
+              {/* Endpoint Overview Card */}
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
+                    REST WebService Call
+                  </span>
+                  {entry.apiDetails.responseCode !== undefined && (
+                    <span className={`px-2 py-0.5 rounded font-mono font-bold text-xs ${
                       entry.apiDetails.responseCode >= 400
-                        ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-200'
-                        : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200'
+                        ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/80 dark:text-rose-200'
+                        : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200'
                     }`}>
                       HTTP {entry.apiDetails.responseCode}
                     </span>
                   )}
                 </div>
 
-                <div className="text-[11px] font-mono break-all text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900 p-2 rounded border border-gray-200 dark:border-gray-700">
-                  {entry.apiDetails.url || 'No URL available'}
-                </div>
-
-                {entry.apiDetails.durationMs && (
-                  <div className="text-[11px] text-gray-500">
-                    Total Time: <strong className="text-gray-800 dark:text-gray-200">{entry.apiDetails.durationMs} ms</strong>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded font-bold font-mono text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                      {entry.apiDetails.method || 'GET'}
+                    </span>
+                    <span className="font-mono text-xs text-gray-800 dark:text-gray-200 break-all select-all font-semibold">
+                      {entry.apiDetails.url || entry.apiDetails.name || 'API Endpoint'}
+                    </span>
                   </div>
-                )}
+
+                  {entry.apiDetails.durationMs !== undefined && (
+                    <div className="flex items-center gap-1.5 text-gray-500 text-[11px]">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>Duration: {entry.apiDetails.durationMs} ms</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Request Payload */}
-              {entry.apiDetails.requestPayload && (
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Request Payload</span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
+                    Request Payload
+                  </span>
+                  {entry.apiDetails.requestPayload && (
                     <button
-                      onClick={() => copyToClipboard(entry.apiDetails!.requestPayload || '', setCopiedPayload)}
-                      className="px-2 py-0.5 rounded text-[11px] text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-200 dark:border-gray-700 flex items-center gap-1"
+                      onClick={() => copyToClipboard(entry.apiDetails?.requestPayload || '', setCopiedPayload)}
+                      className="px-2 py-0.5 rounded text-[11px] border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-1 text-gray-600 dark:text-gray-300"
                     >
                       {copiedPayload ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedPayload ? 'Copied' : 'Copy JSON'}</span>
+                      <span>{copiedPayload ? 'Copied' : 'Copy'}</span>
                     </button>
-                  </div>
-                  <pre className="p-3 rounded-lg bg-gray-900 text-emerald-400 font-mono text-[11px] overflow-x-auto max-h-60">
-                    {formatJsonIfPossible(entry.apiDetails.requestPayload)}
-                  </pre>
+                  )}
                 </div>
-              )}
+                <pre className="font-mono text-xs bg-gray-950 text-gray-200 p-3.5 rounded-xl border border-gray-800 overflow-x-auto max-h-60 select-all">
+                  {entry.apiDetails.requestPayload ? formatJsonIfPossible(entry.apiDetails.requestPayload) : '<no payload>'}
+                </pre>
+              </div>
 
               {/* Response Body */}
-              {entry.apiDetails.responseBody && (
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Response Body</span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-[11px]">
+                    Response Body
+                  </span>
+                  {entry.apiDetails.responseBody && (
                     <button
-                      onClick={() => copyToClipboard(entry.apiDetails!.responseBody || '', setCopiedResponse)}
-                      className="px-2 py-0.5 rounded text-[11px] text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-200 dark:border-gray-700 flex items-center gap-1"
+                      onClick={() => copyToClipboard(entry.apiDetails?.responseBody || '', setCopiedResponse)}
+                      className="px-2 py-0.5 rounded text-[11px] border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-1 text-gray-600 dark:text-gray-300"
                     >
                       {copiedResponse ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedResponse ? 'Copied' : 'Copy Response'}</span>
+                      <span>{copiedResponse ? 'Copied' : 'Copy'}</span>
                     </button>
-                  </div>
-                  <pre className={`p-3 rounded-lg font-mono text-[11px] overflow-x-auto max-h-60 ${
-                    entry.apiDetails.responseCode && entry.apiDetails.responseCode >= 400
-                      ? 'bg-rose-950/80 text-rose-200 border border-rose-900'
-                      : 'bg-gray-900 text-blue-300'
-                  }`}>
-                    {formatJsonIfPossible(entry.apiDetails.responseBody)}
-                  </pre>
+                  )}
                 </div>
-              )}
+                <pre className="font-mono text-xs bg-gray-950 text-gray-200 p-3.5 rounded-xl border border-gray-800 overflow-x-auto max-h-72 select-all">
+                  {entry.apiDetails.responseBody ? formatJsonIfPossible(entry.apiDetails.responseBody) : '<no response body>'}
+                </pre>
+              </div>
 
             </div>
           )}
 
-          {/* TAB 3: STACK TRACE */}
+          {/* TAB 4: STACK TRACE */}
           {activeTab === 'stack' && entry.error?.stackTrace && (
             <div className="space-y-3">
-              <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-900 dark:text-rose-200">
+              <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 rounded-lg text-xs text-rose-800 dark:text-rose-200">
                 <strong>{entry.error.type}:</strong> {entry.error.message}
               </div>
-              <pre className="p-3 rounded-lg bg-gray-900 text-rose-400 font-mono text-[11px] overflow-x-auto max-h-96 leading-relaxed">
-                {entry.error.stackTrace.join('\n')}
-              </pre>
+              <div className="p-3.5 bg-gray-950 text-rose-300 font-mono text-xs rounded-xl border border-gray-800 overflow-x-auto max-h-96 space-y-1 select-all">
+                {entry.error.stackTrace.map((line, idx) => (
+                  <div key={idx}>{line}</div>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* TAB 4: RAW LOG LINES */}
+          {/* TAB 5: RAW LOG LINES */}
           {activeTab === 'raw' && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-500">
-                  Original lines {entry.startLine} to {entry.endLine} (Original File Order)
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 text-xs">
+                  {entry.rawLines.length} raw line(s) from log file
                 </span>
                 <button
                   onClick={() => copyToClipboard(entry.rawLines.join('\n'), setCopiedRaw)}
-                  className="px-2.5 py-1 rounded text-xs font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 flex items-center gap-1"
+                  className="px-2.5 py-1 rounded text-xs border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-1 text-gray-600 dark:text-gray-300 transition-colors"
                 >
                   {copiedRaw ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedRaw ? 'Copied' : 'Copy All Lines'}</span>
+                  <span>{copiedRaw ? 'Copied' : 'Copy All'}</span>
                 </button>
               </div>
-
-              <div className="rounded-lg bg-gray-900 text-gray-200 font-mono text-[11px] p-3 overflow-x-auto max-h-[500px]">
+              <div className="p-3.5 bg-gray-950 text-gray-200 font-mono text-xs rounded-xl border border-gray-800 overflow-x-auto max-h-[500px] space-y-1 select-all">
                 {entry.rawLines.map((line, idx) => (
-                  <div key={idx} className="flex hover:bg-gray-800/60 py-0.5">
-                    <span className="w-12 shrink-0 select-none text-gray-500 text-right pr-3 font-mono">
-                      {entry.startLine + idx}
-                    </span>
-                    <span className="whitespace-pre-wrap break-all">
-                      {line}
-                    </span>
+                  <div key={idx} className="whitespace-pre hover:bg-gray-900/60 py-0.5">
+                    {line}
                   </div>
                 ))}
               </div>
@@ -446,6 +607,7 @@ export const DetailPanel: React.FC<DetailPanelProps> = ({
         </div>
 
       </div>
+
     </div>
   );
 };

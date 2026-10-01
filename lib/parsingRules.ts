@@ -51,9 +51,17 @@ export interface ParsingRuleConfig {
     restWebserviceDuration: RegExp;
     callWebService: RegExp;
 
-    // Session Object manipulation
+    // Session & Object manipulation
     putSessionObject: RegExp;
     getSessionObject: RegExp;
+    putObject?: RegExp;
+    getObject?: RegExp;
+    removeObject?: RegExp;
+    removeSessionObject?: RegExp;
+    gotoComponent?: RegExp;
+    setStatusMessage?: RegExp;
+    threadTenant: RegExp;
+    fileNameUserSession: RegExp;
 
     // Exceptions and Stack Traces
     exceptionStart: RegExp;
@@ -85,11 +93,13 @@ export const PARSING_RULES: ParsingRuleConfig = {
     // Alt header format (if brackets differ)
     altLogHeader: /^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\.\d{3})\s*\[([A-Z]+)\]\s*\[(.*?)\]\s*(\S+)\s*-\s*(.*)/,
 
-    // Thread block format: [][WS-G-HK(181)-[(181)Thread-509]-[3]] or [SA-OB-UAT(414)-[(414)Thread-1399]-[111]]
-    threadUserSession: /([A-Za-z0-9_-]+)\((\d+)\)(?:-\[\((\d+)\)Thread-([0-9A-Za-z_-]+)\])?(?:-\[(\d+)\])?/,
+    // Thread block format: [][WS-G-HK(181)-[(181)Thread-509]-[3]] or [PureCS_Rafed_TEST][SAI.KEDASU@PURECS.COM(434)-[(434)Thread-688]-[4]]
+    threadUserSession: /([A-Za-z0-9_.\-@]+)\((\d+)\)(?:-\[\((\d+)\)Thread-([0-9A-Za-z_-]+)\])?(?:-\[(\d+)\])?/,
+    threadTenant: /^\[([A-Za-z0-9_-]+)\]/,
+    fileNameUserSession: /^([A-Za-z0-9_.\-@]+)_(?:\d+)_(\d+)\.log$/i,
 
     // SessionMonitor pattern
-    sessionMonitorUserSession: /username\s+([A-Za-z0-9_-]+)\s*,?\s*session\s+id\s*:\s*(\d+)/i,
+    sessionMonitorUserSession: /username\s+([A-Za-z0-9_.\-@]+)\s*,?\s*session\s+id\s*:\s*(\d+)/i,
 
     // Screen detection
     screenInScript: /(?:runScript:|_onPageEntered~|_afterPageEntered~)([A-Za-z0-9_]+)(?::Java)?/i,
@@ -121,9 +131,15 @@ export const PARSING_RULES: ParsingRuleConfig = {
     restWebserviceDuration: /(\S+_WS|\S+WebService)\.runWebService:\s*Total\s*time\s*=\s*(\d+)\s*ms/i,
     callWebService: /(\S+_WS)\.callWebService/i,
 
-    // Session Objects
+    // Session & Object Manipulations
+    putObject: /FlexiAPI\.putObject:key:\s*([A-Za-z0-9_]+)(?:,\s*object:\s*(.*))?/i,
+    getObject: /FlexiAPI\.getObject:key:\s*([A-Za-z0-9_]+)/i,
     putSessionObject: /FlexiAPI\.putSessionObject:key:\s*([A-Za-z0-9_]+)(?:,\s*object:\s*(.*))?/i,
     getSessionObject: /FlexiAPI\.getSessionObject:key:\s*([A-Za-z0-9_]+)/i,
+    removeObject: /FlexiAPI\.removeObject:key:\s*([A-Za-z0-9_]+)/i,
+    removeSessionObject: /FlexiAPI\.removeSessionObject:key:\s*([A-Za-z0-9_]+)/i,
+    gotoComponent: /FlexiAPI\.gotoComponent:(?:componentName:|target:)\s*([A-Za-z0-9_]+)/i,
+    setStatusMessage: /FlexiAPI\.setStatusMessage:message[=:]\s*(.*)/i,
 
     // Exceptions
     exceptionStart: /^([a-zA-Z][a-zA-Z0-9_.]*(?:Exception|Error)):?(?:\s+(.*))?/,

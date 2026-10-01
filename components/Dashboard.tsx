@@ -12,7 +12,10 @@ import {
   Clock, 
   ArrowRight,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Sparkles,
+  Code,
+  Layers
 } from 'lucide-react';
 import { LogEntry, FilterState } from '../lib/types';
 
@@ -36,15 +39,20 @@ export const Dashboard: React.FC<DashboardProps> = ({
     let totalErrors = 0;
     let totalWarnings = 0;
     let failedApiCount = 0;
+    let flexiMethodsCount = 0;
+    let scriptsCount = 0;
+    let scmCount = 0;
+    let wmsCount = 0;
+
     const usersSet = new Set<string>();
     const sessionsSet = new Set<string>();
     const failingApisMap = new Map<string, number>();
     const failingFieldsMap = new Map<string, number>();
     const errorsByEventMap = new Map<string, number>();
+    const flexiMethodsMap = new Map<string, number>();
     const recentIssues: LogEntry[] = [];
 
     // Order for recent issues: always newest first
-    // Entries are passed in
     const sortedForRecent = entries.slice().sort((a, b) => {
       if (a.timestampMs !== b.timestampMs) return b.timestampMs - a.timestampMs;
       return b.startLine - a.startLine;
@@ -53,6 +61,19 @@ export const Dashboard: React.FC<DashboardProps> = ({
     for (const e of sortedForRecent) {
       if (e.userName) usersSet.add(e.userName);
       if (e.sessionId) sessionsSet.add(e.sessionId);
+
+      if (e.appType === 'SCM') scmCount++;
+      else if (e.appType === 'WMS') wmsCount++;
+
+      if (e.entryType === 'FLEXI_METHOD' || e.flexiMethod) {
+        flexiMethodsCount++;
+        const mName = e.flexiMethod?.methodName || 'Method';
+        flexiMethodsMap.set(mName, (flexiMethodsMap.get(mName) || 0) + 1);
+      }
+
+      if (e.entryType === 'SCRIPT_CODE' || e.scriptCode) {
+        scriptsCount++;
+      }
 
       if (e.status === 'FAIL') {
         totalErrors++;
@@ -96,16 +117,26 @@ export const Dashboard: React.FC<DashboardProps> = ({
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
 
+    const topFlexiMethods = Array.from(flexiMethodsMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
     return {
       totalEntries: entries.length,
       totalErrors,
       totalWarnings,
       failedApiCount,
+      flexiMethodsCount,
+      scriptsCount,
+      scmCount,
+      wmsCount,
       uniqueUsers: usersSet.size,
       uniqueSessions: sessionsSet.size,
       topFailingApis,
       topFailingFields,
       topFailingEvents,
+      topFlexiMethods,
       recentIssues,
     };
   }, [entries]);
@@ -116,7 +147,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     <div className="space-y-4">
       
       {/* 1. Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         
         {/* Total Entries */}
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs flex flex-col justify-between">
@@ -127,8 +158,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="mt-2 text-2xl font-extrabold text-gray-900 dark:text-white">
             {stats.totalEntries.toLocaleString()}
           </div>
-          <div className="mt-1 text-[11px] text-gray-400">
-            Parsed & analyzed
+          <div className="mt-1 text-[11px] text-gray-400 flex items-center gap-1.5">
+            {stats.scmCount > 0 && <span className="text-teal-600 dark:text-teal-400 font-bold">{stats.scmCount} SCM</span>}
+            {stats.scmCount > 0 && stats.wmsCount > 0 && <span>•</span>}
+            {stats.wmsCount > 0 && <span className="text-blue-600 dark:text-blue-400 font-bold">{stats.wmsCount} WMS</span>}
           </div>
         </div>
 
@@ -149,8 +182,45 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
+        {/* Flexi Methods Called */}
+        <div 
+          onClick={() => onFilterChange({ entryTypes: ['FLEXI_METHOD'] })}
+          className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-purple-200 dark:border-purple-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-purple-50/30 transition-colors"
+        >
+          <div className="flex items-center justify-between text-purple-600 dark:text-purple-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Flexi Methods</span>
+            <Sparkles className="w-4 h-4 text-purple-500" />
+          </div>
+          <div className="mt-2 text-2xl font-extrabold text-purple-600 dark:text-purple-400">
+            {stats.flexiMethodsCount}
+          </div>
+          <div className="mt-1 text-[11px] text-gray-400">
+            put/getSessionObject & queries
+          </div>
+        </div>
+
+        {/* Custom Scripts */}
+        <div 
+          onClick={() => onFilterChange({ entryTypes: ['SCRIPT_CODE'] })}
+          className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-emerald-50/30 transition-colors"
+        >
+          <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
+            <span className="text-xs font-semibold uppercase tracking-wider">Custom Scripts</span>
+            <Code className="w-4 h-4 text-emerald-500" />
+          </div>
+          <div className="mt-2 text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+            {stats.scriptsCount}
+          </div>
+          <div className="mt-1 text-[11px] text-gray-400">
+            Screen events executed
+          </div>
+        </div>
+
         {/* Failed APIs */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-amber-200 dark:border-amber-900/60 shadow-xs flex flex-col justify-between">
+        <div 
+          onClick={() => onFilterChange({ entryTypes: ['API_CALL'], onlyFailures: true })}
+          className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-amber-200 dark:border-amber-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-amber-50/30 transition-colors"
+        >
           <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
             <span className="text-xs font-semibold uppercase tracking-wider">Failed APIs</span>
             <Server className="w-4 h-4 text-amber-500" />
@@ -163,7 +233,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        {/* Unique Users */}
+        {/* Active Operators */}
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400">
             <span className="text-xs font-semibold uppercase tracking-wider">Active Users</span>
@@ -173,21 +243,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {stats.uniqueUsers}
           </div>
           <div className="mt-1 text-[11px] text-gray-400">
-            Unique operator IDs
-          </div>
-        </div>
-
-        {/* Unique Sessions */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
-          <div className="flex items-center justify-between text-gray-500 dark:text-gray-400">
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Sessions</span>
-            <Clock className="w-4 h-4 text-sky-500" />
-          </div>
-          <div className="mt-2 text-2xl font-extrabold text-gray-900 dark:text-white">
-            {stats.uniqueSessions}
-          </div>
-          <div className="mt-1 text-[11px] text-gray-400">
-            RF screen session IDs
+            across {stats.uniqueSessions} sessions
           </div>
         </div>
 
@@ -199,59 +255,66 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-rose-500" />
-                Latest Issues (Newest First)
+              <h3 className="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-1.5">
+                <span>Latest Critical Diagnostics & Root Causes</span>
+                <span className="text-[11px] font-normal text-gray-500">
+                  (Newest First)
+                </span>
               </h3>
             </div>
-            <span className="text-[11px] text-gray-400">
-              Most recent failures detected from bottom-to-top
-            </span>
+            <button
+              onClick={() => onFilterChange({ onlyFailures: true })}
+              className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
+            >
+              <span>View All {stats.totalErrors} Failures</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          <div className="space-y-2">
-            {stats.recentIssues.map((issue) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            {stats.recentIssues.slice(0, 3).map((issue) => (
               <div
                 key={issue.id}
                 onClick={() => onSelectEntry(issue)}
-                className="group p-2.5 rounded-lg border border-gray-100 dark:border-gray-700/60 bg-rose-50/40 dark:bg-rose-950/20 hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer flex items-center justify-between gap-3 transition-colors text-xs"
+                className="p-3 rounded-lg border border-rose-100 dark:border-rose-950/80 bg-rose-50/50 dark:bg-rose-950/20 hover:bg-rose-100/60 dark:hover:bg-rose-950/40 cursor-pointer transition-all flex flex-col justify-between gap-2"
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  <span className="shrink-0 px-2 py-0.5 rounded font-mono font-bold text-[10px] bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">
-                    L{issue.startLine}
-                  </span>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {issue.screen || issue.logger || 'Flexi System'}
+                <div>
+                  <div className="flex items-center justify-between gap-2 text-[10px] text-gray-500 dark:text-gray-400 mb-1">
+                    <div className="flex items-center gap-1">
+                      <span className="font-mono font-bold text-rose-700 dark:text-rose-300">
+                        Line {issue.startLine}
                       </span>
-                      {issue.field && (
-                        <span className="px-1.5 py-0.2 rounded bg-gray-100 dark:bg-gray-700 font-mono text-[10px] text-gray-700 dark:text-gray-300">
-                          {issue.field}
+                      {issue.appType === 'SCM' && (
+                        <span className="px-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 font-bold rounded">
+                          SCM
                         </span>
                       )}
-                      {issue.apiDetails?.responseCode && (
-                        <span className="px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-900/80 font-bold text-[10px] text-rose-800 dark:text-rose-200">
-                          HTTP {issue.apiDetails.responseCode}
+                      {issue.appType === 'WMS' && (
+                        <span className="px-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 font-bold rounded">
+                          WMS
                         </span>
                       )}
-                      <span className="text-[11px] text-gray-400">
-                        {issue.timestamp}
-                      </span>
+                      {issue.scriptErrorLine !== undefined && (
+                        <span className="px-1 bg-rose-200 dark:bg-rose-900 text-rose-900 dark:text-rose-100 font-bold rounded">
+                          Script Line {issue.scriptErrorLine}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 truncate mt-0.5 font-medium">
-                      {issue.rootCauseHint || issue.error?.message || 'Error occurred'}
-                    </p>
+                    <span>{issue.timestamp?.replace(/^\d{4}-/, '')}</span>
                   </div>
+
+                  <p className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-2 leading-snug">
+                    {issue.rootCauseHint || issue.error?.message || 'Error occurred'}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  {issue.userName && (
-                    <span className="hidden md:inline px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px]">
-                      {issue.userName}
-                    </span>
-                  )}
-                  <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-rose-600 transition-colors" />
+                <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1 border-t border-rose-100 dark:border-rose-900/40">
+                  <span className="truncate">
+                    {issue.field || issue.screen || issue.apiDetails?.name || 'Screen Action'}
+                  </span>
+                  <span className="text-rose-600 dark:text-rose-400 font-bold flex items-center gap-0.5">
+                    Inspect <ChevronRight className="w-3 h-3" />
+                  </span>
                 </div>
               </div>
             ))}
@@ -259,80 +322,90 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       )}
 
-      {/* 3. Top 5 Failing APIs & Top 5 Failing Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* 3. Top Hotspots Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         
         {/* Top Failing APIs */}
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 mb-3 text-gray-800 dark:text-gray-200 font-bold text-xs">
+            <Flame className="w-4 h-4 text-rose-500" />
             <span>Top Failing APIs</span>
-            <span className="text-[11px] text-gray-400 font-normal">HTTP 4xx / 5xx</span>
-          </h4>
+          </div>
           {stats.topFailingApis.length === 0 ? (
-            <p className="text-xs text-gray-400 py-3 text-center">No failing API calls detected</p>
+            <p className="text-xs text-gray-400 italic">No failing APIs detected.</p>
           ) : (
-            <div className="space-y-2">
-              {stats.topFailingApis.map((item, idx) => {
-                const maxCount = stats.topFailingApis[0]?.count || 1;
-                const pct = Math.round((item.count / maxCount) * 100);
-                return (
-                  <div 
-                    key={idx}
-                    onClick={() => onFilterChange({ search: item.name, onlyFailures: true })}
-                    className="p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
-                  >
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[280px]" title={item.name}>
-                        {item.name}
-                      </span>
-                      <span className="font-bold text-rose-600 dark:text-rose-400 shrink-0">
-                        {item.count} failure{item.count > 1 ? 's' : ''}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-rose-500 h-full rounded-full" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <ul className="space-y-2 text-xs">
+              {stats.topFailingApis.map((item, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => onFilterChange({ search: item.name })}
+                  className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
+                >
+                  <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.name}>
+                    {item.name}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/60 dark:text-rose-300">
+                    {item.count} fail
+                  </span>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 
         {/* Top Failing Fields */}
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-3 flex items-center justify-between">
-            <span>Top Failing Fields</span>
-            <span className="text-[11px] text-gray-400 font-normal">Input / Exit Errors</span>
-          </h4>
+          <div className="flex items-center gap-2 mb-3 text-gray-800 dark:text-gray-200 font-bold text-xs">
+            <ShieldAlert className="w-4 h-4 text-amber-500" />
+            <span>Problem Fields & Events</span>
+          </div>
           {stats.topFailingFields.length === 0 ? (
-            <p className="text-xs text-gray-400 py-3 text-center">No field-level failures detected</p>
+            <p className="text-xs text-gray-400 italic">No problematic fields identified.</p>
           ) : (
-            <div className="space-y-2">
-              {stats.topFailingFields.map((item, idx) => {
-                const maxCount = stats.topFailingFields[0]?.count || 1;
-                const pct = Math.round((item.count / maxCount) * 100);
-                return (
-                  <div 
-                    key={idx}
-                    onClick={() => onFilterChange({ fields: [item.field], onlyFailures: true })}
-                    className="p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
-                  >
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-mono font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[280px]" title={item.field}>
-                        {item.field}
-                      </span>
-                      <span className="font-bold text-amber-600 dark:text-amber-400 shrink-0">
-                        {item.count} issue{item.count > 1 ? 's' : ''}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-amber-500 h-full rounded-full" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <ul className="space-y-2 text-xs">
+              {stats.topFailingFields.map((item, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => onFilterChange({ fields: [item.field] })}
+                  className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
+                >
+                  <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.field}>
+                    {item.field}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300">
+                    {item.count} issues
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Top Flexi Methods Invoked */}
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xs">
+          <div className="flex items-center gap-2 mb-3 text-gray-800 dark:text-gray-200 font-bold text-xs">
+            <Sparkles className="w-4 h-4 text-purple-500" />
+            <span>Top Flexi Methods Invoked</span>
+          </div>
+          {stats.topFlexiMethods.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No FlexiAPI method calls detected.</p>
+          ) : (
+            <ul className="space-y-2 text-xs">
+              {stats.topFlexiMethods.map((item, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => onFilterChange({ search: item.name })}
+                  className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
+                >
+                  <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.name}>
+                    FlexiAPI.{item.name}
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300">
+                    {item.count} calls
+                  </span>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 

@@ -32,6 +32,29 @@ export function applyFiltersAndSort(entries: LogEntry[], filters: FilterState): 
     });
   }
 
+  // 1b. Flexi Focus Mode (Default ON: hides raw platform noise like VT100 dumps & UI state transforms)
+  if (filters.focusFlexiOnly) {
+    result = result.filter(e => e.entryType !== 'PLATFORM');
+  }
+
+  // 1c. Entry Type filter (Script Code, Flexi Method, API Call, Error, User Input)
+  if (filters.entryTypes && filters.entryTypes.length > 0) {
+    const etSet = new Set(filters.entryTypes);
+    result = result.filter(e => etSet.has(e.entryType));
+  }
+
+  // 1d. App Type filter (SCM vs WMS)
+  if (filters.appTypes && filters.appTypes.length > 0) {
+    const atSet = new Set(filters.appTypes);
+    result = result.filter(e => atSet.has(e.appType));
+  }
+
+  // 1e. Tenants filter (e.g. PureCS_Rafed_TEST)
+  if (filters.tenants && filters.tenants.length > 0) {
+    const tenantSet = new Set(filters.tenants.map(t => t.toLowerCase()));
+    result = result.filter(e => e.tenant && tenantSet.has(e.tenant.toLowerCase()));
+  }
+
   // 2. Only Failures toggle
   if (filters.onlyFailures) {
     result = result.filter(e => e.isIssue || e.status === 'FAIL' || e.status === 'WARN');
