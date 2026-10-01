@@ -109,20 +109,29 @@ self.onmessage = function (e) {
       if (headerLine.threadBlock) {
         const m = headerLine.threadBlock.match(threadUserSession);
         if (m) {
-          user = m[1] || '';
-          session = m[2] || '';
-          threadId = m[4] ? `Thread-${m[4]}` : '';
-          stepSeq = m[5] || '';
+          user = m[1]?.trim() || '';
+          session = m[2]?.trim() || '';
+          threadId = m[4] ? `Thread-${m[4].trim()}` : '';
+          stepSeq = m[5]?.trim() || '';
         } else {
-          threadId = headerLine.threadBlock;
+          threadId = headerLine.threadBlock.trim();
         }
       }
 
       if ((!user || !session) && headerLine.message) {
         const sm = headerLine.message.match(sessionMonitorUserSession);
         if (sm) {
-          user = sm[1].trim();
-          session = sm[2].trim();
+          user = sm[1]?.trim() || '';
+          session = sm[2]?.trim() || '';
+        }
+      }
+
+      // Fallback to filename: e.g. WS-G-HK_038381784196022690_181.log
+      if ((!user || !session) && fileName) {
+        const fnMatch = fileName.match(/^([A-Za-z0-9_-]+)_(?:\d+)_(\d+)\.log$/i);
+        if (fnMatch) {
+          if (!user) user = fnMatch[1].trim();
+          if (!session) session = fnMatch[2].trim();
         }
       }
 
@@ -133,6 +142,7 @@ self.onmessage = function (e) {
       let isScan = false;
       let targetField = '';
       let sourceField = '';
+      let dialogMessage = '';
 
       let apiDetails = undefined;
       let apiName = '';
@@ -198,6 +208,12 @@ self.onmessage = function (e) {
           }
         }
 
+        // Dialog prompt detection
+        if (txt.includes('FlexiRuntime.showOptionDialog:')) {
+          const dm = txt.match(/message\s+([^,]+)/);
+          if (dm) dialogMessage = dm[1].trim();
+        }
+
         if (txt.includes('.runWebService')) {
           const am = txt.match(/(\S+_WS|\S+WebService)\.runWebService/);
           if (am) apiName = am[1];
@@ -241,14 +257,16 @@ self.onmessage = function (e) {
         if (txt.startsWith('\tat ') || txt.startsWith('    at ')) {
           stackTraceLines.push(txt.trim());
           if (!logCode) {
-            const sm = txt.match(/at\s+([a-zA-Z0-9_$.]+)\(([^)]+)\)/);
+            const lineSnippet = txt.length > 300 ? txt.substring(0, 300) : txt;
+            const sm = lineSnippet.match(/at\s+([a-zA-Z0-9_$.]+)\(([^)]+)\)/);
             if (sm) logCode = `${sm[1]}:${sm[2]}`;
           }
-        } else if (txt.includes('Exception:') || txt.includes('Error:')) {
-          const em = txt.match(/([a-zA-Z0-9_.]*(?:Exception|Error)):?(?:\s+(.*))?/);
+        } else if (!txt.includes('runWebService: result') && (txt.includes('Exception:') || txt.includes('Error:') || txt.includes('Exception ') || txt.includes('Error '))) {
+          const lineSnippet = txt.length > 500 ? txt.substring(0, 500) : txt;
+          const em = lineSnippet.match(/\b([A-Za-z0-9_.]*(?:Exception|Error))\b:?(?:\s+(.*))?/);
           if (em) {
             exceptionType = em[1];
-            exceptionMessage = em[2] || '';
+            exceptionMessage = (em[2] || '').trim();
           }
         }
       }
@@ -259,6 +277,20 @@ self.onmessage = function (e) {
         else if (apiName.startsWith('PATCH_') || apiName.includes('_PATCH_')) method = 'PATCH';
         else if (apiName.startsWith('PUT_')) method = 'PUT';
         else if (apiName.startsWith('DELETE_')) method = 'DELETE';
+      }
+
+      // Extract scanned value directly from API URL query parameters if not yet captured
+      if (!scannedValue && url) {
+        const cm = url.match(/[?&](?:container_id__container_nbr|container_nbr|pallet_nbr|shipment_nbr|lpn)=([^&]+)/i);
+        if (cm) {
+          scannedValue = decodeURIComponent(cm[1]);
+          if (!field) {
+            if (url.includes('container_nbr')) field = 'container_nbr (LPN)';
+            else if (url.includes('pallet_nbr')) field = 'pallet_nbr';
+            else if (url.includes('shipment_nbr')) field = 'shipment_nbr';
+            else field = 'LPN';
+          }
+        }
       }
 
       if (apiName || method || url || responseCode !== undefined) {
@@ -272,6 +304,7 @@ self.onmessage = function (e) {
           durationMs,
           authHeader,
         };
+        if (!event) event = apiName;
       }
 
       if (exceptionType || stackTraceLines.length > 0 || level === 'ERROR') {
@@ -335,10 +368,10 @@ self.onmessage = function (e) {
         }
 
         if (apiDetails.responseCode === 404) {
-          rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned 404 (Not Found). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}Scanned record does not exist in Oracle WMS.`;
-          suggestedFix = `Verify if the scanned container, pallet, or shipment number exists in Oracle WMS.`;
+          rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || 'endpoint'} returned HTTP 404 (NOT_FOUND). ${errSnippet ? `Server message: "${errSnippet}". ` : ''}Scanned ${field || 'Container/LPN'} "${scannedValue || 'record'}" was not found in Oracle WMS inventory.`;
+          suggestedFix = `Verify if ${field || 'record'} ${scannedValue ? `"${scannedValue}" ` : ''}exists in Oracle WMS, or check if it was already received or closed.`;
         } else if (apiDetails.responseCode >= 500) {
-          rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} failed with 500 server error. ${errSnippet ? `Backend message: "${errSnippet}".` : ''}`;
+          rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} failed with HTTP ${apiDetails.responseCode} server error. ${errSnippet ? `Backend message: "${errSnippet}".` : ''}`;
           suggestedFix = `Check backend Oracle WMS integration endpoint logs.`;
         } else {
           rootCauseHint = `${apiDetails.method || 'API'} ${apiDetails.name || ''} returned HTTP ${apiDetails.responseCode}. ${errSnippet ? `Response: "${errSnippet}".` : ''}`;
@@ -349,6 +382,20 @@ self.onmessage = function (e) {
           rootCauseHint += ` Note: Payload also sent with empty fields: [${missingValueDetails.field}].`;
           suggestedFix += ` Ensure required fields are scanned before submit.`;
         }
+      } else if (dialogMessage) {
+        isIssue = true;
+        issueCategory = 'VALIDATION';
+        status = 'WARN';
+        level = 'WARN';
+        if (!event) event = 'showOptionDialog';
+        rootCauseHint = `WMS Dialog Prompt: "${dialogMessage}". The scanned value does not match current shipment or validation rules.`;
+        suggestedFix = `Ensure operator scans an LPN that exists on this shipment.`;
+      } else if (sampleSnippet.includes('LogFireSSHConnection.SendKey:content=') && !exceptionType && !apiDetails) {
+        // Standard VT100 / telnet terminal render, NOT an error
+        status = 'INFO';
+        isIssue = false;
+        issueCategory = 'NONE';
+        if (!event) event = 'SSH_TERMINAL_RENDER';
       } else if (errorDetails || level === 'ERROR') {
         isIssue = true;
         issueCategory = 'EXCEPTION';
@@ -425,25 +472,48 @@ self.onmessage = function (e) {
       });
     }
 
+    let inApiCall = false;
+
     for (let i = 0; i < totalLines; i++) {
       const rawText = lines[i];
       const lineInfo = tryParseHeader(rawText, i + 1);
 
       if (lineInfo.isHeader) {
-        if (currentGroup.length > 0) {
-          flush(currentGroup);
-        }
-        currentGroup = [lineInfo];
-      } else {
-        if (currentGroup.length > 0) {
-          currentGroup.push(lineInfo);
-        } else {
+        const msg = lineInfo.message || '';
+        const isCalling = msg.includes('<-------- Calling ');
+        const isRestStart = !inApiCall && msg.includes('RestWebService.request: Request Method = ');
+        const isApiStart = isCalling || isRestStart;
+
+        const isApiContinuation = inApiCall && !isCalling && (
+          msg.includes('RestWebService.') ||
+          msg.includes('RestWebService:') ||
+          msg.includes('.runWebService') ||
+          msg.includes('SUCCESS') ||
+          msg.includes('FAILED')
+        );
+
+        if (isApiStart) {
+          if (currentGroup.length > 0) flush(currentGroup);
           currentGroup = [lineInfo];
+          inApiCall = true;
+        } else if (isApiContinuation) {
+          currentGroup.push(lineInfo);
+          if (msg.includes('SUCCESS') || msg.includes('FAILED')) {
+            flush(currentGroup);
+            currentGroup = [];
+            inApiCall = false;
+          }
+        } else {
+          if (currentGroup.length > 0) flush(currentGroup);
+          currentGroup = [lineInfo];
+          inApiCall = false;
         }
+      } else {
+        currentGroup.push(lineInfo);
       }
 
-      if (i % 25000 === 0 && i > 0) {
-        const pct = Math.min(80, Math.round((i / totalLines) * 80));
+      if (i % 2500 === 0 && i > 0) {
+        const pct = Math.min(85, Math.round((i / totalLines) * 85));
         self.postMessage({ type: 'PROGRESS', progress: pct, message: `Scanned ${i.toLocaleString()} of ${totalLines.toLocaleString()} lines...` });
       }
     }

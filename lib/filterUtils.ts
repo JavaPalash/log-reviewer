@@ -39,50 +39,50 @@ export function applyFiltersAndSort(entries: LogEntry[], filters: FilterState): 
 
   // 3. Users filter
   if (filters.users.length > 0) {
-    const userSet = new Set(filters.users);
-    result = result.filter(e => e.userName && userSet.has(e.userName));
+    const userSet = new Set(filters.users.map(u => u.trim().toLowerCase()));
+    result = result.filter(e => e.userName && userSet.has(e.userName.trim().toLowerCase()));
   }
 
   // 4. Sessions filter
   if (filters.sessions.length > 0) {
-    const sessionSet = new Set(filters.sessions);
-    result = result.filter(e => e.sessionId && sessionSet.has(e.sessionId));
+    const sessionSet = new Set(filters.sessions.map(s => s.trim().toLowerCase()));
+    result = result.filter(e => e.sessionId && sessionSet.has(e.sessionId.trim().toLowerCase()));
   }
 
   // 5. API Methods filter
   if (filters.apiMethods.length > 0) {
-    const methodSet = new Set(filters.apiMethods.map(m => m.toUpperCase()));
-    result = result.filter(e => e.apiDetails?.method && methodSet.has(e.apiDetails.method.toUpperCase()));
+    const methodSet = new Set(filters.apiMethods.map(m => m.trim().toUpperCase()));
+    result = result.filter(e => e.apiDetails?.method && methodSet.has(e.apiDetails.method.trim().toUpperCase()));
   }
 
   // 6. Response Codes filter
   if (filters.responseCodes.length > 0) {
-    const codeSet = new Set(filters.responseCodes.map(c => c.toString()));
-    result = result.filter(e => e.apiDetails?.responseCode !== undefined && codeSet.has(e.apiDetails.responseCode.toString()));
+    const codeSet = new Set(filters.responseCodes.map(c => c.toString().trim()));
+    result = result.filter(e => e.apiDetails?.responseCode !== undefined && codeSet.has(e.apiDetails.responseCode.toString().trim()));
   }
 
   // 7. Log Levels filter
   if (filters.logLevels.length > 0) {
-    const levelSet = new Set(filters.logLevels.map(l => l.toUpperCase()));
-    result = result.filter(e => levelSet.has(e.level.toUpperCase()));
+    const levelSet = new Set(filters.logLevels.map(l => l.trim().toUpperCase()));
+    result = result.filter(e => levelSet.has(e.level.trim().toUpperCase()));
   }
 
   // 8. Fields filter
   if (filters.fields.length > 0) {
-    const fieldSet = new Set(filters.fields);
-    result = result.filter(e => e.field && fieldSet.has(e.field));
+    const fieldSet = new Set(filters.fields.map(f => f.trim().toLowerCase()));
+    result = result.filter(e => e.field && fieldSet.has(e.field.trim().toLowerCase()));
   }
 
   // 9. Events filter
   if (filters.events.length > 0) {
-    const eventSet = new Set(filters.events);
-    result = result.filter(e => e.event && eventSet.has(e.event));
+    const eventSet = new Set(filters.events.map(ev => ev.trim().toLowerCase()));
+    result = result.filter(e => e.event && eventSet.has(e.event.trim().toLowerCase()));
   }
 
   // 10. Screens filter
   if (filters.screens.length > 0) {
-    const screenSet = new Set(filters.screens);
-    result = result.filter(e => e.screen && screenSet.has(e.screen));
+    const screenSet = new Set(filters.screens.map(sc => sc.trim().toLowerCase()));
+    result = result.filter(e => e.screen && screenSet.has(e.screen.trim().toLowerCase()));
   }
 
   // 11. Date range filter
