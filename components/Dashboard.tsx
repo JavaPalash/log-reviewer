@@ -146,6 +146,34 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   if (entries.length === 0) return null;
 
+  // Clean drilldown that clears unrelated conflicting filters and scrolls directly to results
+  const handleDrilldown = (drilldownUpdate: Partial<FilterState>) => {
+    // Reset existing search/field/screen filters so the clicked item is viewed directly without conflicts
+    onFilterChange({
+      search: '',
+      fields: [],
+      screens: [],
+      users: [],
+      sessions: [],
+      apiMethods: [],
+      responseCodes: [],
+      logLevels: [],
+      entryTypes: [],
+      tenants: [],
+      appTypes: [],
+      onlyFailures: false,
+      ...drilldownUpdate,
+    });
+
+    // Smoothly scroll down to the results table
+    setTimeout(() => {
+      const el = document.getElementById('results-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+  };
+
   return (
     <div className="space-y-4">
       
@@ -170,7 +198,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Total Failures */}
         <div 
-          onClick={() => onFilterChange({ onlyFailures: true })}
+          onClick={() => handleDrilldown({ onlyFailures: true })}
           className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-rose-200 dark:border-rose-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-rose-50/30 transition-colors"
         >
           <div className="flex items-center justify-between text-rose-600 dark:text-rose-400">
@@ -187,7 +215,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Flexi Methods Called */}
         <div 
-          onClick={() => onFilterChange({ entryTypes: ['FLEXI_METHOD'] })}
+          onClick={() => handleDrilldown({ entryTypes: ['FLEXI_METHOD'] })}
           className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-purple-200 dark:border-purple-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-purple-50/30 transition-colors"
         >
           <div className="flex items-center justify-between text-purple-600 dark:text-purple-400">
@@ -204,7 +232,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Custom Scripts */}
         <div 
-          onClick={() => onFilterChange({ entryTypes: ['SCRIPT_CODE'] })}
+          onClick={() => handleDrilldown({ entryTypes: ['SCRIPT_CODE'] })}
           className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-emerald-50/30 transition-colors"
         >
           <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
@@ -221,7 +249,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Failed APIs */}
         <div 
-          onClick={() => onFilterChange({ entryTypes: ['API_CALL'], onlyFailures: true })}
+          onClick={() => handleDrilldown({ entryTypes: ['API_CALL'], onlyFailures: true })}
           className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-amber-200 dark:border-amber-900/60 shadow-xs flex flex-col justify-between cursor-pointer hover:bg-amber-50/30 transition-colors"
         >
           <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
@@ -266,7 +294,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </h3>
             </div>
             <button
-              onClick={() => onFilterChange({ onlyFailures: true })}
+              onClick={() => handleDrilldown({ onlyFailures: true })}
               className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1"
             >
               <span>View All {stats.totalErrors} Failures</span>
@@ -278,7 +306,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {stats.recentIssues.slice(0, 3).map((issue) => (
               <div
                 key={issue.id}
-                onClick={() => onSelectEntry(issue)}
+                onClick={() => {
+                  onSelectEntry(issue);
+                  setTimeout(() => {
+                    const el = document.getElementById('results-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 60);
+                }}
                 className="p-3 rounded-lg border border-rose-100 dark:border-rose-950/80 bg-rose-50/50 dark:bg-rose-950/20 hover:bg-rose-100/60 dark:hover:bg-rose-950/40 cursor-pointer transition-all flex flex-col justify-between gap-2"
               >
                 <div>
@@ -341,7 +375,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               {stats.topFailingApis.map((item, idx) => (
                 <li
                   key={idx}
-                  onClick={() => onFilterChange({ search: item.name })}
+                  onClick={() => handleDrilldown({ search: item.name, onlyFailures: true })}
                   className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
                 >
                   <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.name}>
@@ -369,7 +403,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               {stats.topFailingFields.map((item, idx) => (
                 <li
                   key={idx}
-                  onClick={() => onFilterChange({ fields: [item.field] })}
+                  onClick={() => handleDrilldown({ fields: [item.field], onlyFailures: true })}
                   className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
                 >
                   <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.field}>
@@ -397,7 +431,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               {stats.topFlexiMethods.map((item, idx) => (
                 <li
                   key={idx}
-                  onClick={() => onFilterChange({ search: item.name })}
+                  onClick={() => handleDrilldown({ search: item.name, entryTypes: ['FLEXI_METHOD'] })}
                   className="flex items-center justify-between p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors"
                 >
                   <span className="font-mono text-gray-700 dark:text-gray-300 truncate max-w-[200px]" title={item.name}>

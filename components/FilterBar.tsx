@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { 
   Search, 
   Filter, 
@@ -14,7 +14,8 @@ import {
   Barcode,
   Layers,
   CheckCircle2,
-  Building2
+  Building2,
+  ChevronDown
 } from 'lucide-react';
 import { FilterState, LogEntry, EntryType } from '../lib/types';
 
@@ -94,6 +95,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     };
   }, [entries]);
 
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
   // Active filters count
   const activeCount = useMemo(() => {
     let count = 0;
@@ -112,6 +115,21 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     count += filters.screens.length;
     count += filters.events.length;
     return count;
+  }, [filters]);
+
+  // Dropdown-only active count for the collapse toggle
+  const dropdownActiveCount = useMemo(() => {
+    return (
+      filters.users.length +
+      filters.sessions.length +
+      filters.screens.length +
+      filters.fields.length +
+      filters.events.length +
+      filters.apiMethods.length +
+      filters.responseCodes.length +
+      (filters.tenants?.length || 0) +
+      filters.logLevels.length
+    );
   }, [filters]);
 
   const toggleEntryType = (type: EntryType) => {
@@ -202,6 +220,26 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           >
             <ArrowDownCircle className="w-3.5 h-3.5 text-gray-500" />
             <span className="hidden md:inline">Jump to Oldest</span>
+          </button>
+
+          {/* Toggle Detailed Dropdowns */}
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className={`px-2.5 py-2 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors border ${
+              showAdvanced || dropdownActiveCount > 0
+                ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700 font-semibold'
+                : 'bg-gray-100 dark:bg-gray-700/80 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600'
+            }`}
+            title="Toggle dropdown filters (User, Session, Screen, Field, Event, Method, Status Code)"
+          >
+            <Filter className="w-3.5 h-3.5" />
+            <span>More Filters</span>
+            {dropdownActiveCount > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-600 text-white">
+                {dropdownActiveCount}
+              </span>
+            )}
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showAdvanced ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Clear Filters Button */}
@@ -349,138 +387,217 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       </div>
 
-      {/* Row 3: Filter Dropdowns Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2 border-t border-gray-100 dark:border-gray-700/60 text-xs">
-        
-        {/* User filter */}
-        <select
-          value={filters.users[0] || ''}
-          onChange={(e) => onFilterChange({ users: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.users.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">User: All ({options.users.length})</option>
-          {options.users.map(u => (
-            <option key={u} value={u}>{u}</option>
+      {/* Active Filter Chips Bar */}
+      {(Boolean(
+        filters.search ||
+        filters.onlyFailures ||
+        filters.fields.length > 0 ||
+        filters.screens.length > 0 ||
+        filters.events.length > 0 ||
+        filters.apiMethods.length > 0 ||
+        filters.responseCodes.length > 0 ||
+        filters.users.length > 0 ||
+        filters.sessions.length > 0
+      )) && (
+        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-gray-100 dark:border-gray-700/60 text-xs">
+          <span className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mr-1">Active filters:</span>
+          {filters.search && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[11px]">
+              <span>Search: <strong className="font-mono">{filters.search}</strong></span>
+              <button onClick={() => onFilterChange({ search: '' })} className="hover:text-blue-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
+          )}
+          {filters.onlyFailures && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px]">
+              <span>Only Failures</span>
+              <button onClick={() => onFilterChange({ onlyFailures: false })} className="hover:text-rose-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
+          )}
+          {filters.fields.map(f => (
+            <span key={f} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[11px]">
+              <span>Field: <strong className="font-mono">{f}</strong></span>
+              <button onClick={() => onFilterChange({ fields: filters.fields.filter(x => x !== f) })} className="hover:text-purple-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* Session ID filter */}
-        <select
-          value={filters.sessions[0] || ''}
-          onChange={(e) => onFilterChange({ sessions: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.sessions.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Session: All ({options.sessions.length})</option>
-          {options.sessions.map(s => (
-            <option key={s} value={s}>Session {s}</option>
+          {filters.screens.map(s => (
+            <span key={s} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-[11px]">
+              <span>Screen: <strong className="font-mono">{s}</strong></span>
+              <button onClick={() => onFilterChange({ screens: filters.screens.filter(x => x !== s) })} className="hover:text-indigo-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* Screen Name filter */}
-        <select
-          value={filters.screens[0] || ''}
-          onChange={(e) => onFilterChange({ screens: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.screens.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Screen: All ({options.screens.length})</option>
-          {options.screens.map(sc => (
-            <option key={sc} value={sc}>{sc}</option>
+          {filters.events.map(ev => (
+            <span key={ev} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/70 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800 text-[11px]">
+              <span>Event: <strong className="font-mono">{ev}</strong></span>
+              <button onClick={() => onFilterChange({ events: filters.events.filter(x => x !== ev) })} className="hover:text-amber-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* Field Name filter */}
-        <select
-          value={filters.fields[0] || ''}
-          onChange={(e) => onFilterChange({ fields: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.fields.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Field: All ({options.fields.length})</option>
-          {options.fields.map(f => (
-            <option key={f} value={f}>{f}</option>
+          {filters.apiMethods.map(m => (
+            <span key={m} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 dark:bg-sky-950/70 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 text-[11px]">
+              <span>Method: <strong className="font-mono">{m}</strong></span>
+              <button onClick={() => onFilterChange({ apiMethods: filters.apiMethods.filter(x => x !== m) })} className="hover:text-sky-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* Event filter */}
-        <select
-          value={filters.events[0] || ''}
-          onChange={(e) => onFilterChange({ events: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.events.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Event: All ({options.events.length})</option>
-          {options.events.map(ev => (
-            <option key={ev} value={ev}>{ev}</option>
+          {filters.responseCodes.map(rc => (
+            <span key={rc} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px]">
+              <span>Status: <strong className="font-mono">{rc}</strong></span>
+              <button onClick={() => onFilterChange({ responseCodes: filters.responseCodes.filter(x => x !== rc) })} className="hover:text-rose-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* API Method filter */}
-        <select
-          value={filters.apiMethods[0] || ''}
-          onChange={(e) => onFilterChange({ apiMethods: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.apiMethods.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Method: All</option>
-          {['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].map(m => (
-            <option key={m} value={m}>{m}</option>
+          {filters.users.map(u => (
+            <span key={u} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 text-[11px]">
+              <span>User: <strong className="font-mono">{u}</strong></span>
+              <button onClick={() => onFilterChange({ users: filters.users.filter(x => x !== u) })} className="hover:text-gray-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
-
-        {/* Response Code filter */}
-        <select
-          value={filters.responseCodes[0] || ''}
-          onChange={(e) => onFilterChange({ responseCodes: e.target.value ? [e.target.value] : [] })}
-          className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-            filters.responseCodes.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
-          }`}
-        >
-          <option value="">Status Code: All</option>
-          {options.codes.map(c => (
-            <option key={c} value={c}>{c}</option>
+          {filters.sessions.map(sess => (
+            <span key={sess} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700 text-[11px]">
+              <span>Session: <strong className="font-mono">{sess}</strong></span>
+              <button onClick={() => onFilterChange({ sessions: filters.sessions.filter(x => x !== sess) })} className="hover:text-gray-900 dark:hover:text-white ml-0.5"><X className="w-3 h-3" /></button>
+            </span>
           ))}
-        </select>
+          <button
+            onClick={onClearFilters}
+            className="text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-400 hover:underline ml-2"
+          >
+            Clear All
+          </button>
+        </div>
+      )}
 
-        {/* Tenant filter (if any) */}
-        {options.tenants.length > 0 ? (
+      {/* Row 3: Filter Dropdowns Grid (Collapsible) */}
+      {(showAdvanced || dropdownActiveCount > 0) && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2 border-t border-gray-100 dark:border-gray-700/60 text-xs">
+          
+          {/* User filter */}
           <select
-            value={filters.tenants?.[0] || ''}
-            onChange={(e) => onFilterChange({ tenants: e.target.value ? [e.target.value] : [] })}
+            value={filters.users[0] || ''}
+            onChange={(e) => onFilterChange({ users: e.target.value ? [e.target.value] : [] })}
             className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-              filters.tenants?.length ? 'border-teal-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+              filters.users.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
             }`}
           >
-            <option value="">Tenant: All ({options.tenants.length})</option>
-            {options.tenants.map(t => (
-              <option key={t} value={t}>{t}</option>
+            <option value="">User: All ({options.users.length})</option>
+            {options.users.map(u => (
+              <option key={u} value={u}>{u}</option>
             ))}
           </select>
-        ) : (
-          /* Log Level filter fallback */
+
+          {/* Session ID filter */}
           <select
-            value={filters.logLevels[0] || ''}
-            onChange={(e) => onFilterChange({ logLevels: e.target.value ? [e.target.value] : [] })}
+            value={filters.sessions[0] || ''}
+            onChange={(e) => onFilterChange({ sessions: e.target.value ? [e.target.value] : [] })}
             className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
-              filters.logLevels.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+              filters.sessions.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
             }`}
           >
-            <option value="">Level: All</option>
-            {['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'].map(l => (
-              <option key={l} value={l}>{l}</option>
+            <option value="">Session: All ({options.sessions.length})</option>
+            {options.sessions.map(s => (
+              <option key={s} value={s}>Session {s}</option>
             ))}
           </select>
-        )}
 
-      </div>
+          {/* Screen Name filter */}
+          <select
+            value={filters.screens[0] || ''}
+            onChange={(e) => onFilterChange({ screens: e.target.value ? [e.target.value] : [] })}
+            className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+              filters.screens.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            <option value="">Screen: All ({options.screens.length})</option>
+            {options.screens.map(sc => (
+              <option key={sc} value={sc}>{sc}</option>
+            ))}
+          </select>
+
+          {/* Field Name filter */}
+          <select
+            value={filters.fields[0] || ''}
+            onChange={(e) => onFilterChange({ fields: e.target.value ? [e.target.value] : [] })}
+            className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+              filters.fields.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            <option value="">Field: All ({options.fields.length})</option>
+            {options.fields.map(f => (
+              <option key={f} value={f}>{f}</option>
+            ))}
+          </select>
+
+          {/* Event filter */}
+          <select
+            value={filters.events[0] || ''}
+            onChange={(e) => onFilterChange({ events: e.target.value ? [e.target.value] : [] })}
+            className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+              filters.events.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            <option value="">Event: All ({options.events.length})</option>
+            {options.events.map(ev => (
+              <option key={ev} value={ev}>{ev}</option>
+            ))}
+          </select>
+
+          {/* API Method filter */}
+          <select
+            value={filters.apiMethods[0] || ''}
+            onChange={(e) => onFilterChange({ apiMethods: e.target.value ? [e.target.value] : [] })}
+            className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+              filters.apiMethods.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            <option value="">Method: All</option>
+            {['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].map(m => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+
+          {/* Response Code filter */}
+          <select
+            value={filters.responseCodes[0] || ''}
+            onChange={(e) => onFilterChange({ responseCodes: e.target.value ? [e.target.value] : [] })}
+            className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+              filters.responseCodes.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+            }`}
+          >
+            <option value="">Status Code: All</option>
+            {options.codes.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+
+          {/* Tenant filter (if any) */}
+          {options.tenants.length > 0 ? (
+            <select
+              value={filters.tenants?.[0] || ''}
+              onChange={(e) => onFilterChange({ tenants: e.target.value ? [e.target.value] : [] })}
+              className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+                filters.tenants?.length ? 'border-teal-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+              }`}
+            >
+              <option value="">Tenant: All ({options.tenants.length})</option>
+              {options.tenants.map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          ) : (
+            /* Log Level filter fallback */
+            <select
+              value={filters.logLevels[0] || ''}
+              onChange={(e) => onFilterChange({ logLevels: e.target.value ? [e.target.value] : [] })}
+              className={`py-1.5 px-2 rounded-lg border text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 ${
+                filters.logLevels.length > 0 ? 'border-blue-500 font-semibold' : 'border-gray-300 dark:border-gray-600'
+              }`}
+            >
+              <option value="">Level: All</option>
+              {['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'].map(l => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
+          )}
+
+        </div>
+      )}
 
     </div>
   );

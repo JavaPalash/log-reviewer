@@ -302,7 +302,31 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
             {pageEntries.length === 0 ? (
               <tr>
                 <td colSpan={18} className="py-12 text-center text-gray-400">
-                  No log entries found matching the current filters.
+                  <div className="flex flex-col items-center justify-center gap-2.5">
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      No log entries found matching the current filters.
+                    </p>
+                    <button
+                      onClick={() => onFilterChange({
+                        search: '',
+                        users: [],
+                        sessions: [],
+                        apiMethods: [],
+                        responseCodes: [],
+                        logLevels: [],
+                        onlyFailures: false,
+                        fields: [],
+                        screens: [],
+                        events: [],
+                        entryTypes: [],
+                        appTypes: [],
+                        tenants: [],
+                      })}
+                      className="text-xs px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors shadow-xs"
+                    >
+                      Clear All Filters
+                    </button>
+                  </div>
                 </td>
               </tr>
             ) : (

@@ -105,6 +105,7 @@ export default function Home() {
 
   // Filter change handler
   const handleFilterChange = useCallback((update: Partial<FilterState>) => {
+    setActiveView('table');
     setFilters(prev => ({ ...prev, ...update }));
   }, []);
 
@@ -132,6 +133,8 @@ export default function Home() {
 
   // Upload handler for new files
   const handleFilesAdded = async (newFiles: File[]) => {
+    // Clear old filters so newly imported files are viewed cleanly without leftover queries
+    handleClearFilters();
     setIsParsing(true);
 
     for (let i = 0; i < newFiles.length; i++) {
@@ -173,6 +176,7 @@ export default function Home() {
 
   // Sample Log Loader
   const handleLoadSample = async (type: 'scm' | 'screen' | 'server') => {
+    handleClearFilters();
     setIsLoadingSample(true);
     setIsParsing(true);
     let fileName = 'sample-flexi-screen-session.log';
@@ -274,7 +278,7 @@ export default function Home() {
 
         {/* Filters and View Controls (visible when files are loaded) */}
         {allEntries.length > 0 && (
-          <div className="space-y-4">
+          <div id="results-section" className="space-y-4 scroll-mt-6">
             
             {/* View Tabs */}
             <div className="flex items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-2">
