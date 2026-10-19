@@ -12,7 +12,8 @@ import {
   Download, 
   Sparkles,
   Layers,
-  CheckCircle2
+  CheckCircle2,
+  Zap
 } from 'lucide-react';
 import { FilterState } from '../lib/types';
 
@@ -22,6 +23,8 @@ interface NavbarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
   onOpenRcaModal: () => void;
+  onOpenPerformance?: () => void;
+  activeView?: string;
   onExportExcel: () => void;
   onExportCsv: () => void;
   onExportPdf: () => void;
@@ -36,6 +39,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isDarkMode,
   onToggleDarkMode,
   onOpenRcaModal,
+  onOpenPerformance,
+  activeView,
   onExportExcel,
   onExportCsv,
   onExportPdf,
@@ -186,6 +191,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right: Actions & Exports */}
         <div className="flex items-center gap-2">
+          {/* Performance Check Button */}
+          {totalEntriesCount > 0 && onOpenPerformance && (
+            <button
+              onClick={onOpenPerformance}
+              title="Screen & Event Transaction Performance Check"
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all border shadow-sm ${
+                activeView === 'performance'
+                  ? 'bg-amber-500 text-white border-amber-600 shadow-amber-500/20'
+                  : 'bg-amber-50 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500/40" />
+              <span>Performance Check</span>
+            </button>
+          )}
+
           {/* RCA Report Button */}
           {totalEntriesCount > 0 && (
             <button

@@ -9,11 +9,12 @@ import { ResultsTable } from '../components/ResultsTable';
 import { SessionTimeline } from '../components/SessionTimeline';
 import { DetailPanel } from '../components/DetailPanel';
 import { RcaReportModal } from '../components/RcaReportModal';
+import { PerformanceCheck } from '../components/PerformanceCheck';
 import { ParsedLogFile, LogEntry, FilterState } from '../lib/types';
 import { applyFiltersAndSort } from '../lib/filterUtils';
 import { parseLogInBackground } from '../lib/workerClient';
 import { exportToExcel, exportToCsv, exportToPdf } from '../lib/exportUtils';
-import { Table, GitCommit, LayoutDashboard, Sparkles, AlertCircle } from 'lucide-react';
+import { Table, GitCommit, LayoutDashboard, Sparkles, AlertCircle, Zap } from 'lucide-react';
 
 export default function Home() {
   // Theme state
@@ -25,8 +26,8 @@ export default function Home() {
   const [parseProgress, setParseProgress] = useState({ percent: 0, message: '' });
   const [isLoadingSample, setIsLoadingSample] = useState(false);
 
-  // Active view tab: 'table' | 'timeline' | 'dashboard'
-  const [activeView, setActiveView] = useState<'table' | 'timeline' | 'dashboard'>('table');
+  // Active view tab: 'table' | 'timeline' | 'dashboard' | 'performance'
+  const [activeView, setActiveView] = useState<'table' | 'timeline' | 'dashboard' | 'performance'>('table');
 
   // Active selected entry for DetailPanel
   const [selectedEntry, setSelectedEntry] = useState<LogEntry | null>(null);
@@ -243,6 +244,8 @@ export default function Home() {
         isDarkMode={isDarkMode}
         onToggleDarkMode={toggleDarkMode}
         onOpenRcaModal={() => setIsRcaModalOpen(true)}
+        onOpenPerformance={() => setActiveView('performance')}
+        activeView={activeView}
         onExportExcel={() => exportToExcel(filteredEntries)}
         onExportCsv={() => exportToCsv(filteredEntries)}
         onExportPdf={() => exportToPdf(filteredEntries)}
@@ -309,6 +312,18 @@ export default function Home() {
                   <GitCommit className="w-4 h-4" />
                   <span>Session Timeline</span>
                 </button>
+
+                <button
+                  onClick={() => setActiveView('performance')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
+                    activeView === 'performance'
+                      ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/20'
+                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-gray-200 dark:border-gray-700'
+                  }`}
+                >
+                  <Zap className="w-4 h-4 text-amber-400 fill-amber-400/40" />
+                  <span>Performance Check</span>
+                </button>
               </div>
 
               <div className="text-xs text-gray-500 flex items-center gap-2">
@@ -319,15 +334,17 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Filter Bar */}
-            <FilterBar
-              entries={allEntries}
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={handleClearFilters}
-              onJumpToLatest={handleJumpToLatest}
-              onJumpToOldest={handleJumpToOldest}
-            />
+            {/* Filter Bar (Only for Table and Timeline views) */}
+            {(activeView === 'table' || activeView === 'timeline') && (
+              <FilterBar
+                entries={allEntries}
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onClearFilters={handleClearFilters}
+                onJumpToLatest={handleJumpToLatest}
+                onJumpToOldest={handleJumpToOldest}
+              />
+            )}
 
             {/* View 1: Results Table */}
             {activeView === 'table' && (
@@ -346,6 +363,15 @@ export default function Home() {
                 onSelectEntry={(entry) => setSelectedEntry(entry)}
                 selectedSessionId={timelineSessionId}
                 onSessionChange={(s) => setTimelineSessionId(s)}
+                defaultSortOrder={filters.sortOrder}
+              />
+            )}
+
+            {/* View 3: Performance Check */}
+            {activeView === 'performance' && (
+              <PerformanceCheck
+                files={files}
+                entries={allEntries}
                 defaultSortOrder={filters.sortOrder}
               />
             )}
