@@ -2,6 +2,7 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { LogEntry, RcaReportData } from './types';
+import { ScreenTransaction, PerformanceSummary } from './performanceTypes';
 
 /**
  * Export entries to Excel (.xlsx)
@@ -333,4 +334,240 @@ function downloadBlob(blob: Blob, filename: string) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/**
+ * Export Performance Audit Report to PDF
+ */
+export function exportPerformanceReportToPdf(
+  transactions: ScreenTransaction[],
+  summary: PerformanceSummary,
+  filename = `Screen_Performance_Report_${Date.now()}.pdf`
+) {
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+
+  // Title Banner
+  doc.setFillColor(30, 58, 138); // Dark blue
+  doc.rect(0, 0, doc.internal.pageSize.getWidth(), 60, 'F');
+
+  doc.setFontSize(16);
+  doc.setTextColor(255, 255, 255);
+  doc.text('Intellinum Flexi - Screen & Event Performance Audit Report', 40, 36);
+
+  // Subtitle / KPI Summary Strip
+  doc.setFontSize(9);
+  doc.setTextColor(203, 213, 225);
+  doc.text(
+    `Generated: ${new Date().toLocaleString()} | Screens Analyzed: ${transactions.length} | Avg Duration: ${summary.avgDurationFormatted} | Peak Screen: ${summary.slowestScreen} | Total Events: ${summary.totalEventsCount}`,
+    40,
+    50
+  );
+
+  // Table 1: Screen Transactions Overview
+  const head = [
+    ['#', 'Screen Name', 'System', 'User & Session', 'Notepad++ Lines', 'Start Time', 'Duration', 'Delay Cause & Bottleneck', 'Slowest Step', 'Status']
+  ];
+
+  const body = transactions.map((tx, idx) => [
+    idx + 1,
+    tx.screenName,
+    tx.appType === 'SCM' ? 'SCM Cloud' : tx.appType === 'WMS' ? 'WMS RF' : 'General',
+    `${tx.userName || 'Unknown'}\n[${tx.sessionId || '-'}]`,
+    `L${tx.startLine} -> L${tx.endLine || 'end'}`,
+    tx.startTime ? tx.startTime.split(' ')[1] : '-',
+    tx.totalDurationFormatted,
+    tx.primaryDelayReason || 'Normal response',
+    tx.slowestEventName || '-',
+    tx.status,
+  ]);
+
+  autoTable(doc, {
+    head,
+    body,
+    startY: 75,
+    theme: 'grid',
+    styles: { fontSize: 8, cellPadding: 4, overflow: 'linebreak' },
+    headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
+    columnStyles: {
+      0: { cellWidth: 24, halign: 'center' },
+      1: { cellWidth: 110, fontStyle: 'bold' },
+      2: { cellWidth: 60, halign: 'center' },
+      3: { cellWidth: 80 },
+      4: { cellWidth: 70, halign: 'center' },
+      5: { cellWidth: 55, halign: 'center' },
+      6: { cellWidth: 65, fontStyle: 'bold' },
+      7: { cellWidth: 155 },
+      8: { cellWidth: 95 },
+      9: { cellWidth: 50, halign: 'center' },
+    },
+    didParseCell: (data) => {
+      if (data.section === 'body' && data.column.index === 9) {
+        if (data.cell.raw === 'COMPLETED') {
+          data.cell.styles.textColor = [22, 163, 74];
+          data.cell.styles.fontStyle = 'bold';
+        } else if (data.cell.raw === 'HAS_ERROR') {
+          data.cell.styles.textColor = [220, 38, 38];
+          data.cell.styles.fontStyle = 'bold';
+        } else if (data.cell.raw === 'IN_PROGRESS') {
+          data.cell.styles.textColor = [217, 119, 6];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      }
+    },
+  });
+
+  // Include detailed event breakdown for each screen if small report (<= 10 screens)
+  const txWithEvents = transactions.filter(t => t.events && t.events.length > 0);
+  if (txWithEvents.length > 0 && txWithEvents.length <= 10) {
+    for (const tx of txWithEvents) {
+      doc.addPage();
+      
+      // Page header banner
+      doc.setFillColor(30, 58, 138);
+      doc.rect(0, 0, doc.internal.pageSize.getWidth(), 50, 'F');
+
+      doc.setFontSize(13);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`Screen Event Breakdown: ${tx.screenName}`, 40, 30);
+
+      doc.setFontSize(8.5);
+      doc.setTextColor(203, 213, 225);
+      doc.text(
+        `System: ${tx.appType} | User: ${tx.userName} | Sess: ${tx.sessionId} | Notepad++: L${tx.startLine} -> L${tx.endLine || 'end'} | Total Time: ${tx.totalDurationFormatted}`,
+        40,
+        42
+      );
+
+      const evHead = [
+        ['Step', 'Notepad++ Line', 'Time', 'Field', 'Action Triggered', 'Scanned / Value', 'Time Taken', 'Delay Cause (Why It Took Time)', 'Details & Diagnostics']
+      ];
+
+      const evBody = tx.events.map((ev, evIdx) => [
+        evIdx + 1,
+        `Line ${ev.lineNo}`,
+        ev.timestamp ? (ev.timestamp.split(' ')[1] || ev.timestamp) : '-',
+        ev.field || '-',
+        ev.event,
+        ev.value || '-',
+        ev.durationFormatted,
+        ev.whySlow || 'Normal execution',
+        ev.details || '-',
+      ]);
+
+      autoTable(doc, {
+        head: evHead,
+        body: evBody,
+        startY: 65,
+        theme: 'grid',
+        styles: { fontSize: 7.5, cellPadding: 3.5, overflow: 'linebreak' },
+        headStyles: { fillColor: [51, 65, 85], textColor: [255, 255, 255] },
+        columnStyles: {
+          0: { cellWidth: 26, halign: 'center' },
+          1: { cellWidth: 60, halign: 'center', textColor: [37, 99, 235] },
+          2: { cellWidth: 55, halign: 'center' },
+          3: { cellWidth: 75, fontStyle: 'bold' },
+          4: { cellWidth: 85 },
+          5: { cellWidth: 70 },
+          6: { cellWidth: 55, fontStyle: 'bold' },
+          7: { cellWidth: 165 },
+          8: { cellWidth: 175 },
+        },
+      });
+    }
+  }
+
+  // Footer on all pages
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      `Intellinum Flexi Performance Audit - Page ${i} of ${totalPages}`,
+      doc.internal.pageSize.getWidth() - 200,
+      doc.internal.pageSize.getHeight() - 15
+    );
+  }
+
+  doc.save(filename);
+}
+
+/**
+ * Export a Single Screen's Event Breakdown to PDF
+ */
+export function exportSingleScreenToPdf(
+  tx: ScreenTransaction,
+  filename?: string
+) {
+  const safeName = tx.screenName.replace(/[^a-zA-Z0-9_-]/g, '_');
+  const actualFilename = filename || `${safeName}_Performance_Report_${Date.now()}.pdf`;
+
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+
+  // Title Banner
+  doc.setFillColor(30, 58, 138);
+  doc.rect(0, 0, doc.internal.pageSize.getWidth(), 55, 'F');
+
+  doc.setFontSize(15);
+  doc.setTextColor(255, 255, 255);
+  doc.text(`Screen Event Timings: ${tx.screenName}`, 40, 32);
+
+  doc.setFontSize(9);
+  doc.setTextColor(203, 213, 225);
+  doc.text(
+    `System: ${tx.appType} | User: ${tx.userName} | Session: ${tx.sessionId} | Notepad++: L${tx.startLine} -> L${tx.endLine || 'end'} | Total Time: ${tx.totalDurationFormatted} | Primary Delay: ${tx.primaryDelayReason || 'N/A'}`,
+    40,
+    46
+  );
+
+  const evHead = [
+    ['Step', 'Notepad++ Line', 'Timestamp', 'Field / Component', 'Action Triggered', 'Scanned / Value', 'Time Taken', 'Delay Cause (Why It Took Time)', 'Details & Diagnostics']
+  ];
+
+  const evBody = tx.events.map((ev, idx) => [
+    idx + 1,
+    `Line ${ev.lineNo}`,
+    ev.timestamp ? (ev.timestamp.split(' ')[1] || ev.timestamp) : '-',
+    ev.field || '-',
+    ev.event,
+    ev.value || '-',
+    ev.durationFormatted,
+    ev.whySlow || 'Normal execution',
+    ev.details || '-',
+  ]);
+
+  autoTable(doc, {
+    head: evHead,
+    body: evBody,
+    startY: 70,
+    theme: 'grid',
+    styles: { fontSize: 7.5, cellPadding: 3.5, overflow: 'linebreak' },
+    headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
+    columnStyles: {
+      0: { cellWidth: 26, halign: 'center' },
+      1: { cellWidth: 60, halign: 'center', textColor: [37, 99, 235], fontStyle: 'bold' },
+      2: { cellWidth: 55, halign: 'center' },
+      3: { cellWidth: 80, fontStyle: 'bold' },
+      4: { cellWidth: 95 },
+      5: { cellWidth: 75 },
+      6: { cellWidth: 60, fontStyle: 'bold' },
+      7: { cellWidth: 160 },
+      8: { cellWidth: 155 },
+    },
+  });
+
+  // Footer on all pages
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      `Intellinum Flexi Performance - ${tx.screenName} - Page ${i} of ${totalPages}`,
+      doc.internal.pageSize.getWidth() - 250,
+      doc.internal.pageSize.getHeight() - 15
+    );
+  }
+
+  doc.save(actualFilename);
 }

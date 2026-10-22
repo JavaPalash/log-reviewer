@@ -27,6 +27,7 @@ import {
   Terminal,
   Activity,
   FileSpreadsheet,
+  FileText,
   UserCheck
 } from 'lucide-react';
 import { LogEntry, ParsedLogFile } from '../lib/types';
@@ -40,6 +41,7 @@ import {
   exportPerformanceDetailsCsv,
   exportScreenEventsCsv
 } from '../lib/performanceUtils';
+import { exportPerformanceReportToPdf, exportSingleScreenToPdf } from '../lib/exportUtils';
 
 interface PerformanceCheckProps {
   files: ParsedLogFile[];
@@ -228,11 +230,23 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
     triggerDownload(csvContent, `screen_performance_details_${Date.now()}.csv`);
   };
 
-  // Export 3: Single Screen Events
+  // Export 3: Single Screen Events (CSV)
   const handleExportScreenEventsCsv = (tx: ScreenTransaction) => {
     const csvContent = exportScreenEventsCsv(tx);
     const safeName = tx.screenName.replace(/[^a-zA-Z0-9_-]/g, '_');
     triggerDownload(csvContent, `${safeName}_events_${Date.now()}.csv`);
+  };
+
+  // Export 4: Performance Audit Report as PDF
+  const handleExportPdf = () => {
+    const list = filteredTransactions.length > 0 ? filteredTransactions : allTransactions;
+    if (list.length === 0) return;
+    exportPerformanceReportToPdf(list, summary);
+  };
+
+  // Export 5: Single Screen Events as PDF
+  const handleExportScreenEventsPdf = (tx: ScreenTransaction) => {
+    exportSingleScreenToPdf(tx);
   };
 
   const getDurationBadgeClass = (ms: number) => {
@@ -363,26 +377,36 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
           </p>
         </div>
 
-        {/* Dual Export Buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
+        {/* Export Buttons: Summary CSV, Details CSV, and Full Report PDF */}
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleExportSummaryCsv}
             disabled={allTransactions.length === 0}
-            className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-white text-blue-900 hover:bg-blue-50 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-white text-blue-900 hover:bg-blue-50 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
             title="Export transaction-level summary per screen"
           >
-            <Download className="w-4 h-4 text-blue-700" />
-            <span>Export Summary (CSV)</span>
+            <Download className="w-3.5 h-3.5 text-blue-700" />
+            <span>Summary (CSV)</span>
           </button>
 
           <button
             onClick={handleExportAllDetailsCsv}
             disabled={allTransactions.length === 0}
-            className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-blue-950/80 hover:bg-blue-950 text-white border border-white/25 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-blue-950/80 hover:bg-blue-950 text-white border border-white/25 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
             title="Export step-by-step event details with root cause diagnostics and physical Notepad++ line numbers"
           >
-            <FileSpreadsheet className="w-4 h-4 text-amber-300" />
-            <span>Export Details (CSV)</span>
+            <FileSpreadsheet className="w-3.5 h-3.5 text-amber-300" />
+            <span>Details (CSV)</span>
+          </button>
+
+          <button
+            onClick={handleExportPdf}
+            disabled={allTransactions.length === 0}
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white border border-rose-400/30 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            title="Export comprehensive performance audit report as PDF"
+          >
+            <FileText className="w-3.5 h-3.5 text-white" />
+            <span>Export as PDF</span>
           </button>
         </div>
       </div>
@@ -883,7 +907,16 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                     title="Export this screen's events to CSV"
                                   >
                                     <Download className="w-3.5 h-3.5" />
-                                    <span>Export Screen Events</span>
+                                    <span>Export CSV</span>
+                                  </button>
+
+                                  <button
+                                    onClick={() => handleExportScreenEventsPdf(tx)}
+                                    className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/50 flex items-center gap-1 transition-colors"
+                                    title="Export this screen's event breakdown to PDF"
+                                  >
+                                    <FileText className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                                    <span>Export as PDF</span>
                                   </button>
                                 </div>
                               </div>
