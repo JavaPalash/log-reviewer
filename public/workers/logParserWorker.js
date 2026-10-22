@@ -1064,6 +1064,7 @@ self.onmessage = function (e) {
 
     const screenTransactions = [];
     let currentTx = null;
+    let lastScreenReadyMs = 0;
     let lastAction = null;
     let pendingTarget = '';
 
@@ -1090,6 +1091,10 @@ self.onmessage = function (e) {
         }
       }
 
+      if (line.includes('LogFirePage.doAction:finish Current cursor =') || line.includes('.runScript:_onPageEntered~') || line.includes('.onSessionApplicationEnterEvent')) {
+        lastScreenReadyMs = timeMs;
+      }
+
       if (line.includes('FlexiRuntime.handleUI:inputData=')) {
         const targetM = line.match(/target='(.*?)'/);
         const sourceM = line.match(/source='(.*?)'/);
@@ -1097,6 +1102,7 @@ self.onmessage = function (e) {
         const isScanM = line.match(/isScan='(.*?)'/);
         const seqM = line.match(/seq='(.*?)'/);
         const isScan = isScanM ? isScanM[1] === 'true' : false;
+        const userHoldMs = lastScreenReadyMs && timeMs > lastScreenReadyMs ? Math.max(0, timeMs - lastScreenReadyMs) : 0;
 
         lastAction = {
           type: isScan ? 'SCAN' : 'INPUT',
@@ -1108,6 +1114,7 @@ self.onmessage = function (e) {
           seq: seqM ? seqM[1] : '',
           timeStr,
           timeMs,
+          userHoldMs,
           lineNo,
         };
 
@@ -1145,6 +1152,8 @@ self.onmessage = function (e) {
             formatted = 'SELECT_MENU';
           }
 
+          const userHoldMs = lastScreenReadyMs && timeMs > lastScreenReadyMs ? Math.max(0, timeMs - lastScreenReadyMs) : 0;
+
           if (!lastAction) {
             lastAction = {
               type: rawAction,
@@ -1156,6 +1165,7 @@ self.onmessage = function (e) {
               seq: '',
               timeStr,
               timeMs,
+              userHoldMs,
               lineNo,
             };
           } else {
@@ -1164,6 +1174,7 @@ self.onmessage = function (e) {
             if (tgt) lastAction.target = tgt;
             if (src && !lastAction.source) lastAction.source = src;
             if (val) lastAction.value = val;
+            if (userHoldMs > lastAction.userHoldMs) lastAction.userHoldMs = userHoldMs;
             lastAction.lineNo = lineNo;
           }
 
@@ -1224,6 +1235,7 @@ self.onmessage = function (e) {
                 slowestEventName: '',
                 events: [],
               };
+              lastScreenReadyMs = timeMs;
             } else if (currentTx.screenName !== currName) {
               currentTx.events.push({
                 id: `ev-${currentTx.events.length + 1}`,
@@ -1238,7 +1250,10 @@ self.onmessage = function (e) {
                 lineNo,
                 status: 'PASS',
                 details: `Screen stepped into sub-screen "${currName}" (from "${prevTitle}")`,
+                delayCategory: 'SCREEN_PARSING',
+                whySlow: `Sub-screen transition into "${currName}" (parsing terminal layout).`,
               });
+              lastScreenReadyMs = timeMs;
             }
           }
         }
@@ -1288,6 +1303,7 @@ self.onmessage = function (e) {
               events: [],
             };
             pendingTarget = '';
+            lastScreenReadyMs = timeMs;
           }
         }
 
@@ -1299,6 +1315,7 @@ self.onmessage = function (e) {
               currentTx.screenName = snM[1];
             }
           }
+          lastScreenReadyMs = timeMs;
         }
 
         if (currentTx && (line.includes('Session.closeApplication:') || line.includes('FlexiAPI.closeApplication') || line.includes('ActionType : EXIT_APPLICATION'))) {
@@ -1320,27 +1337,50 @@ self.onmessage = function (e) {
 
         if (line.includes('LogFireSSHConnection.SendKey:LogFireTime=')) {
           const msM = line.match(/LogFireTime=(\d+)\s*ms/);
-          const durationMs = msM ? parseInt(msM[1], 10) : 0;
+          const serverMs = msM ? parseInt(msM[1], 10) : 0;
           const fieldName = lastAction ? (lastAction.target || lastAction.source) : 'terminal';
           const evLabel = lastAction?.actionLabel || (lastAction?.isScan ? 'SCAN' : 'ENTER');
           const evVal = lastAction ? lastAction.value : '';
+          const userHoldMs = lastAction?.userHoldMs || 0;
+
+          let delayCategory = 'NORMAL';
+          let whySlow = '';
+
+          if (serverMs >= 1500) {
+            delayCategory = 'RF_TERMINAL_LATENCY';
+            whySlow = `Oracle WMS backend host took ${formatDuration(serverMs)} to process action '${evLabel}' and return terminal screen via SSH.`;
+          } else if (userHoldMs >= 1500) {
+            delayCategory = 'USER_HOLD';
+            whySlow = `User held/paused on screen for ${formatDuration(userHoldMs)} before submitting input on '${fieldName}'. Server responded in ${serverMs} ms.`;
+          } else if (serverMs >= 800) {
+            delayCategory = 'RF_TERMINAL_LATENCY';
+            whySlow = `SSH terminal host response took ${serverMs} ms.`;
+          } else {
+            delayCategory = 'NORMAL';
+            whySlow = `Fast response: Server returned in ${serverMs} ms.`;
+          }
 
           currentTx.events.push({
             id: `ev-${currentTx.events.length + 1}`,
             timestamp: timeStr,
             timestampMs: timeMs,
-            durationMs,
-            durationFormatted: `${durationMs} ms`,
+            durationMs: serverMs,
+            durationFormatted: formatDuration(serverMs),
             isReportedDuration: true,
             event: evLabel,
             field: fieldName,
             value: evVal,
             stepSeq: lastAction?.seq || '',
             lineNo,
-            status: durationMs > 2500 ? 'WARN' : 'PASS',
-            details: `SSH Terminal Response (${durationMs} ms) on ${fieldName}`,
+            status: serverMs > 2500 ? 'WARN' : 'PASS',
+            details: `SSH Terminal Response (${serverMs} ms) on ${fieldName}`,
+            delayCategory,
+            whySlow,
+            userHoldTimeMs: userHoldMs,
+            serverLatencyMs: serverMs,
           });
 
+          lastScreenReadyMs = timeMs;
           lastAction = null;
         }
 
@@ -1362,6 +1402,8 @@ self.onmessage = function (e) {
               lineNo,
               status: 'PASS',
               details: `Triggered ${evName} event script on ${fieldName}`,
+              delayCategory: 'SCRIPT_LATENCY',
+              whySlow: `Triggered ${evName} event script on field '${fieldName}'.`,
             });
           }
         }
@@ -1371,20 +1413,27 @@ self.onmessage = function (e) {
           if (sim) {
             const field = sim[1];
             const durationMs = parseInt(sim[2], 10);
+            const whySlow = durationMs >= 1000 
+              ? `BeanShell script initialize took ${formatDuration(durationMs)} on field '${field}' (High script latency).`
+              : `Script initialize took ${durationMs} ms on field '${field}'.`;
+
             if (currentTx.events.length > 0 && currentTx.events[currentTx.events.length - 1].field === field && currentTx.events[currentTx.events.length - 1].event.startsWith('SCRIPT:')) {
               const ev = currentTx.events[currentTx.events.length - 1];
               ev.durationMs = durationMs;
-              ev.durationFormatted = `${durationMs} ms`;
+              ev.durationFormatted = formatDuration(durationMs);
               ev.isReportedDuration = true;
               ev.status = durationMs > 1000 ? 'WARN' : 'PASS';
               ev.details += ` (init ${durationMs} ms)`;
+              ev.delayCategory = durationMs >= 1000 ? 'SCRIPT_LATENCY' : 'NORMAL';
+              ev.whySlow = whySlow;
+              ev.scriptLatencyMs = durationMs;
             } else {
               currentTx.events.push({
                 id: `ev-${currentTx.events.length + 1}`,
                 timestamp: timeStr,
                 timestampMs: timeMs,
                 durationMs,
-                durationFormatted: `${durationMs} ms`,
+                durationFormatted: formatDuration(durationMs),
                 isReportedDuration: true,
                 event: `SCRIPT: init`,
                 field,
@@ -1392,8 +1441,12 @@ self.onmessage = function (e) {
                 lineNo,
                 status: durationMs > 1000 ? 'WARN' : 'PASS',
                 details: `Script initialize took ${durationMs} ms on ${field}`,
+                delayCategory: durationMs >= 1000 ? 'SCRIPT_LATENCY' : 'NORMAL',
+                whySlow,
+                scriptLatencyMs: durationMs,
               });
             }
+            lastScreenReadyMs = timeMs;
           }
         }
 
@@ -1402,12 +1455,16 @@ self.onmessage = function (e) {
           if (am) {
             const apiName = am[1];
             const durationMs = parseInt(am[2], 10);
+            const whySlow = durationMs >= 1500
+              ? `Remote Web Service API '${apiName}' took ${formatDuration(durationMs)} to respond (Server/Network delay).`
+              : `Web Service API '${apiName}' completed in ${durationMs} ms.`;
+
             currentTx.events.push({
               id: `ev-${currentTx.events.length + 1}`,
               timestamp: timeStr,
               timestampMs: timeMs,
               durationMs,
-              durationFormatted: `${durationMs} ms`,
+              durationFormatted: formatDuration(durationMs),
               isReportedDuration: true,
               event: `API: ${apiName}`,
               field: apiName,
@@ -1415,9 +1472,13 @@ self.onmessage = function (e) {
               lineNo,
               status: durationMs > 2000 ? 'WARN' : 'PASS',
               details: `Web Service API: ${apiName} responded in ${durationMs} ms`,
+              delayCategory: durationMs >= 1000 ? 'API_LATENCY' : 'NORMAL',
+              whySlow,
+              apiLatencyMs: durationMs,
             });
             currentTx.apiCallsCount++;
             currentTx.apiTotalDurationMs += durationMs;
+            lastScreenReadyMs = timeMs;
           }
         }
 
@@ -1435,6 +1496,8 @@ self.onmessage = function (e) {
             lineNo,
             status: 'PASS',
             details: line.substring(Math.max(0, line.indexOf('UserActionLogger - ') + 19)).substring(0, 80),
+            delayCategory: 'NORMAL',
+            whySlow: 'Executed database query.',
           });
         }
       }
@@ -1460,7 +1523,19 @@ self.onmessage = function (e) {
           const delta = nextEv.timestampMs - ev.timestampMs;
           if (delta > 0 && delta < 300000) {
             ev.durationMs = delta;
-            ev.durationFormatted = `${delta} ms`;
+            ev.durationFormatted = formatDuration(delta);
+            if (delta >= 1500) {
+              if (ev.userHoldTimeMs && ev.userHoldTimeMs >= 1500) {
+                ev.delayCategory = 'USER_HOLD';
+                ev.whySlow = `User held/paused screen for ${formatDuration(ev.userHoldTimeMs)} before next action.`;
+              } else if (!ev.delayCategory || ev.delayCategory === 'NORMAL') {
+                ev.delayCategory = 'SCREEN_PARSING';
+                ev.whySlow = `Screen step transition took ${formatDuration(delta)} to process.`;
+              }
+            } else if (!ev.whySlow) {
+              ev.delayCategory = 'NORMAL';
+              ev.whySlow = `Completed in ${ev.durationFormatted}.`;
+            }
           }
         }
       }
@@ -1471,17 +1546,48 @@ self.onmessage = function (e) {
 
       let maxEv = 0;
       let slowestName = '';
+      let totalUserHold = 0;
+      let totalServer = 0;
+      let totalApi = 0;
+      let totalScript = 0;
+
       for (const ev of tx.events) {
         if (ev.durationMs > maxEv) {
           maxEv = ev.durationMs;
           slowestName = `${ev.event} on ${ev.field} (${ev.durationFormatted})`;
         }
+        if (ev.userHoldTimeMs) totalUserHold += ev.userHoldTimeMs;
+        if (ev.serverLatencyMs) totalServer += ev.serverLatencyMs;
+        if (ev.apiLatencyMs) totalApi += ev.apiLatencyMs;
+        if (ev.scriptLatencyMs) totalScript += ev.scriptLatencyMs;
+
         if (ev.status === 'FAIL') {
           tx.status = 'HAS_ERROR';
         }
       }
       tx.maxEventDurationMs = maxEv;
       tx.slowestEventName = slowestName || 'N/A';
+
+      const maxContribution = Math.max(totalUserHold, totalServer, totalApi, totalScript);
+      const txTotal = Math.max(1, tx.totalDurationMs);
+      if (maxContribution >= 1500) {
+        if (maxContribution === totalUserHold) {
+          tx.primaryDelayCategory = 'USER_HOLD';
+          tx.primaryDelayReason = `User screen pause/hold took ${formatDuration(totalUserHold)} (${Math.round((totalUserHold / txTotal) * 100)}% of total time)`;
+        } else if (maxContribution === totalServer) {
+          tx.primaryDelayCategory = 'RF_TERMINAL_LATENCY';
+          tx.primaryDelayReason = `Oracle WMS host SSH latency took ${formatDuration(totalServer)} (${Math.round((totalServer / txTotal) * 100)}% of total time)`;
+        } else if (maxContribution === totalApi) {
+          tx.primaryDelayCategory = 'API_LATENCY';
+          tx.primaryDelayReason = `Remote Web Service APIs took ${formatDuration(totalApi)} (${Math.round((totalApi / txTotal) * 100)}% of total time)`;
+        } else {
+          tx.primaryDelayCategory = 'SCRIPT_LATENCY';
+          tx.primaryDelayReason = `Flexi script execution took ${formatDuration(totalScript)} (${Math.round((totalScript / txTotal) * 100)}% of total time)`;
+        }
+      } else {
+        tx.primaryDelayCategory = 'NORMAL';
+        tx.primaryDelayReason = `Fast execution (${tx.totalDurationFormatted})`;
+      }
     }
 
     self.postMessage({

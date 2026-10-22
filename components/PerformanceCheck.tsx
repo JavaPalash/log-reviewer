@@ -26,7 +26,8 @@ import {
   Barcode,
   Terminal,
   Activity,
-  FileSpreadsheet
+  FileSpreadsheet,
+  UserCheck
 } from 'lucide-react';
 import { LogEntry, ParsedLogFile } from '../lib/types';
 import { ScreenTransaction, ScreenEventDetail } from '../lib/performanceTypes';
@@ -72,7 +73,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
   const [sortOption, setSortOption] = useState<'slowest' | 'fastest' | 'newest' | 'oldest'>('slowest');
   const [expandedTxId, setExpandedTxId] = useState<string | null>(null);
   const [eventSearchTerm, setEventSearchTerm] = useState<string>('');
-  const [eventFilterType, setEventFilterType] = useState<'ALL' | 'SLOW' | 'API' | 'SCRIPT' | 'SSH'>('ALL');
+  const [eventFilterType, setEventFilterType] = useState<'ALL' | 'SLOW' | 'USER_HOLD' | 'SSH' | 'API' | 'SCRIPT'>('ALL');
 
   // Pagination for Screen Transactions Table (Default: 50 records)
   const [txPage, setTxPage] = useState<number>(1);
@@ -121,7 +122,8 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         tx.screenCode.toLowerCase().includes(q) ||
         tx.userName.toLowerCase().includes(q) ||
         tx.sessionId.toLowerCase().includes(q) ||
-        tx.slowestEventName.toLowerCase().includes(q)
+        tx.slowestEventName.toLowerCase().includes(q) ||
+        (tx.primaryDelayReason && tx.primaryDelayReason.toLowerCase().includes(q))
       );
     }
 
@@ -160,13 +162,15 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
     let evs = [...activeTx.events];
 
     if (eventFilterType === 'SLOW') {
-      evs = evs.filter(e => e.durationMs >= 1000);
-    } else if (eventFilterType === 'API') {
-      evs = evs.filter(e => e.event.startsWith('API:') || e.event === 'API_CALL');
-    } else if (eventFilterType === 'SCRIPT') {
-      evs = evs.filter(e => e.event.startsWith('SCRIPT:') || e.event.includes('script') || e.event === 'onFocus' || e.event === 'onExit' || e.event === 'onKeyPress' || e.event === 'onClick');
+      evs = evs.filter(e => e.durationMs >= 1000 || (e.userHoldTimeMs && e.userHoldTimeMs >= 1500));
+    } else if (eventFilterType === 'USER_HOLD') {
+      evs = evs.filter(e => e.delayCategory === 'USER_HOLD' || (e.userHoldTimeMs && e.userHoldTimeMs >= 1500));
     } else if (eventFilterType === 'SSH') {
-      evs = evs.filter(e => e.isReportedDuration && e.details.includes('SSH'));
+      evs = evs.filter(e => e.delayCategory === 'RF_TERMINAL_LATENCY' || (e.isReportedDuration && e.details.includes('SSH')));
+    } else if (eventFilterType === 'API') {
+      evs = evs.filter(e => e.delayCategory === 'API_LATENCY' || e.event.startsWith('API:') || e.event === 'API_CALL');
+    } else if (eventFilterType === 'SCRIPT') {
+      evs = evs.filter(e => e.delayCategory === 'SCRIPT_LATENCY' || e.event.startsWith('SCRIPT:') || e.event.includes('script'));
     }
 
     if (eventSearchTerm.trim()) {
@@ -175,6 +179,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         e.field.toLowerCase().includes(q) ||
         e.event.toLowerCase().includes(q) ||
         (e.value && e.value.toLowerCase().includes(q)) ||
+        (e.whySlow && e.whySlow.toLowerCase().includes(q)) ||
         e.details.toLowerCase().includes(q)
       );
     }
@@ -254,6 +259,88 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
     return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700';
   };
 
+  const getDelayCategoryBadge = (ev: ScreenEventDetail) => {
+    switch (ev.delayCategory) {
+      case 'USER_HOLD':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/70 dark:text-amber-300 dark:border-amber-800 whitespace-nowrap">
+            <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+            User Hold ({ev.userHoldTimeMs ? formatShortDuration(ev.userHoldTimeMs) : ev.durationFormatted})
+          </span>
+        );
+      case 'RF_TERMINAL_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-900 border border-rose-300 dark:bg-rose-950/70 dark:text-rose-300 dark:border-rose-800 whitespace-nowrap">
+            <Terminal className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+            RF Host Latency ({ev.serverLatencyMs ? formatShortDuration(ev.serverLatencyMs) : ev.durationFormatted})
+          </span>
+        );
+      case 'API_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-900 border border-indigo-300 dark:bg-indigo-950/70 dark:text-indigo-300 dark:border-indigo-800 whitespace-nowrap">
+            <Zap className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+            Remote API ({ev.apiLatencyMs ? formatShortDuration(ev.apiLatencyMs) : ev.durationFormatted})
+          </span>
+        );
+      case 'SCRIPT_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-900 border border-purple-300 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-800 whitespace-nowrap">
+            <Code className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+            Script Execution ({ev.scriptLatencyMs ? formatShortDuration(ev.scriptLatencyMs) : ev.durationFormatted})
+          </span>
+        );
+      case 'SCREEN_PARSING':
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-100 text-cyan-900 border border-cyan-300 dark:bg-cyan-950/70 dark:text-cyan-300 dark:border-cyan-800 whitespace-nowrap">
+            <Layers className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
+            RF Screen Layout ({ev.durationFormatted})
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 whitespace-nowrap">
+            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+            Normal
+          </span>
+        );
+    }
+  };
+
+  const getPrimaryDelayBadge = (tx: ScreenTransaction) => {
+    switch (tx.primaryDelayCategory) {
+      case 'USER_HOLD':
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800">
+            <Clock className="w-2.5 h-2.5 text-amber-600" />
+            User Hold
+          </span>
+        );
+      case 'RF_TERMINAL_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800">
+            <Terminal className="w-2.5 h-2.5 text-rose-600" />
+            RF Host
+          </span>
+        );
+      case 'API_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-indigo-50 text-indigo-800 border border-indigo-200 dark:bg-indigo-950/50 dark:text-indigo-300 dark:border-indigo-800">
+            <Zap className="w-2.5 h-2.5 text-indigo-600" />
+            API Delay
+          </span>
+        );
+      case 'SCRIPT_LATENCY':
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-800 border border-purple-200 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800">
+            <Code className="w-2.5 h-2.5 text-purple-600" />
+            Script Delay
+          </span>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="space-y-6">
       
@@ -272,7 +359,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
             </span>
           </div>
           <p className="text-xs text-blue-100 max-w-2xl">
-            Calculates exact duration for Oracle Cloud <strong>SCM</strong> screens (via <code className="bg-blue-900/60 px-1 py-0.5 rounded text-amber-200">openApplication</code> to <code className="bg-blue-900/60 px-1 py-0.5 rounded text-amber-200">closeApplication</code>) and Oracle <strong>WMS</strong> RF screens (via terminal menu selection & render), with per-event response times (<code className="bg-blue-900/60 px-1 py-0.5 rounded text-amber-200">Ctrl-P</code>, <code className="bg-blue-900/60 px-1 py-0.5 rounded text-amber-200">Ctrl-E</code>, <code className="bg-blue-900/60 px-1 py-0.5 rounded text-amber-200">SendKey</code>, APIs, and scripts). All line numbers strictly match <strong>Notepad++</strong> 1:1.
+            Pinpoints exact response times and <strong>why each step is slow</strong>: distinguishes between <strong>User Screen Hold / Idle Time</strong> (user paused before entering value), <strong>RF Terminal Host Latency</strong> (Oracle WMS backend host SSH latency), <strong>Web Service API Calls</strong>, <strong>Script Execution</strong>, and <strong>RF Screen Parsing</strong>. All line numbers strictly match <strong>Notepad++</strong> 1:1.
           </p>
         </div>
 
@@ -292,7 +379,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
             onClick={handleExportAllDetailsCsv}
             disabled={allTransactions.length === 0}
             className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-blue-950/80 hover:bg-blue-950 text-white border border-white/25 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
-            title="Export step-by-step event details with physical Notepad++ line numbers"
+            title="Export step-by-step event details with root cause diagnostics and physical Notepad++ line numbers"
           >
             <FileSpreadsheet className="w-4 h-4 text-amber-300" />
             <span>Export Details (CSV)</span>
@@ -384,7 +471,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by Screen Name, Technical Code, User, Session, or Slowest Step..."
+              placeholder="Search by Screen Name, Technical Code, User, Session, or Delay Reason..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-9 pr-8 py-2 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-hidden"
@@ -515,7 +602,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                 <th className="py-3 px-3">End Time</th>
                 <th className="py-3 px-3">Total Duration</th>
                 <th className="py-3 px-3 text-center">Steps</th>
-                <th className="py-3 px-3">Slowest Event</th>
+                <th className="py-3 px-3">Slowest Step & Delay Cause</th>
                 <th className="py-3 px-3 text-center">Status</th>
                 <th className="py-3 px-3 text-center w-24">Action</th>
               </tr>
@@ -636,11 +723,21 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                           </span>
                         </td>
 
-                        {/* Slowest Step */}
+                        {/* Slowest Step & Why Slow */}
                         <td className="py-3 px-3">
-                          <span className="text-[11px] text-gray-600 dark:text-gray-300 font-mono line-clamp-1" title={tx.slowestEventName}>
-                            {tx.slowestEventName}
-                          </span>
+                          <div className="flex flex-col gap-1 max-w-[240px]">
+                            <span className="text-[11px] text-gray-800 dark:text-gray-200 font-mono truncate" title={tx.slowestEventName}>
+                              {tx.slowestEventName}
+                            </span>
+                            {tx.primaryDelayReason && (
+                              <div className="flex items-center gap-1">
+                                {getPrimaryDelayBadge(tx)}
+                                <span className="text-[10px] text-gray-500 dark:text-gray-400 font-sans truncate" title={tx.primaryDelayReason}>
+                                  {tx.primaryDelayReason}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </td>
 
                         {/* Status */}
@@ -701,6 +798,11 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                   </div>
                                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                     Notepad++ Lines: <strong className="text-blue-600 dark:text-blue-400 font-mono">L{tx.startLine}</strong> to <strong className="text-blue-600 dark:text-blue-400 font-mono">L{tx.endLine || 'end'}</strong> • Total Duration: <strong>{tx.totalDurationFormatted}</strong> • Peak step: <strong className="text-rose-600 dark:text-rose-400">{tx.slowestEventName}</strong>
+                                    {tx.primaryDelayReason && (
+                                      <span className="block mt-0.5 text-amber-700 dark:text-amber-400 font-medium">
+                                        Primary bottleneck: {tx.primaryDelayReason}
+                                      </span>
+                                    )}
                                   </p>
                                 </div>
 
@@ -728,37 +830,51 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                       Slow (&gt;1000ms)
                                     </button>
                                     <button
+                                      onClick={() => setEventFilterType('USER_HOLD')}
+                                      className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors flex items-center gap-1 ${
+                                        eventFilterType === 'USER_HOLD'
+                                          ? 'bg-amber-600 text-white'
+                                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                                      }`}
+                                    >
+                                      <Clock className="w-3 h-3" />
+                                      User Hold
+                                    </button>
+                                    {tx.appType === 'WMS' && (
+                                      <button
+                                        onClick={() => setEventFilterType('SSH')}
+                                        className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors flex items-center gap-1 ${
+                                          eventFilterType === 'SSH'
+                                            ? 'bg-rose-600 text-white'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                                        }`}
+                                      >
+                                        <Terminal className="w-3 h-3" />
+                                        RF Host Latency
+                                      </button>
+                                    )}
+                                    <button
                                       onClick={() => setEventFilterType('API')}
-                                      className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
+                                      className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors flex items-center gap-1 ${
                                         eventFilterType === 'API'
                                           ? 'bg-indigo-600 text-white'
                                           : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                                       }`}
                                     >
+                                      <Zap className="w-3 h-3" />
                                       API Calls ({tx.apiCallsCount})
                                     </button>
                                     <button
                                       onClick={() => setEventFilterType('SCRIPT')}
-                                      className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
+                                      className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors flex items-center gap-1 ${
                                         eventFilterType === 'SCRIPT'
                                           ? 'bg-purple-600 text-white'
                                           : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                                       }`}
                                     >
+                                      <Code className="w-3 h-3" />
                                       Scripts
                                     </button>
-                                    {tx.appType === 'WMS' && (
-                                      <button
-                                        onClick={() => setEventFilterType('SSH')}
-                                        className={`px-2 py-1 rounded-md text-[11px] font-semibold transition-colors ${
-                                          eventFilterType === 'SSH'
-                                            ? 'bg-amber-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
-                                        }`}
-                                      >
-                                        SSH Terminal
-                                      </button>
-                                    )}
                                   </div>
 
                                   <button
@@ -777,7 +893,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                 <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                                 <input
                                   type="text"
-                                  placeholder="Filter events by field name, event, value, or details..."
+                                  placeholder="Filter events by field name, event, value, or delay reason..."
                                   value={eventSearchTerm}
                                   onChange={(e) => setEventSearchTerm(e.target.value)}
                                   className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
@@ -789,7 +905,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                 )}
                               </div>
 
-                              {/* Detailed Events Table */}
+                              {/* Detailed Events Table with Delay Diagnostics */}
                               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                 <table className="w-full text-left border-collapse text-xs">
                                   <thead className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 text-[10px] uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
@@ -800,14 +916,15 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                       <th className="py-2.5 px-3">Field / Target</th>
                                       <th className="py-2.5 px-3">Action / Event Triggered</th>
                                       <th className="py-2.5 px-3">Value Scanned / Entered</th>
-                                      <th className="py-2.5 px-3">Time Taken (ms)</th>
-                                      <th className="py-2.5 px-3">Details & Diagnostics</th>
+                                      <th className="py-2.5 px-3">Time Taken</th>
+                                      <th className="py-2.5 px-3">Why Slow? / Root Cause Diagnostics</th>
+                                      <th className="py-2.5 px-3">Details</th>
                                     </tr>
                                   </thead>
                                   <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60 font-mono text-[11px]">
                                     {filteredEvents.length === 0 ? (
                                       <tr>
-                                        <td colSpan={8} className="py-8 text-center text-gray-400 font-sans">
+                                        <td colSpan={9} className="py-8 text-center text-gray-400 font-sans">
                                           No events match the selected event filters.
                                         </td>
                                       </tr>
@@ -854,6 +971,19 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
                                                 </span>
                                               )}
                                             </td>
+
+                                            {/* Why Slow / Root Cause Diagnostics Cell */}
+                                            <td className="py-2 px-3">
+                                              <div className="flex flex-col gap-1 min-w-[240px]">
+                                                <div>{getDelayCategoryBadge(ev)}</div>
+                                                {ev.whySlow && (
+                                                  <span className="text-[11px] text-gray-700 dark:text-gray-300 font-sans leading-tight">
+                                                    {ev.whySlow}
+                                                  </span>
+                                                )}
+                                              </div>
+                                            </td>
+
                                             <td className="py-2 px-3 text-gray-600 dark:text-gray-400 font-sans text-xs">
                                               {ev.details}
                                             </td>
