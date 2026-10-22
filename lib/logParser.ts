@@ -1,5 +1,6 @@
 import { LogEntry, LogLevel, ParsedLogFile, IssueCategory, ApiDetails, ErrorDetails, MissingValueInfo, FlexiMethodDetails, EntryType } from './types';
 import { PARSING_RULES } from './parsingRules';
+import { extractScreenTransactionsFromLines } from './performanceUtils';
 
 interface RawLogLineInfo {
   lineNum: number;
@@ -314,6 +315,8 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
     else if (e.status === 'WARN') warnCount++;
   }
 
+  const screenTransactions = extractScreenTransactionsFromLines(lines, fileName, fileId, appType);
+
   return {
     id: fileId,
     fileName,
@@ -325,6 +328,7 @@ export function parseLogContent(content: string, fileName: string, fileId: strin
     appType,
     tenant: fileTenant,
     entries,
+    screenTransactions,
   };
 }
 

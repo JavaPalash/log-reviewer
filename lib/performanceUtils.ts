@@ -29,6 +29,34 @@ export function formatShortDuration(ms: number): string {
 }
 
 /**
+ * Format WMS Control Keys and Function Keys into clear user actions
+ */
+export function formatControlKey(target?: string, value?: string): string {
+  const t = (target || value || '').toUpperCase().trim();
+  switch (t) {
+    case 'P': return 'Ctrl-P (Exec Task / Printer)';
+    case 'E': return 'Ctrl-E (Close LPN)';
+    case 'W': return 'Ctrl-W (Previous Screen)';
+    case 'X': return 'Ctrl-X (Exit App)';
+    case 'D': return 'Ctrl-D (Page Down)';
+    case 'U': return 'Ctrl-U (Page Up)';
+    case 'L': return 'Ctrl-L (Change Location / Language)';
+    case 'F': return 'Ctrl-F (Change Facility)';
+    case 'O': return 'Ctrl-O (Restrict Company)';
+    case 'S': return 'Ctrl-S (Split / Execute)';
+    case 'T': return 'Ctrl-T (Change Task Type)';
+    case 'Q': return 'Ctrl-Q (Change Equipment)';
+    case 'A': return 'Ctrl-A (Select All / Action)';
+    case 'K': return 'Ctrl-K (Special Function)';
+    case 'B': return 'Ctrl-B (Back)';
+    case 'R': return 'Ctrl-R (Refresh)';
+    case 'N': return 'Ctrl-N (Next Screen / Record)';
+    case 'F2': return 'F2 (Previous Screen)';
+    default: return t ? `Ctrl-${t}` : 'CONTROL_KEY';
+  }
+}
+
+/**
  * Extract timestamp string and epoch ms from a log line
  */
 function parseTimestamp(line: string): { str: string; ms: number } | null {
@@ -44,73 +72,33 @@ function parseTimestamp(line: string): { str: string; ms: number } | null {
 }
 
 /**
- * Extracts all lines from ParsedLogFiles or LogEntries
+ * Core Parser: Extracts screen transactions directly from raw physical log lines.
+ * Line numbering (i + 1) matches Notepad++ 1:1 with zero drift.
  */
-function getLinesFromSources(sources: (ParsedLogFile | LogEntry)[]): { line: string; lineNo: number; fileName: string; fileId: string; appType: 'SCM' | 'WMS' | 'UNKNOWN' }[] {
-  const result: { line: string; lineNo: number; fileName: string; fileId: string; appType: 'SCM' | 'WMS' | 'UNKNOWN' }[] = [];
+export function extractScreenTransactionsFromLines(
+  lines: string[],
+  fileName: string,
+  fileId: string,
+  forcedAppType?: 'SCM' | 'WMS' | 'UNKNOWN'
+): ScreenTransaction[] {
+  if (!lines || lines.length === 0) return [];
 
-  // Check if sources are ParsedLogFile
-  if (sources.length > 0 && 'entries' in sources[0] && Array.isArray((sources[0] as ParsedLogFile).entries)) {
-    for (const f of sources as ParsedLogFile[]) {
-      const fAppType = f.appType || 'UNKNOWN';
-      for (const entry of f.entries) {
-        let currentLineNo = entry.startLine;
-        for (const raw of entry.rawLines) {
-          result.push({
-            line: raw,
-            lineNo: currentLineNo,
-            fileName: f.fileName,
-            fileId: f.id,
-            appType: fAppType !== 'UNKNOWN' ? fAppType : entry.appType,
-          });
-          currentLineNo++;
-        }
-      }
-    }
-  } else {
-    // Sources are LogEntry[]
-    for (const entry of sources as LogEntry[]) {
-      let currentLineNo = entry.startLine;
-      for (const raw of entry.rawLines) {
-        result.push({
-          line: raw,
-          lineNo: currentLineNo,
-          fileName: entry.fileName,
-          fileId: entry.fileId,
-          appType: entry.appType,
-        });
-        currentLineNo++;
-      }
+  // Detect App Type if not forced
+  let appType = forcedAppType || 'UNKNOWN';
+  if (appType === 'UNKNOWN') {
+    const sample = lines.slice(0, 150).join('\n').toUpperCase();
+    if (sample.includes('SCM') || sample.includes('PURECS') || sample.includes('OPENAPPLICATION') || sample.includes('FUSION')) {
+      appType = 'SCM';
+    } else if (sample.includes('WMS') || sample.includes('LOGFIRE') || sample.includes('WS-G-HK') || sample.includes('LOGFIREPAGE')) {
+      appType = 'WMS';
     }
   }
-
-  // Deduplicate lines by lineNo and fileName if any overlap
-  const seen = new Set<string>();
-  const deduped: typeof result = [];
-  for (const item of result) {
-    const key = `${item.fileName}:${item.lineNo}:${item.line}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      deduped.push(item);
-    }
-  }
-
-  return deduped;
-}
-
-/**
- * Main function: Analyzes logs and constructs complete ScreenTransaction lifecycle objects
- */
-export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[]): ScreenTransaction[] {
-  if (!sources || sources.length === 0) return [];
-
-  const rawLinesWithMeta = getLinesFromSources(sources);
-  if (rawLinesWithMeta.length === 0) return [];
 
   const transactions: ScreenTransaction[] = [];
   let currentTx: ScreenTransaction | null = null;
   let lastAction: {
     type: string;
+    actionLabel: string;
     target: string;
     source: string;
     value: string;
@@ -122,8 +110,10 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
   } | null = null;
   let pendingTarget = '';
 
-  for (let i = 0; i < rawLinesWithMeta.length; i++) {
-    const { line, lineNo, fileName, fileId, appType } = rawLinesWithMeta[i];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineNo = i + 1; // 100% exact Notepad++ physical line number
+
     const time = parseTimestamp(line);
     const timeStr = time ? time.str : '';
     const timeMs = time ? time.ms : 0;
@@ -137,6 +127,12 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
       user = tm[1];
       session = tm[2];
       thread = tm[4] ? `Thread-${tm[4]}` : '';
+    } else {
+      const sm = line.match(/username\s+([A-Za-z0-9_.\-@]+)\s*,?\s*session\s+id\s*:\s*(\d+)/i);
+      if (sm) {
+        user = sm[1];
+        session = sm[2];
+      }
     }
 
     // 1. Capture User UI Input (FlexiRuntime.handleUI)
@@ -146,13 +142,15 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
       const valM = line.match(/value='(.*?)'/);
       const isScanM = line.match(/isScan='(.*?)'/);
       const seqM = line.match(/seq='(.*?)'/);
+      const isScan = isScanM ? isScanM[1] === 'true' : false;
 
       lastAction = {
-        type: 'INPUT',
+        type: isScan ? 'SCAN' : 'INPUT',
+        actionLabel: isScan ? 'SCAN' : 'ENTER',
         target: targetM ? targetM[1] : '',
         source: sourceM ? sourceM[1] : '',
         value: valM ? valM[1] : '',
-        isScan: isScanM ? isScanM[1] === 'true' : false,
+        isScan,
         seq: seqM ? seqM[1] : '',
         timeStr,
         timeMs,
@@ -169,26 +167,51 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
     } else if (line.includes('FlexiRuntime.handleUI: ')) {
       const actM = line.match(/handleUI:\s*([A-Za-z0-9_]+)\s+with\s+value\s+'(.*?)'\s+from\s+source\s+'(.*?)'\s+to\s+target\s+'(.*?)'/);
       if (actM) {
+        const rawAction = actM[1];
+        const val = actM[2];
+        const src = actM[3];
+        const tgt = actM[4];
+
+        let formatted = rawAction;
+        if (rawAction === 'CONTROL_KEY') {
+          formatted = formatControlKey(tgt, val);
+        } else if (rawAction === 'F2' || tgt === 'F2' || val === 'F2') {
+          formatted = 'F2 (Previous Screen)';
+        } else if (rawAction === 'ENTER') {
+          formatted = 'ENTER';
+        } else if (rawAction === 'UP') {
+          formatted = 'UP (Menu Up)';
+        } else if (rawAction === 'DOWN') {
+          formatted = 'DOWN (Menu Down)';
+        } else if (rawAction === 'TAB') {
+          formatted = 'TAB (Next Field)';
+        } else if (rawAction === 'MOUSE_CLICK') {
+          formatted = 'CLICK';
+        } else if (rawAction === 'MOUSE_ENTER') {
+          formatted = 'SELECT_MENU';
+        }
+
         if (!lastAction) {
           lastAction = {
-            type: '',
-            target: '',
-            source: '',
-            value: '',
+            type: rawAction,
+            actionLabel: formatted,
+            target: tgt || src,
+            source: src,
+            value: val,
             isScan: false,
             seq: '',
             timeStr,
             timeMs,
             lineNo,
           };
+        } else {
+          lastAction.type = rawAction;
+          lastAction.actionLabel = formatted;
+          if (tgt) lastAction.target = tgt;
+          if (src && !lastAction.source) lastAction.source = src;
+          if (val) lastAction.value = val;
+          lastAction.lineNo = lineNo;
         }
-        lastAction.type = actM[1];
-        lastAction.value = actM[2];
-        lastAction.source = actM[3];
-        lastAction.target = actM[4];
-        lastAction.timeStr = timeStr;
-        lastAction.timeMs = timeMs;
-        lastAction.lineNo = lineNo;
 
         if (lastAction.target) {
           if (lastAction.target.startsWith('menu')) {
@@ -218,7 +241,7 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
           if (currentTx) {
             currentTx.endTime = timeStr;
             currentTx.endTimeMs = timeMs;
-            currentTx.endLine = lineNo;
+            currentTx.endLine = lineNo; // Notepad++ line number of exit
             currentTx.totalDurationMs = currentTx.endTimeMs && currentTx.startTimeMs ? Math.max(0, currentTx.endTimeMs - currentTx.startTimeMs) : 0;
             currentTx.totalDurationFormatted = formatDuration(currentTx.totalDurationMs);
             currentTx.status = 'COMPLETED';
@@ -244,7 +267,7 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
               endTimeMs: 0,
               totalDurationMs: 0,
               totalDurationFormatted: '',
-              startLine: lineNo,
+              startLine: lineNo, // Notepad++ line number of entry
               endLine: lineNo,
               status: 'IN_PROGRESS',
               eventsCount: 0,
@@ -255,7 +278,7 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
               events: [],
             };
           } else if (currentTx.screenName !== currName) {
-            // Internal step / sub-screen transition
+            // Internal step / sub-screen transition (clearly indicate sub-screen, NOT generic Navigate)
             currentTx.events.push({
               id: `ev-${currentTx.events.length + 1}`,
               timestamp: timeStr,
@@ -263,12 +286,12 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
               durationMs: 0,
               durationFormatted: '0 ms',
               isReportedDuration: false,
-              event: 'NAVIGATE',
+              event: `Sub-Screen: ${currName}`,
               field: currName,
               value: '',
-              lineNo,
+              lineNo, // Exact Notepad++ line number
               status: 'PASS',
-              details: `Screen transitioned to "${currName}"`,
+              details: `Screen stepped into sub-screen "${currName}" (from "${prevTitle}")`,
             });
           }
         }
@@ -355,12 +378,12 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
       if (session && !currentTx.sessionId) currentTx.sessionId = session;
       if (thread && !currentTx.threadId) currentTx.threadId = thread;
 
-      // WMS LogFire SSH SendKey Time
+      // WMS LogFire SSH SendKey Time (Response latency from backend)
       if (line.includes('LogFireSSHConnection.SendKey:LogFireTime=')) {
         const msM = line.match(/LogFireTime=(\d+)\s*ms/);
         const durationMs = msM ? parseInt(msM[1], 10) : 0;
         const fieldName = lastAction ? (lastAction.target || lastAction.source) : 'terminal';
-        const evType = lastAction ? lastAction.type : 'SendKey';
+        const evLabel = lastAction?.actionLabel || (lastAction?.isScan ? 'SCAN' : 'ENTER');
         const evVal = lastAction ? lastAction.value : '';
 
         currentTx.events.push({
@@ -370,14 +393,16 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
           durationMs,
           durationFormatted: `${durationMs} ms`,
           isReportedDuration: true,
-          event: evType || 'ENTER',
+          event: evLabel,
           field: fieldName,
           value: evVal,
           stepSeq: lastAction?.seq || '',
-          lineNo,
+          lineNo, // Exact Notepad++ line where SSH SendKey returned
           status: durationMs > 2500 ? 'WARN' : 'PASS',
           details: `SSH Terminal Response (${durationMs} ms) on ${fieldName}`,
         });
+
+        lastAction = null; // Reset so next action doesn't duplicate
       }
 
       // Script Events: onFocus, onExit, onKeyPress, onClick, etc.
@@ -393,12 +418,12 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
             durationMs: 0,
             durationFormatted: '0 ms',
             isReportedDuration: false,
-            event: evName,
+            event: `SCRIPT: ${evName}`,
             field: fieldName,
             value: '',
-            lineNo,
+            lineNo, // Exact Notepad++ line number
             status: 'PASS',
-            details: `Script: ${evName} on ${fieldName}`,
+            details: `Triggered ${evName} event script on ${fieldName}`,
           });
         }
       }
@@ -409,11 +434,13 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
         if (sim) {
           const field = sim[1];
           const durationMs = parseInt(sim[2], 10);
-          if (currentTx.events.length > 0 && currentTx.events[currentTx.events.length - 1].field === field) {
+          if (currentTx.events.length > 0 && currentTx.events[currentTx.events.length - 1].field === field && currentTx.events[currentTx.events.length - 1].event.startsWith('SCRIPT:')) {
             const ev = currentTx.events[currentTx.events.length - 1];
             ev.durationMs = durationMs;
             ev.durationFormatted = `${durationMs} ms`;
             ev.isReportedDuration = true;
+            ev.status = durationMs > 1000 ? 'WARN' : 'PASS';
+            ev.details += ` (init ${durationMs} ms)`;
           } else {
             currentTx.events.push({
               id: `ev-${currentTx.events.length + 1}`,
@@ -422,12 +449,12 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
               durationMs,
               durationFormatted: `${durationMs} ms`,
               isReportedDuration: true,
-              event: 'script_init',
+              event: `SCRIPT: init`,
               field,
               value: '',
-              lineNo,
+              lineNo, // Exact Notepad++ line number
               status: durationMs > 1000 ? 'WARN' : 'PASS',
-              details: `Script initialize (${durationMs} ms) on ${field}`,
+              details: `Script initialize took ${durationMs} ms on ${field}`,
             });
           }
         }
@@ -446,13 +473,15 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
             durationMs,
             durationFormatted: `${durationMs} ms`,
             isReportedDuration: true,
-            event: 'API_CALL',
+            event: `API: ${apiName}`,
             field: apiName,
             value: '',
-            lineNo,
+            lineNo, // Exact Notepad++ line number of API response
             status: durationMs > 2000 ? 'WARN' : 'PASS',
-            details: `Web Service API: ${apiName} (${durationMs} ms)`,
+            details: `Web Service API: ${apiName} responded in ${durationMs} ms`,
           });
+          currentTx.apiCallsCount++;
+          currentTx.apiTotalDurationMs += durationMs;
         }
       }
 
@@ -468,7 +497,7 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
           event: 'DB_QUERY',
           field: 'flexi.executeQuery',
           value: '',
-          lineNo,
+          lineNo, // Exact Notepad++ line number
           status: 'PASS',
           details: line.substring(Math.max(0, line.indexOf('UserActionLogger - ') + 19)).substring(0, 80),
         });
@@ -476,12 +505,13 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
     }
   }
 
-  // Final unclosed transaction
+  // Final unclosed transaction if log ends while inside screen
   if (currentTx) {
     if (!currentTx.endTime && currentTx.events.length > 0) {
       const lastEv = currentTx.events[currentTx.events.length - 1];
       currentTx.endTime = lastEv.timestamp;
       currentTx.endTimeMs = lastEv.timestampMs;
+      currentTx.endLine = lastEv.lineNo;
       currentTx.totalDurationMs = Math.max(0, currentTx.endTimeMs - currentTx.startTimeMs);
       currentTx.totalDurationFormatted = formatDuration(currentTx.totalDurationMs);
     }
@@ -504,8 +534,8 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
 
     // Rollups
     tx.eventsCount = tx.events.length;
-    tx.apiCallsCount = tx.events.filter(e => e.event === 'API_CALL').length;
-    tx.apiTotalDurationMs = tx.events.filter(e => e.event === 'API_CALL').reduce((sum, e) => sum + e.durationMs, 0);
+    tx.apiCallsCount = tx.events.filter(e => e.event.startsWith('API:') || e.event === 'API_CALL').length;
+    tx.apiTotalDurationMs = tx.events.filter(e => e.event.startsWith('API:') || e.event === 'API_CALL').reduce((sum, e) => sum + e.durationMs, 0);
 
     let maxEv = 0;
     let slowestName = '';
@@ -523,6 +553,58 @@ export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[])
   }
 
   return transactions;
+}
+
+/**
+ * Extracts screen transactions from ParsedLogFiles or LogEntries.
+ * If pre-computed screenTransactions exist on files, uses them directly.
+ */
+export function extractScreenTransactions(sources: (ParsedLogFile | LogEntry)[]): ScreenTransaction[] {
+  if (!sources || sources.length === 0) return [];
+
+  // 1. If sources are ParsedLogFiles with pre-computed screenTransactions, return directly!
+  if ('entries' in sources[0] && Array.isArray((sources[0] as ParsedLogFile).entries)) {
+    const precomputed: ScreenTransaction[] = [];
+    for (const f of sources as ParsedLogFile[]) {
+      if (f.screenTransactions && f.screenTransactions.length > 0) {
+        precomputed.push(...f.screenTransactions);
+      }
+    }
+    if (precomputed.length > 0) {
+      return precomputed;
+    }
+  }
+
+  // 2. Fallback: Reconstruct contiguous raw lines
+  const lines: string[] = [];
+  let fileName = 'log-file.log';
+  let fileId = 'file-1';
+  let appType: 'SCM' | 'WMS' | 'UNKNOWN' = 'UNKNOWN';
+
+  if ('entries' in sources[0] && Array.isArray((sources[0] as ParsedLogFile).entries)) {
+    const files = sources as ParsedLogFile[];
+    const allTxs: ScreenTransaction[] = [];
+    for (const f of files) {
+      const fLines: string[] = [];
+      for (const e of f.entries) {
+        fLines.push(...e.rawLines);
+      }
+      const txs = extractScreenTransactionsFromLines(fLines, f.fileName, f.id, f.appType);
+      allTxs.push(...txs);
+    }
+    return allTxs;
+  } else {
+    const entries = sources as LogEntry[];
+    if (entries.length > 0) {
+      fileName = entries[0].fileName;
+      fileId = entries[0].fileId;
+      appType = entries[0].appType;
+      for (const e of entries) {
+        lines.push(...e.rawLines);
+      }
+    }
+    return extractScreenTransactionsFromLines(lines, fileName, fileId, appType);
+  }
 }
 
 /**
@@ -579,4 +661,138 @@ export function calculatePerformanceSummary(transactions: ScreenTransaction[]): 
     avgEventDurationMs,
     screenNames: Array.from(screenNameSet).sort(),
   };
+}
+
+/**
+ * Generate CSV string for Performance Summary (Screen level)
+ */
+export function exportPerformanceSummaryCsv(transactions: ScreenTransaction[]): string {
+  const headers = [
+    'Screen Name',
+    'Screen Code',
+    'System Type',
+    'User',
+    'Session ID',
+    'Start Line (Notepad++)',
+    'End Line (Notepad++)',
+    'Start Time',
+    'End Time',
+    'Total Duration (ms)',
+    'Total Duration (Formatted)',
+    'Events Count',
+    'API Calls Count',
+    'API Total Duration (ms)',
+    'Max Event Duration (ms)',
+    'Slowest Event',
+    'Status'
+  ];
+
+  const rows = transactions.map(tx => [
+    `"${tx.screenName.replace(/"/g, '""')}"`,
+    `"${tx.screenCode.replace(/"/g, '""')}"`,
+    `"${tx.appType}"`,
+    `"${tx.userName}"`,
+    `"${tx.sessionId}"`,
+    tx.startLine,
+    tx.endLine,
+    `"${tx.startTime}"`,
+    `"${tx.endTime}"`,
+    tx.totalDurationMs,
+    `"${tx.totalDurationFormatted}"`,
+    tx.eventsCount,
+    tx.apiCallsCount,
+    tx.apiTotalDurationMs,
+    tx.maxEventDurationMs,
+    `"${tx.slowestEventName.replace(/"/g, '""')}"`,
+    `"${tx.status}"`
+  ]);
+
+  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+}
+
+/**
+ * Generate CSV string for Performance Details across all transactions (Event level)
+ */
+export function exportPerformanceDetailsCsv(transactions: ScreenTransaction[]): string {
+  const headers = [
+    'Transaction Screen',
+    'Screen Code',
+    'System Type',
+    'User',
+    'Session ID',
+    'Step #',
+    'Line # (Notepad++)',
+    'Timestamp',
+    'Action / Event Triggered',
+    'Field / Target',
+    'Scanned / Input Value',
+    'Duration (ms)',
+    'Duration (Formatted)',
+    'Reported By Log',
+    'Status',
+    'Details'
+  ];
+
+  const rows: (string | number)[][] = [];
+
+  for (const tx of transactions) {
+    for (let idx = 0; idx < tx.events.length; idx++) {
+      const ev = tx.events[idx];
+      rows.push([
+        `"${tx.screenName.replace(/"/g, '""')}"`,
+        `"${tx.screenCode.replace(/"/g, '""')}"`,
+        `"${tx.appType}"`,
+        `"${tx.userName}"`,
+        `"${tx.sessionId}"`,
+        idx + 1,
+        ev.lineNo,
+        `"${ev.timestamp}"`,
+        `"${ev.event.replace(/"/g, '""')}"`,
+        `"${(ev.field || '').replace(/"/g, '""')}"`,
+        `"${(ev.value || '').replace(/"/g, '""')}"`,
+        ev.durationMs,
+        `"${ev.durationFormatted}"`,
+        ev.isReportedDuration ? 'YES' : 'NO',
+        `"${ev.status}"`,
+        `"${(ev.details || '').replace(/"/g, '""')}"`
+      ]);
+    }
+  }
+
+  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+}
+
+/**
+ * Generate CSV string for a single screen's detailed events
+ */
+export function exportScreenEventsCsv(tx: ScreenTransaction): string {
+  const headers = [
+    'Step #',
+    'Line # (Notepad++)',
+    'Timestamp',
+    'Action / Event Triggered',
+    'Field / Target',
+    'Scanned / Input Value',
+    'Duration (ms)',
+    'Duration (Formatted)',
+    'Reported By Log',
+    'Status',
+    'Details'
+  ];
+
+  const rows = tx.events.map((ev, idx) => [
+    idx + 1,
+    ev.lineNo,
+    `"${ev.timestamp}"`,
+    `"${ev.event.replace(/"/g, '""')}"`,
+    `"${(ev.field || '').replace(/"/g, '""')}"`,
+    `"${(ev.value || '').replace(/"/g, '""')}"`,
+    ev.durationMs,
+    `"${ev.durationFormatted}"`,
+    ev.isReportedDuration ? 'YES' : 'NO',
+    `"${ev.status}"`,
+    `"${(ev.details || '').replace(/"/g, '""')}"`
+  ]);
+
+  return [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
 }

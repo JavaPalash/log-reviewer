@@ -1,3 +1,5 @@
+import { ScreenTransaction } from './performanceTypes';
+
 export type LogLevel = 'INFO' | 'DEBUG' | 'WARN' | 'ERROR' | 'TRACE' | 'FATAL';
 
 export type IssueCategory =
@@ -96,6 +98,7 @@ export interface ParsedLogFile {
   appType: 'SCM' | 'WMS' | 'UNKNOWN';
   tenant?: string;
   entries: LogEntry[];
+  screenTransactions?: ScreenTransaction[];
 }
 
 export interface FilterState {
