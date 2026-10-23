@@ -235,7 +235,7 @@ export default function Home() {
   // We provide clear one-click buttons so the user is in control.
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#fffdf4] dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
       
       {/* Top Navigation */}
       <Navbar
@@ -254,8 +254,8 @@ export default function Home() {
         totalEntriesCount={allEntries.length}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      {/* Main Content Area - Full width utilizing the complete screen */}
+      <main className="flex-1 w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
         {/* Upload Zone */}
         <LogUploader
@@ -284,14 +284,14 @@ export default function Home() {
           <div id="results-section" className="space-y-4 scroll-mt-6">
             
             {/* View Tabs */}
-            <div className="flex items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-2">
+            <div className="flex items-center justify-between gap-3 border-b border-[#ecebe6] dark:border-gray-800 pb-2">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setActiveView('table')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'table'
-                      ? 'bg-[#1B2E59] text-white shadow-sm shadow-[#1B2E59]/20'
-                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
+                      ? 'bg-[#1B2E59] text-white shadow-sm border border-[#1B2E59]'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#fffdf4] dark:hover:bg-gray-700 border border-[#e5e3dc] dark:border-gray-700'
                   }`}
                 >
                   <Table className="w-4 h-4" />
@@ -305,8 +305,8 @@ export default function Home() {
                   onClick={() => setActiveView('timeline')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'timeline'
-                      ? 'bg-[#009FE3] text-white shadow-sm shadow-[#009FE3]/20'
-                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
+                      ? 'bg-[#009FE3] text-white shadow-sm border border-[#009FE3]'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#fffdf4] dark:hover:bg-gray-700 border border-[#e5e3dc] dark:border-gray-700'
                   }`}
                 >
                   <GitCommit className="w-4 h-4" />
@@ -317,8 +317,8 @@ export default function Home() {
                   onClick={() => setActiveView('performance')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'performance'
-                      ? 'bg-[#F37021] text-white shadow-sm shadow-[#F37021]/30'
-                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-orange-50 dark:hover:bg-[#F37021]/20 border border-gray-200 dark:border-gray-700'
+                      ? 'bg-[#F37021] text-white shadow-sm border border-[#e06115]'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-[#fffdf4] dark:hover:bg-gray-700 border border-[#e5e3dc] dark:border-gray-700'
                   }`}
                 >
                   <Zap className="w-4 h-4 text-amber-200 fill-amber-200/50" />
@@ -401,7 +401,7 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 py-4 text-center text-xs text-gray-400">
+      <footer className="border-t border-[#ecebe6] dark:border-gray-800 bg-[#fffdf4] dark:bg-gray-900 py-4 text-center text-xs text-gray-500">
         <p>Log Reviewer • Built for Intellinum Flexi Screen & Server Log Analysis • Deploys directly on Vercel</p>
       </footer>
 

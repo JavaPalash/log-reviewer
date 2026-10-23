@@ -156,20 +156,20 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   };
 
   return (
-    <div id="results-table-container" className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col transition-colors">
+    <div id="results-table-container" className="bg-white dark:bg-gray-800 rounded-2xl border border-[#ecebe6] dark:border-gray-700 shadow-sm overflow-hidden flex flex-col transition-colors">
       
       {/* Table Header Controls */}
-      <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-3 border-b border-[#ecebe6] dark:border-gray-700 flex flex-wrap items-center justify-between gap-3 text-xs bg-[#fffdf4]/40 dark:bg-gray-900/30">
         
         <div className="flex items-center gap-2">
           <span className="font-bold text-gray-900 dark:text-white">
             Results
           </span>
-          <span className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-[11px]">
+          <span className="px-2 py-0.5 rounded-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-[11px] border border-[#e5e3dc] dark:border-gray-600">
             {entries.length.toLocaleString()} matching
           </span>
           {filters.focusFlexiOnly && (
-            <span className="px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 text-[10px] font-bold">
+            <span className="px-2 py-0.5 rounded-full bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#007cb3] dark:text-[#38bdf8] border border-[#009FE3]/30 text-[10px] font-bold">
               🎯 Flexi Focus Active (Platform Logs Hidden)
             </span>
           )}
@@ -276,7 +276,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
       {/* Main Table */}
       <div className="overflow-x-auto flex-1">
         <table className="w-full text-left border-collapse text-xs">
-          <thead className="bg-gray-50 dark:bg-gray-900/60 border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-semibold sticky top-0 z-10">
+          <thead className="bg-[#fffdf4] dark:bg-gray-900/60 border-b border-[#ecebe6] dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold sticky top-0 z-10">
             <tr>
               <th className="py-2.5 px-3 w-12 text-center">#</th>
               {visibleColumns.lineNo && <th className="py-2.5 px-3">Line</th>}

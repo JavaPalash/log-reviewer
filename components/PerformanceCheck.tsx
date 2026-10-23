@@ -415,10 +415,10 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         
         {/* Metric 1: Total Screen Transactions */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl shadow-xs">
+        <div className="bg-white dark:bg-gray-800 border border-[#ecebe6] dark:border-gray-700 p-4 rounded-xl shadow-xs">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 text-xs">
             <span>Total Transactions</span>
-            <Layers className="w-4 h-4 text-blue-500" />
+            <Layers className="w-4 h-4 text-[#009FE3]" />
           </div>
           <div className="mt-2 text-2xl font-black text-gray-900 dark:text-white">
             {summary.totalTransactions}
@@ -429,12 +429,12 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         </div>
 
         {/* Metric 2: Average Screen Duration */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl shadow-xs">
+        <div className="bg-white dark:bg-gray-800 border border-[#ecebe6] dark:border-gray-700 p-4 rounded-xl shadow-xs">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 text-xs">
             <span>Average Screen Time</span>
-            <Clock className="w-4 h-4 text-purple-500" />
+            <Clock className="w-4 h-4 text-[#1B2E59] dark:text-indigo-400" />
           </div>
-          <div className="mt-2 text-2xl font-black text-purple-600 dark:text-purple-400">
+          <div className="mt-2 text-2xl font-black text-[#1B2E59] dark:text-blue-300">
             {summary.avgDurationFormatted}
           </div>
           <div className="text-[11px] text-gray-400 mt-1">
@@ -443,7 +443,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         </div>
 
         {/* Metric 3: Slowest Screen */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl shadow-xs md:col-span-1 col-span-2">
+        <div className="bg-white dark:bg-gray-800 border border-[#ecebe6] dark:border-gray-700 p-4 rounded-xl shadow-xs md:col-span-1 col-span-2">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 text-xs">
             <span>Peak Transaction</span>
             <AlertTriangle className="w-4 h-4 text-rose-500" />
@@ -457,7 +457,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         </div>
 
         {/* Metric 4: Total Steps Recorded */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl shadow-xs">
+        <div className="bg-white dark:bg-gray-800 border border-[#ecebe6] dark:border-gray-700 p-4 rounded-xl shadow-xs">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 text-xs">
             <span>Events & Actions</span>
             <Activity className="w-4 h-4 text-emerald-500" />
@@ -471,12 +471,12 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
         </div>
 
         {/* Metric 5: Average Event Latency */}
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl shadow-xs">
+        <div className="bg-white dark:bg-gray-800 border border-[#ecebe6] dark:border-gray-700 p-4 rounded-xl shadow-xs">
           <div className="flex items-center justify-between text-gray-500 dark:text-gray-400 text-xs">
             <span>Avg Event Latency</span>
-            <Timer className="w-4 h-4 text-amber-500" />
+            <Timer className="w-4 h-4 text-[#F37021]" />
           </div>
-          <div className="mt-2 text-2xl font-black text-amber-600 dark:text-amber-400">
+          <div className="mt-2 text-2xl font-black text-[#F37021]">
             {summary.avgEventDurationMs} ms
           </div>
           <div className="text-[11px] text-gray-400 mt-1">

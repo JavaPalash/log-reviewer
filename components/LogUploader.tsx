@@ -71,7 +71,7 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-5 transition-colors">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-[#ecebe6] dark:border-gray-700 shadow-[0_2px_12px_rgba(27,46,89,0.03)] p-6 transition-colors">
       
       {/* Hidden file input */}
       <input
@@ -92,7 +92,7 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
             isDragOver
               ? 'border-[#009FE3] bg-[#009FE3]/10 dark:bg-[#009FE3]/20 scale-[0.99]'
-              : 'border-gray-300 dark:border-gray-700 hover:border-[#009FE3] bg-gray-50/50 dark:bg-gray-800/40'
+              : 'border-[#dcd9ce] dark:border-gray-700 hover:border-[#009FE3] bg-[#fffdf4]/70 dark:bg-gray-800/40'
           }`}
         >
           <div className="mx-auto w-14 h-14 rounded-full bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#009FE3] flex items-center justify-center mb-4 shadow-inner">
@@ -183,11 +183,11 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
             {files.map((f) => (
               <div
                 key={f.id}
-                className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/40 flex items-center justify-between gap-3 shadow-xs"
+                className="p-3.5 rounded-xl border border-[#e5e3dc] dark:border-gray-700 bg-[#fffdf4] dark:bg-gray-900/60 flex items-center justify-between gap-3 shadow-2xs"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <FileText className="w-4 h-4 text-blue-500 shrink-0" />
+                    <FileText className="w-4 h-4 text-[#009FE3] shrink-0" />
                     <span className="text-xs font-bold text-gray-900 dark:text-white truncate max-w-[180px]" title={f.fileName}>
                       {f.fileName}
                     </span>

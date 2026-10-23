@@ -2,10 +2,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #fffdf4;
+  --foreground: #1B2E59;
   --card-bg: #ffffff;
-  --border-color: #e2e8f0;
+  --border-color: #ecebe6;
 }
 
 .dark {
