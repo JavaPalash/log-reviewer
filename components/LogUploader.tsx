@@ -91,11 +91,11 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
           onDrop={handleDrop}
           className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
             isDragOver
-              ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-950/30 scale-[0.99]'
-              : 'border-gray-300 dark:border-gray-700 hover:border-blue-400 bg-gray-50/50 dark:bg-gray-800/40'
+              ? 'border-[#009FE3] bg-[#009FE3]/10 dark:bg-[#009FE3]/20 scale-[0.99]'
+              : 'border-gray-300 dark:border-gray-700 hover:border-[#009FE3] bg-gray-50/50 dark:bg-gray-800/40'
           }`}
         >
-          <div className="mx-auto w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 shadow-inner">
+          <div className="mx-auto w-14 h-14 rounded-full bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#009FE3] flex items-center justify-center mb-4 shadow-inner">
             <UploadCloud className="w-7 h-7" />
           </div>
 
@@ -110,7 +110,7 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow transition-colors"
+              className="px-4 py-2 text-xs font-semibold rounded-lg bg-[#009FE3] hover:bg-[#0086bf] text-white shadow transition-colors"
             >
               Browse Files (.log, .txt)
             </button>
@@ -118,17 +118,17 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
             <button
               type="button"
               onClick={() => onLoadSample('scm')}
-              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-teal-50 dark:bg-teal-950/80 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#007cb3] dark:text-[#38bdf8] border border-[#009FE3]/30 hover:bg-[#009FE3]/20 flex items-center gap-1.5 transition-colors"
             >
-              <Sparkles className="w-3.5 h-3.5 text-teal-500" />
+              <Sparkles className="w-3.5 h-3.5 text-[#009FE3]" />
               Try Oracle SCM Cloud Log (O-SKNS)
             </button>
             <button
               type="button"
               onClick={() => onLoadSample('screen')}
-              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[#1B2E59]/10 dark:bg-[#1B2E59]/30 text-[#1B2E59] dark:text-[#93c5fd] border border-[#1B2E59]/30 hover:bg-[#1B2E59]/20 flex items-center gap-1.5 transition-colors"
             >
-              <FileText className="w-3.5 h-3.5 text-indigo-500" />
+              <FileText className="w-3.5 h-3.5 text-[#1B2E59] dark:text-[#93c5fd]" />
               Try Oracle WMS Screen Log (WS-G-HK)
             </button>
             <button
@@ -155,7 +155,7 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <FileCode className="w-4 h-4 text-blue-500" />
+              <FileCode className="w-4 h-4 text-[#009FE3]" />
               <h3 className="text-sm font-bold text-gray-900 dark:text-white">
                 Loaded Files ({files.length})
               </h3>
@@ -164,7 +164,7 @@ export const LogUploader: React.FC<LogUploaderProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="px-2.5 py-1 text-xs font-medium rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition-colors"
+                className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#007cb3] dark:text-[#38bdf8] border border-[#009FE3]/30 hover:bg-[#009FE3]/20 transition-colors"
               >
                 + Add More Files
               </button>

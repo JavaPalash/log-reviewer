@@ -68,21 +68,25 @@ export const Navbar: React.FC<NavbarProps> = ({
         
         {/* Left: Brand / Title */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-400 flex items-center justify-center shadow-md shadow-blue-500/20 text-white font-bold text-lg">
-            <Layers className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-extrabold text-lg tracking-tight text-gray-900 dark:text-white">
-                Log Reviewer
-              </h1>
-              <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                Flexi SCM & WMS
-              </span>
+          <div className="flex items-center gap-2.5">
+            <img 
+              src="/flexi-logo.png" 
+              alt="Intellinum Flexi Logo" 
+              className="h-10 w-auto max-w-[120px] object-contain drop-shadow-sm rounded"
+            />
+            <div className="border-l border-gray-200 dark:border-gray-700 pl-3">
+              <div className="flex items-center gap-2">
+                <h1 className="font-extrabold text-lg tracking-tight text-[#1B2E59] dark:text-white flex items-center gap-1.5">
+                  <span>Log Reviewer</span>
+                </h1>
+                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-[#009FE3]/10 text-[#009FE3] dark:text-[#38bdf8] border border-[#009FE3]/30">
+                  SCM & WMS
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Screen & Server Log Diagnostic for Oracle Cloud
+              </p>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Screen & Server Log Diagnostic for Oracle Cloud
-            </p>
           </div>
         </div>
 
@@ -94,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             title={filters.focusFlexiOnly ? "Flexi Focus: Showing Flexi methods, scripts, APIs & errors. Platform noise hidden." : "Showing ALL raw logs including VT100 dumps"}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all border shadow-sm ${
               filters.focusFlexiOnly
-                ? 'bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 ring-2 ring-purple-500/20'
+                ? 'bg-[#1B2E59]/10 dark:bg-[#1B2E59]/60 text-[#1B2E59] dark:text-[#38bdf8] border-[#009FE3]/50 ring-2 ring-[#009FE3]/20'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700'
             }`}
           >
@@ -110,11 +114,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             title={isNewestFirst ? "Order: Newest First (Bottom-to-Top) - server log order" : "Order: Oldest First (Top-to-Bottom)"}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 transition-all border shadow-sm ${
               isNewestFirst
-                ? 'bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700 ring-2 ring-blue-500/20'
+                ? 'bg-[#009FE3]/10 dark:bg-[#009FE3]/20 text-[#007cb3] dark:text-[#38bdf8] border-[#009FE3]/40 ring-2 ring-[#009FE3]/20'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700'
             }`}
           >
-            <ArrowDownUp className={`w-3.5 h-3.5 transition-transform ${isNewestFirst ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''}`} />
+            <ArrowDownUp className={`w-3.5 h-3.5 transition-transform ${isNewestFirst ? 'rotate-180 text-[#009FE3]' : ''}`} />
             <span>
               {isNewestFirst ? (
                 <>
@@ -198,11 +202,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Screen & Event Transaction Performance Check"
               className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all border shadow-sm ${
                 activeView === 'performance'
-                  ? 'bg-amber-500 text-white border-amber-600 shadow-amber-500/20'
-                  : 'bg-amber-50 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                  ? 'bg-[#F37021] text-white border-[#e06115] shadow-md shadow-[#F37021]/30 ring-2 ring-[#F37021]/20'
+                  : 'bg-[#F37021]/10 dark:bg-[#F37021]/20 text-[#d8580e] dark:text-[#f89553] border-[#F37021]/30 hover:bg-[#F37021]/20'
               }`}
             >
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500/40" />
+              <Zap className="w-3.5 h-3.5 text-[#F37021] fill-[#F37021]/40" />
               <span>Performance Check</span>
             </button>
           )}
@@ -211,9 +215,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           {totalEntriesCount > 0 && (
             <button
               onClick={onOpenRcaModal}
-              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md shadow-blue-500/20 flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+              className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#1B2E59] via-[#0E4B8A] to-[#009FE3] hover:from-[#152447] hover:to-[#0089c4] text-white shadow-md shadow-[#009FE3]/20 flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <Sparkles className="w-3.5 h-3.5 text-[#F37021]" />
               <span>Generate RCA Report</span>
             </button>
           )}

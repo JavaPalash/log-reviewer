@@ -359,11 +359,11 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#1B2E59] via-[#0E3D73] to-[#009FE3] rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-[#F37021]">
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl">
-              <Zap className="w-6 h-6 text-amber-300 fill-amber-300/30" />
+              <Zap className="w-6 h-6 text-[#F37021] fill-[#F37021]/30" />
             </div>
             <h2 className="text-xl font-black tracking-tight">
               Screen & Event Performance Check
@@ -382,17 +382,17 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
           <button
             onClick={handleExportSummaryCsv}
             disabled={allTransactions.length === 0}
-            className="px-3 py-2 rounded-xl text-xs font-bold bg-white text-blue-900 hover:bg-blue-50 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-white text-[#1B2E59] hover:bg-slate-100 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
             title="Export transaction-level summary per screen"
           >
-            <Download className="w-3.5 h-3.5 text-blue-700" />
+            <Download className="w-3.5 h-3.5 text-[#009FE3]" />
             <span>Summary (CSV)</span>
           </button>
 
           <button
             onClick={handleExportAllDetailsCsv}
             disabled={allTransactions.length === 0}
-            className="px-3 py-2 rounded-xl text-xs font-bold bg-blue-950/80 hover:bg-blue-950 text-white border border-white/25 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-[#1B2E59]/80 hover:bg-[#1B2E59] text-white border border-white/25 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
             title="Export step-by-step event details with root cause diagnostics and physical Notepad++ line numbers"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-amber-300" />
@@ -402,7 +402,7 @@ export const PerformanceCheck: React.FC<PerformanceCheckProps> = ({
           <button
             onClick={handleExportPdf}
             disabled={allTransactions.length === 0}
-            className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white border border-rose-400/30 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
+            className="px-3 py-2 rounded-xl text-xs font-bold bg-[#F37021] hover:bg-[#d95d13] text-white border border-[#F37021]/30 shadow-md flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50"
             title="Export comprehensive performance audit report as PDF"
           >
             <FileText className="w-3.5 h-3.5 text-white" />

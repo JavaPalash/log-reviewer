@@ -290,13 +290,13 @@ export default function Home() {
                   onClick={() => setActiveView('table')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'table'
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
+                      ? 'bg-[#1B2E59] text-white shadow-sm shadow-[#1B2E59]/20'
                       : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
                   <Table className="w-4 h-4" />
                   <span>Results Table</span>
-                  <span className="px-1.5 py-0.2 rounded-full bg-black/20 text-[10px]">
+                  <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">
                     {filteredEntries.length}
                   </span>
                 </button>
@@ -305,7 +305,7 @@ export default function Home() {
                   onClick={() => setActiveView('timeline')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'timeline'
-                      ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
+                      ? 'bg-[#009FE3] text-white shadow-sm shadow-[#009FE3]/20'
                       : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
@@ -317,18 +317,18 @@ export default function Home() {
                   onClick={() => setActiveView('performance')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
                     activeView === 'performance'
-                      ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/20'
-                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-gray-200 dark:border-gray-700'
+                      ? 'bg-[#F37021] text-white shadow-sm shadow-[#F37021]/30'
+                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-orange-50 dark:hover:bg-[#F37021]/20 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
-                  <Zap className="w-4 h-4 text-amber-400 fill-amber-400/40" />
+                  <Zap className="w-4 h-4 text-amber-200 fill-amber-200/50" />
                   <span>Performance Check</span>
                 </button>
               </div>
 
               <div className="text-xs text-gray-500 flex items-center gap-2">
                 <span>Active Sort:</span>
-                <span className="font-semibold text-blue-600 dark:text-blue-400">
+                <span className="font-semibold text-[#009FE3] dark:text-[#38bdf8]">
                   {filters.sortOrder === 'newest' ? 'Newest First (Bottom-to-Top)' : 'Oldest First (Top-to-Bottom)'}
                 </span>
               </div>
